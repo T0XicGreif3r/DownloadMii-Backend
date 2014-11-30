@@ -12,8 +12,7 @@
 		<domain>/api/apps/[category]/[subCategory]/[otherCategory]
 
 		To rate an APP
-		<domain>/api/rate/[appguid]/[rating]
-		[securetoken] - this is better to sendit trought POST data
+		<domain>/api/rate/[securetoken]/[appguid]/[rating]
 
 	*/
 
@@ -61,6 +60,11 @@
 				break;
 
 			case 'rate':
+				if (/*Check secure Token*/) {
+					# code...
+				}
+				else 
+					#error invalid user.
 				# code...
 				break;
 		}
