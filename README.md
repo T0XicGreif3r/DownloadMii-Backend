@@ -2,7 +2,7 @@ DownloadMii-Website
 ===================
 
 DownloadMii is an online store for homebrew applications
-
+PLEASE TEST BEFORE COMMITING!
 
 ROADMAP
 ========
