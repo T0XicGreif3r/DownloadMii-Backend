@@ -11,6 +11,7 @@ PLEASE TEST BEFORE COMMITING!
 - Platform: 64bit
 - Server Software: IIS
 - Server Platform: 64bit
+- Connection String Variable: mysqlstring
 
 ROADMAP
 ========
