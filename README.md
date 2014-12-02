@@ -1,8 +1,16 @@
 DownloadMii-Website
 ===================
 
-DownloadMii is an online store for homebrew applications
+DownloadMii is an online store for homebrew applications.
+
 PLEASE TEST BEFORE COMMITING!
+
+**Server Info**
+- Python: 3.4
+- PHP: 5.5
+- Platform: 64bit
+- Server Software: IIS
+- Server Platform: 64bit
 
 ROADMAP
 ========
