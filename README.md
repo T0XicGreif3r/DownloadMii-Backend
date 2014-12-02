@@ -5,6 +5,8 @@ DownloadMii is an online store for homebrew applications.
 
 PLEASE TEST BEFORE COMMITING!
 
+JSON EXAMPLES: https://github.com/DownloadMii/DownloadMii/tree/master/doc/examples
+
 **Server Info**
 - Python: 3.4
 - PHP: 5.5
