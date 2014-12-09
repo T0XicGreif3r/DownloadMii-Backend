@@ -55,7 +55,7 @@ h1{
 }
 
 #FULLSCREEN {
-  background: #25A4D6; 
+  background: #e5e5e5; 
   display: table;
   height: 100%;
   min-height: 200px;
@@ -68,7 +68,7 @@ h1{
 }
 
 #SHOWCASE {
-  background-color: #19c0c2;
+  background-color: #25A4D6;
   color: #ffffff;
 }
 #SHOWCASE img {
@@ -76,7 +76,7 @@ h1{
 }
 
 #SHOWCASE {
-  background-color: #19c0c2;
+  background-color: #25A4D6;
   color: #ffffff;
 }
 
