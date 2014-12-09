@@ -1,0 +1,52 @@
+CREATE TABLE users (
+	userId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	nick VARCHAR(50) NOT NULL UNIQUE,
+	password VARCHAR(32) NOT NULL,
+	role VARCHAR(10) NOT NULL,
+	email VARCHAR(50) NOT NULL UNIQUE,
+	token VARCHAR(32) NULL UNIQUE
+);
+
+CREATE TABLE categories(
+	categoryId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE apps(
+	appId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(50) NOT NULL,
+	version VARCHAR(25) NOT NULL,
+	creator INT NOT NULL,
+	description TEXT NULL,
+	publisher VARCHAR(50) NULL,
+	category INT NOT NULL,
+	subCategory INT NULL,
+	otherCategory INT NULL,
+	3dsx VARCHAR(255) NOT NULL,
+	smdh VARCHAR(255) NOT NULL,
+
+	FOREIGN KEY (creator) REFERENCES users(userId),
+	FOREIGN KEY (category) REFERENCES categories(categoryId),
+	FOREIGN KEY (subCategory) REFERENCES categories(categoryId),
+	FOREIGN KEY (otherCategory) REFERENCES categories(categoryId)
+);
+
+CREATE TABLE rattings(
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	appId INT NOT NULL,
+	userId INT NOT NULL,
+	rate TINYINT NOT NULL DEFAULT 0,
+
+	FOREIGN KEY (appId) REFERENCES apps(appId),
+	FOREIGN KEY (userId) REFERENCES users(userId)
+);
+
+CREATE TABLE developers(
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	appId INT NOT NULL,
+	developerId INT NOT NULL,
+	nick VARCHAR(50) NULL,
+
+	FOREIGN KEY (appId) REFERENCES apps(appId),
+	FOREIGN KEY (developerId) REFERENCES users(userId)
+);
