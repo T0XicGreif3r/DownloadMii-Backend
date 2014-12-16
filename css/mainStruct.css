@@ -81,7 +81,11 @@ h1{
 }
 
 /* HEADER */
-
+.navbar{
+	box-shadow: none !important;
+	border-bottom:0px;
+	/* Remove the lines above to add a border & shadow under the navbar, for a less flat feel */
+}
 /* FOOTER */
 footer {
    position:fixed;
