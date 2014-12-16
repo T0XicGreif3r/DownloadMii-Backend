@@ -43,3 +43,7 @@ ROADMAP
 Error codes
 ===========
 To Do!
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/DownloadMii/downloadmii-website/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
