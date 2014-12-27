@@ -31,8 +31,12 @@
 			
 			case 'apps':
 				switch ($param[4 + $pad]) {
-					case 'TopDownloaded':
+					case 'TopDownloadedApps':
 						# code...
+						break;
+
+					case 'TopDownloadedGames':
+						# code..
 						break;
 
 					case 'StaffPicks':
