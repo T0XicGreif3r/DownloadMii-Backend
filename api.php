@@ -13,6 +13,12 @@
 
 		To rate an APP
 		<domain>/api/rate/[securetoken]/[appguid]/[rating]
+		
+		To get banner
+		<domain>/api/banner
+		
+		To get APP banner
+		<domain>/api/banner/[appguid]
 
 	*/
 
@@ -70,6 +76,15 @@
 				else 
 					#error invalid user.
 				# code...
+				break;
+			
+			case 'banner'
+				if (count($param) > 4) {
+					//get the banner for the current application
+				}
+				else{
+					//get the current main banner
+				}
 				break;
 		}
 	}
