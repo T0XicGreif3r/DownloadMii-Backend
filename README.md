@@ -17,7 +17,7 @@ JSON EXAMPLES: https://github.com/DownloadMii/DownloadMii/tree/master/doc/exampl
 
 ROADMAP
 ========
-some of the following things are horrebly outdated please take a look at api/api.php first.
+some of the following things are horrebly outdated please take a look at api.php first.
 - [ ] Implament a simple but secure account system and SSL support
 - [ ] Implament roles
 - [ ] Add MySQL DB
