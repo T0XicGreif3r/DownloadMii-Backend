@@ -9,7 +9,7 @@ JSON EXAMPLES: https://github.com/DownloadMii/DownloadMii/tree/master/doc/exampl
 
 **Server Info**
 - Python: 3.4
-- PHP: 5.5
+- PHP: 5.4
 - Platform: 64bit
 - Server Software: IIS
 - Server Platform: 64bit
