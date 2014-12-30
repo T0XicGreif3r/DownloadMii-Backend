@@ -2,4 +2,4 @@ Options +FollowSymLinks +ExecCGI
 
 RewriteEngine On
 RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.gif|\.jpeg|\.bmp)$
-RewriteRule ^api/.*  ./dwnmii_lib/api.php [QSA]
+RewriteRule ^api/.*  ./api.php [QSA]

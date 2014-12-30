@@ -22,7 +22,7 @@
 
 	*/
 
-	$origKey = "" //Key to verify if the app that is accessing the API is valid
+	$origKey = ""; //Key to verify if the app that is accessing the API is valid
 	$param = explode('/', strtok(getenv('REQUEST_URI'), '?'));
 	$pad = 1; //nº of folders from the root where is located the api folder ej <domain>/<1st>/<2nd>/api
 
@@ -70,15 +70,15 @@
 				break;
 
 			case 'rate':
-				if (/*Check secure Token*/) {
+				#if (/*Check secure Token*/) {
 					# code...
-				}
-				else 
+				#}
+				#else 
 					#error invalid user.
 				# code...
 				break;
 			
-			case 'banner'
+			case 'banner':
 				if (count($param) > 4) {
 					//get the banner for the current application
 				}
