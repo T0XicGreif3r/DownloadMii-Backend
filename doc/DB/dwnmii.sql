@@ -24,14 +24,17 @@ CREATE TABLE apps(
 	otherCategory INT NULL,
 	3dsx VARCHAR(255) NOT NULL,
 	smdh VARCHAR(255) NOT NULL,
+	-- rating INT NULL,
+	downloads INT NOT NULL,
 
 	FOREIGN KEY (creator) REFERENCES users(userId),
 	FOREIGN KEY (category) REFERENCES categories(categoryId),
 	FOREIGN KEY (subCategory) REFERENCES categories(categoryId),
-	FOREIGN KEY (otherCategory) REFERENCES categories(categoryId)
+	FOREIGN KEY (otherCategory) REFERENCES categories(categoryId),
+	-- FOREIGN KEY (rating) REFERENCES ratings(id)
 );
 
-CREATE TABLE rattings(
+CREATE TABLE ratings(
 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	appId INT NOT NULL,
 	userId INT NOT NULL,

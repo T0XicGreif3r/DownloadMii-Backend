@@ -31,6 +31,7 @@ Column|Description|
 `otherCategory`| id of the category, reference into categories table |
 `3dsx` | 3dsx url |
 `smdh` | smdh url |
+`downloads` | Download count |
 
 ##Rattings
 Column|Description|
