@@ -9,7 +9,7 @@
 		<domain>/api/bydev/[developerId]
 
 		App list by category/sub/other
-		<domain>/api/apps/[category]/[subCategory]/[otherCategory]
+		<domain>/api/apps/[category]/[subcategory]/[othercategory]
 
 		To rate an APP
 		<domain>/api/rate/[securetoken]/[appguid]/[rating]
@@ -50,39 +50,40 @@
 		$jsonResultObj = (object)array($name => $arr); //Create an enclosing object
 		return json_encode($jsonResultObj); //Return JSON
 	}
+	
+	function sendResponseCodeAndExitIfTrue($condition, $responseCode) {
+		if ($condition) {
+			http_response_code($responseCode);
+			exit();
+		}
+	}
 
+	sendResponseCodeAndExitIfTrue(strpos(getenv('REQUEST_URI'), '/api/') != 0, 400);
+	
 	$origKey = ''; //Key to verify if the app that is accessing the API is valid
-	$param = explode('/', strtok(getenv('REQUEST_URI'), '?'));
-	$pad = 0; //nº of folders from the root where is located the api folder ej <domain>/<1st>/<2nd>/api
+	$requestUri = strtok(getenv('REQUEST_URI'), '?');
+	$param = explode('/', rtrim(substr($requestUri, strlen('/api/')), '/')); //All URL "directories" after /api/ -> array
 
 	//get POST parameters
 	$appKey = !empty($_POST['appKey']) ? $_POST['appKey'] : null;
 
 	//Syntax/security checks
-	if (count($param) < 5 + $pad) {
-		http_response_code(400);
-		exit();
-	}
-	if ($origKey != $appKey) {
-		http_response_code(403);
-		exit();
-	}
+	sendResponseCodeAndExitIfTrue(count($param) < 1, 400);
+	sendResponseCodeAndExitIfTrue($origKey != $appKey, 403);
 	
-	$mysqlConn = new mysqli('localhost', 'root', '', 'dwnmii'); //TODO: Use consts from external php file instead of these strings
-	$topLevelRequest = $param[2 + $pad];
+	$config = include('config.php');
+	$mysqlConn = new mysqli($config['mysql_host'], $config['mysql_user'], $config['mysql_pass'], $config['mysql_db']);
+	$topLevelRequest = $param[0];
 	
 	switch ($topLevelRequest) {
 		case 'bydev':
 			$mysqlQuery = 'SELECT app.* FROM apps app JOIN users usr ON usr.userId = app.creator WHERE usr.nick = ?'; //Select rows from apps table by queried developer
-			print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, $param[3 + $pad], 's', [$param[3 + $pad]]));
+			print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, $param[1], 's', [$param[1]]));
 			break;
 		
 		case 'apps':
-			if (count($param) < 5 + $pad) {
-				http_response_code(400);
-				exit();
-			}
-			$secondLevelRequest = $param[3 + $pad];
+			sendResponseCodeAndExitIfTrue(count($param) < 2, 400);
+			$secondLevelRequest = $param[1];
 			
 			switch ($secondLevelRequest) {
 				case 'TopDownloadedApps':
@@ -111,26 +112,26 @@
 					$bindParamArgs = null;
 					
 					//Category query appending
-					if (count($param) > 5 + $pad) {
+					if (count($param) > 2) {
 						$bindParamTypes = 's';
-						$bindParamArgs = array($param[4 + $pad]);
+						$bindParamArgs = array($param[2]);
 						
 						$mysqlQueryEnd = ' WHERE maincat.name = ?';
 						$mysqlQuery .= ' JOIN categories maincat ON maincat.categoryId = app.category';
 						
-						if (count($param) > 6 + $pad) {
+						if (count($param) > 3) {
 							$bindParamTypes .= 's';
-							array_push($bindParamArgs, $param[5 + $pad]);
+							array_push($bindParamArgs, $param[3]);
 							
 							$mysqlQueryEnd .= ' AND subcat.name = ?';
-							$mysqlQuery .= ' JOIN categories subcat ON subcat.categoryId = app.subCategory';
+							$mysqlQuery .= ' JOIN categories subcat ON subcat.categoryId = app.subcategory';
 						
-							if (count($param) > 7 + $pad) {
+							if (count($param) > 4) {
 								$bindParamTypes .= 's';
-								array_push($bindParamArgs, $param[6 + $pad]);
+								array_push($bindParamArgs, $param[4]);
 								
 								$mysqlQueryEnd .= ' AND othercat.name = ?';
-								$mysqlQuery .= ' JOIN categories othercat ON othercat.categoryId = app.otherCategory';
+								$mysqlQuery .= ' JOIN categories othercat ON othercat.categoryId = app.othercategory';
 							}
 						}
 						
@@ -152,7 +153,7 @@
 			break;
 		
 		case 'banner':
-			if (count($param) > 4) {
+			if (count($param) > 1) {
 				//get the banner for the current application
 			}
 			else{
