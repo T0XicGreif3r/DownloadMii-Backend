@@ -33,11 +33,11 @@ Column|Description|
 `rating` | Average app rating |
 `downloads` | Download count |
 
-##Rattings
+##Ratings
 Column|Description|
 ---|:---|
 `id` | Id of the rating |
-`appGuid` | Id of the rated app |
+`appGuid` | Guid of the rated app |
 `userId` | Id of the user who rated the app |
 `rate` | Ratting of the user for the app(Values Between 1 & 5) |
 
@@ -45,8 +45,8 @@ Column|Description|
 Column|Description|
 ---|:---|
 `id` | Id of the association |
-`appGuid` | Id of the app |
-`userId` | Id of the user who had worked in the develop of the app(appId). If the user isn't registred on the system then this column will be NULL and his nick will be in the next column. |
+`appGuid` | Guid of the app |
+`userId` | Id of the user who had worked in the develop of the app(appGuid). If the user isn't registred on the system then this column will be NULL and his nick will be in the next column. |
 `nick` | Nick of a developer if isn't registred on the system |
 
 

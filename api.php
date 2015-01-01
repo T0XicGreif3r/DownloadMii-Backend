@@ -22,41 +22,9 @@
 
 	*/
 	
-	function getJSONFromSQLQuery($conn, $sql, $name, $bindParamTypes = null, $bindParamVarsArr = null) {
-		//TODO: Category ID -> name, Rating ID -> integer, add error checks
-		
-		$stmt = $conn->prepare($sql);
-		if (isset($bindParamTypes, $bindParamVarsArr)) {
-			$callUserArgs = $bindParamVarsArr;
-			array_unshift($callUserArgs, $bindParamTypes);
-			
-			//Create references for call_user_func_array
-			$callUserArgsRefs = array();
-			foreach($callUserArgs as $key => $value) {
-				$callUserArgsRefs[$key] = &$callUserArgs[$key];
-			}
-			
-			call_user_func_array(array($stmt, 'bind_param'), $callUserArgsRefs); //Safe SQL binding
-		}
-		$stmt->execute(); //Perform query
-		$mysqlResult = $stmt->get_result(); //Get results
-		
-		$arr = array();
-		while ($mysqlRow = $mysqlResult->fetch_object()) {
-			array_push($arr, $mysqlRow); //Push all rows to the array
-		}
-		
-		$stmt->close();
-		$jsonResultObj = (object)array($name => $arr); //Create an enclosing object
-		return json_encode($jsonResultObj); //Return JSON
-	}
-	
-	function sendResponseCodeAndExitIfTrue($condition, $responseCode) {
-		if ($condition) {
-			http_response_code($responseCode);
-			exit();
-		}
-	}
+	include('secure/user.php');
+	include('functions.php');
+	//TODO: Category ID -> name, Rating ID -> integer, add error checks
 
 	sendResponseCodeAndExitIfTrue(strpos(getenv('REQUEST_URI'), '/api/') != 0, 400);
 	
@@ -71,8 +39,7 @@
 	sendResponseCodeAndExitIfTrue(count($param) < 1, 400);
 	sendResponseCodeAndExitIfTrue($origKey != $appKey, 403);
 	
-	$config = include('config.php');
-	$mysqlConn = new mysqli($config['mysql_host'], $config['mysql_user'], $config['mysql_pass'], $config['mysql_db']);
+	$mysqlConn = connectToDatabase();
 	$topLevelRequest = $param[0];
 	
 	switch ($topLevelRequest) {
