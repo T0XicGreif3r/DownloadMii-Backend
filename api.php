@@ -22,8 +22,8 @@
 
 	*/
 	
-	include('secure/user.php');
-	include('functions.php');
+	include('common/user.php');
+	include('common/functions.php');
 	//TODO: Category ID -> name, Rating ID -> integer, add error checks
 
 	sendResponseCodeAndExitIfTrue(strpos(getenv('REQUEST_URI'), '/api/') != 0, 400);

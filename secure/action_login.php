@@ -3,10 +3,10 @@
 		DownloadMii Login Handler
 	*/
 	
-	include('user.php');
-	include('../functions.php');
+	include('../common/user.php');
+	include('../common/functions.php');
 	
-	printAndExitIfTrue(!isset($_SESSION['login_token']), 422); //Check if session login token is set
+	sendResponseCodeAndExitIfTrue(!isset($_SESSION['login_token']), 422); //Check if session login token is set
 	$sessionToken = $_SESSION['login_token'];
 	unset($_SESSION['login_token']);
 	
@@ -19,14 +19,16 @@
 	$hashedTryUserPass = crypt($tryUserPass, getenv('USERLOGIN_salt'));
 	
 	$mysqlConn = connectToDatabase();
-	$queryResponseArr = getArrayFromSQLQuery($mysqlConn, 'SELECT userId, nick, token FROM users WHERE nick = ? AND password = ?', 'ss', [$tryUserName, $hashedTryUserPass]);
-	$mysqlConn->close();
+	$queryResponseArr = getArrayFromSQLQuery($mysqlConn, 'SELECT userId, nick FROM users WHERE nick = ? AND password = ? LIMIT 2', 'ss', [$tryUserName, $hashedTryUserPass]);
 	
 	printAndExitIfTrue(count($queryResponseArr) != 1, 'Wrong username or password.'); //Check if there is one user matching attempted user/pass combination
 	
-	$_SESSION['user_id'] = $queryResponseArr[0]->userId;
-	$_SESSION['user_nick'] = $queryResponseArr[0]->nick;
-	$_SESSION['user_token'] = $queryResponseArr[0]->token;
+	executeSafeSQLQuery($mysqlConn, 'UPDATE users SET token = ? WHERE userId = ? LIMIT 1', 'ss', [$sessionToken, $queryResponseArr[0]['userId']]); //Update user token in database
+	$mysqlConn->close();
+	
+	$_SESSION['user_id'] = $queryResponseArr[0]['userId'];
+	$_SESSION['user_nick'] = $queryResponseArr[0]['nick'];
+	$_SESSION['user_token'] = $sessionToken;
 	
 	//Redirect somewhere. If no redirect URL set, redirect to domain root
 	$redirectUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/';
@@ -34,5 +36,5 @@
 		$redirectUrl .= $_GET['redirect'];
 	}
 	
-	#header('Location: ' . $redirectUrl);
+	header('Location: ' . $redirectUrl);
 ?>

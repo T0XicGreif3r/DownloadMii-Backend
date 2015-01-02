@@ -3,8 +3,8 @@
 		TEST/TEMPORARY
 	*/
 	
-	include('user.php');
-	include('../functions.php');
+	include('../common/user.php');
+	include('../common/functions.php');
 	
 	$token = generateRandomString();
 	$_SESSION['login_token'] = md5(getenv('TOKEN_salt') . $token);
