@@ -23,7 +23,7 @@
 	
 	printAndExitIfTrue(count($queryResponseArr) != 1, 'Invalid username and/or password.'); //Check if there is one user matching attempted user/pass combination
 	
-	executeSafeSQLQuery($mysqlConn, 'UPDATE users SET token = ? WHERE userId = ? LIMIT 1', 'ss', [$sessionToken, $queryResponseArr[0]['userId']]); //Update user token in database
+	executePreparedSQLQuery($mysqlConn, 'UPDATE users SET token = ? WHERE userId = ? LIMIT 1', 'ss', [$sessionToken, $queryResponseArr[0]['userId']]); //Update user token in database
 	$mysqlConn->close();
 	
 	$_SESSION['user_id'] = $queryResponseArr[0]['userId'];

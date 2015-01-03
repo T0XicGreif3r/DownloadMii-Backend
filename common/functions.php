@@ -6,8 +6,8 @@
 	/**
 	* Generate a random alphanumreric string
 	*
-	* @param int $len The length of the string to be returned
-	* @return string The random string
+	* @param int $len The desired length of the string to be returned
+	* @return string The generated string
 	*/
 	function generateRandomString($len = 48) {
 		$str = implode(range(0, 9)) . implode(range('A', 'Z')) . implode(range('a', 'z'));
@@ -73,10 +73,10 @@
 	* @param string $sql The SQL statement to be prepared
 	* @param string $bindParamTypes A string that contains one or more characters that specify the types of the corresponding bind variables (corresponds to $types in mysqli_stmt::bind_param)
 	* @param array $bindParamVarsArr An array of variables to bind to the SQL query (corresponds to $var1 in mysqli_stmt::bind_param, however an array here)
-	* @param bool $returnStmt If true, return the mysqli_stmt object for the prepared statement, otherwise return null
+	* @param bool $returnStmt If true, return the mysqli_stmt object for the prepared statement, otherwise close it and return null
 	* @return mixed If $returnStmt is true, the mysqli_stmt object for the prepared statement, otherwise null
 	*/
-	function executeSafeSQLQuery($conn, $sql, $bindParamTypes = null, $bindParamVarsArr = null, $returnStmt = false) {
+	function executePreparedSQLQuery($conn, $sql, $bindParamTypes = null, $bindParamVarsArr = null, $returnStmt = false) {
 		$stmt = $conn->prepare($sql);
 		if (isset($bindParamTypes, $bindParamVarsArr)) {
 			$callUserArgs = $bindParamVarsArr;
@@ -111,7 +111,7 @@
 	* @return array The returned rows from the SQL query
 	*/
 	function getArrayFromSQLQuery($conn, $sql, $bindParamTypes = null, $bindParamVarsArr = null) {
-		$stmt = executeSafeSQLQuery($conn, $sql, $bindParamTypes, $bindParamVarsArr, true);
+		$stmt = executePreparedSQLQuery($conn, $sql, $bindParamTypes, $bindParamVarsArr, true);
 		$mysqlResult = $stmt->get_result(); //Get results
 		
 		$arr = array();
