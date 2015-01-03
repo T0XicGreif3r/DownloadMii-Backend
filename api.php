@@ -24,7 +24,6 @@
 	
 	require_once('common/user.php');
 	require_once('common/functions.php');
-	//TODO: Category ID -> name, Rating ID -> integer, add error checks
 	
 	sendResponseCodeAndExitIfTrue(strpos(getenv('REQUEST_URI'), '/api/') != 0, 400);
 	
@@ -42,6 +41,7 @@
 	$mysqlConn = connectToDatabase();
 	$topLevelRequest = $param[0];
 	
+	//TODO: Error check
 	switch ($topLevelRequest) {
 		case 'bydev':
 			$mysqlQuery = 'SELECT app.* FROM apps app JOIN users usr ON usr.userId = app.creator WHERE usr.nick = ?'; //Select rows from apps table by queried developer
@@ -52,11 +52,16 @@
 			sendResponseCodeAndExitIfTrue(count($param) < 2, 400);
 			$secondLevelRequest = $param[1];
 			
+			//Base query
+			$mysqlQuery = 'SELECT app.*, maincat.name AS category, subcat.name AS subcategory, othercat.name AS othercategory, user.nick AS publisher FROM apps app
+							LEFT JOIN users user ON user.userId = app.publisher
+							LEFT JOIN categories maincat ON maincat.categoryId = app.category
+							LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
+							LEFT JOIN categories othercat ON othercat.categoryId = app.othercategory';
+			
 			switch ($secondLevelRequest) {
 				case 'TopDownloadedApps':
 				case 'TopDownloadedGames':
-					$mysqlQuery = 'SELECT app.* FROM apps app JOIN categories maincat ON maincat.categoryId = app.category'; //Select top 10 downloaded apps/games
-					
 					//Ask for only apps/games depending on request
 					if ($secondLevelRequest == 'TopDownloadedApps') {
 						$mysqlQuery .= ' WHERE maincat.name != "Games"';
@@ -65,7 +70,7 @@
 						$mysqlQuery .= ' WHERE maincat.name = "Games"';
 					}
 					
-					$mysqlQuery .= ' ORDER BY app.downloads DESC LIMIT 10';
+					$mysqlQuery .= ' ORDER BY app.downloads DESC LIMIT 10'; //Select top 10 downloaded apps/games
 					print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps'));
 					break;
 					
@@ -75,7 +80,6 @@
 					break;
 				
 				case 'Applications':
-					$mysqlQuery = 'SELECT app.* FROM apps app';
 					$bindParamTypes = null;
 					$bindParamArgs = null;
 					
@@ -85,21 +89,18 @@
 						$bindParamArgs = array($param[2]);
 						
 						$mysqlQueryEnd = ' WHERE maincat.name = ?';
-						$mysqlQuery .= ' JOIN categories maincat ON maincat.categoryId = app.category';
 						
 						if (count($param) > 3) {
 							$bindParamTypes .= 's';
 							array_push($bindParamArgs, $param[3]);
 							
 							$mysqlQueryEnd .= ' AND subcat.name = ?';
-							$mysqlQuery .= ' JOIN categories subcat ON subcat.categoryId = app.subcategory';
 						
 							if (count($param) > 4) {
 								$bindParamTypes .= 's';
 								array_push($bindParamArgs, $param[4]);
 								
 								$mysqlQueryEnd .= ' AND othercat.name = ?';
-								$mysqlQuery .= ' JOIN categories othercat ON othercat.categoryId = app.othercategory';
 							}
 						}
 						
