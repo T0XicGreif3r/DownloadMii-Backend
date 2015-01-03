@@ -71,6 +71,7 @@
 					
 				case 'StaffPicks':
 					# code...
+					echo "Error: Not implemented!";
 					break;
 				
 				case 'Applications':
