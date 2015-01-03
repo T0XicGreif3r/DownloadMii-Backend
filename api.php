@@ -66,7 +66,7 @@
 					}
 					
 					$mysqlQuery .= ' ORDER BY app.downloads DESC LIMIT 10';
-					print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, $secondLevelRequest));
+					print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps'));
 					break;
 					
 				case 'StaffPicks':
