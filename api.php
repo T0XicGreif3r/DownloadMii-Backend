@@ -128,6 +128,8 @@
 				//get the current main banner
 			}
 			break;
+		default:
+			echo "Error: incorrect use of API!";
 	}
 	$mysqlConn->close();
 ?>
