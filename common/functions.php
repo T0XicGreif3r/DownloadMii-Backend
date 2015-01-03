@@ -23,7 +23,7 @@
 	}
 	
 	function connectToDatabase() {
-		$config = include($_SERVER['DOCUMENT_ROOT'] . '/DownloadMii-Website/config.php');
+		$config = include($_SERVER['DOCUMENT_ROOT'] . '\config.php');
 		$mysqlConn = new mysqli($config['mysql_host'], $config['mysql_user'], $config['mysql_pass'], $config['mysql_db']); //Connect
 		printAndExitIfTrue($mysqlConn->connect_errno, 'Error connecting to database.'); //Check for connection errors
 		return $mysqlConn;
