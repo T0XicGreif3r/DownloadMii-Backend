@@ -3,10 +3,23 @@
 		DownloadMii Internal Functions
 	*/
 	
-	function generateRandomString() {
-		return substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyz', 24)), 0, 24);
+	/**
+	* Generate a random alphanumreric string
+	*
+	* @param int $len The length of the string to be returned
+	* @return string The random string
+	*/
+	function generateRandomString($len = 48) {
+		$str = implode(range(0, 9)) . implode(range('A', 'Z')) . implode(range('a', 'z'));
+		return substr(str_shuffle(str_repeat($str, 2)), 0, $len);
 	}
 
+	/**
+	* Evaluate a condition and, if it is true, exit with a HTTP response code
+	*
+	* @param bool $condition The condition to be evaluated
+	* @param bool $responseCode The response code to return to the client
+	*/
 	function sendResponseCodeAndExitIfTrue($condition, $responseCode) {
 		if ($condition) {
 			http_response_code($responseCode);
@@ -15,6 +28,12 @@
 		}
 	}
 
+	/**
+	* Evaluate a condition and, if it is true, print a string and exit
+	*
+	* @param bool $condition The condition to be evaluated
+	* @param bool $responseCode The string to return to the client
+	*/
 	function printAndExitIfTrue($condition, $str) {
 		if ($condition) {
 			print($str);
@@ -22,13 +41,41 @@
 		}
 	}
 	
+	/**
+	* Get a value from the config.php file
+	*
+	* @param string $key The configuration key to get a value from
+	* @return mixed The configuration value of the key
+	*/
+	function getConfigValue($key) {
+		static $config;
+		if (!isset($config)) {
+			$config = require($_SERVER['DOCUMENT_ROOT'] . '\config.php'); //Load config if not loaded already
+		}
+		return $config[$key];
+	}
+	
+	/**
+	* Connect to the MySQL database through MySQLi
+	*
+	* @return mysqli The MySQLi connection object
+	*/
 	function connectToDatabase() {
-		$config = include($_SERVER['DOCUMENT_ROOT'] . '\config.php');
-		$mysqlConn = new mysqli($config['mysql_host'], $config['mysql_user'], $config['mysql_pass'], $config['mysql_db']); //Connect
+		$mysqlConn = new mysqli(getConfigValue('mysql_host'), getConfigValue('mysql_user'), getConfigValue('mysql_pass'), getConfigValue('mysql_db')); //Connect
 		printAndExitIfTrue($mysqlConn->connect_errno, 'Error connecting to database.'); //Check for connection errors
 		return $mysqlConn;
 	}
 	
+	/**
+	* Execute an SQL query with prepared statements
+	*
+	* @param mysqli $conn The MySQLi connection to execute the query on
+	* @param string $sql The SQL statement to be prepared
+	* @param string $bindParamTypes A string that contains one or more characters that specify the types of the corresponding bind variables (corresponds to $types in mysqli_stmt::bind_param)
+	* @param array $bindParamVarsArr An array of variables to bind to the SQL query (corresponds to $var1 in mysqli_stmt::bind_param, however an array here)
+	* @param bool $returnStmt If true, return the mysqli_stmt object for the prepared statement, otherwise return null
+	* @return mixed If $returnStmt is true, the mysqli_stmt object for the prepared statement, otherwise null
+	*/
 	function executeSafeSQLQuery($conn, $sql, $bindParamTypes = null, $bindParamVarsArr = null, $returnStmt = false) {
 		$stmt = $conn->prepare($sql);
 		if (isset($bindParamTypes, $bindParamVarsArr)) {
@@ -50,9 +97,19 @@
 		}
 		else {
 			$stmt->close();
+			return null;
 		}
 	}
 	
+	/**
+	* Get an array of rows from an SQL query with prepared statements
+	*
+	* @param mysqli $conn The MySQLi connection to execute the query on
+	* @param string $sql The SQL statement to be prepared
+	* @param string $bindParamTypes A string that contains one or more characters that specify the types of the corresponding bind variables (corresponds to $types in mysqli_stmt::bind_param)
+	* @param array $bindParamVarsArr An array of variables to bind to the SQL query (corresponds to $var1 in mysqli_stmt::bind_param, however an array here)
+	* @return array The returned rows from the SQL query
+	*/
 	function getArrayFromSQLQuery($conn, $sql, $bindParamTypes = null, $bindParamVarsArr = null) {
 		$stmt = executeSafeSQLQuery($conn, $sql, $bindParamTypes, $bindParamVarsArr, true);
 		$mysqlResult = $stmt->get_result(); //Get results
@@ -66,6 +123,16 @@
 		return $arr;
 	}
 	
+	/**
+	* Get a JSON string of an array of rows from an SQL query with prepared statements
+	*
+	* @param mysqli $conn The MySQLi connection to execute the query on
+	* @param string $sql The SQL statement to be prepared
+	* @param string $name The desired name of the enclosing object around the rows
+	* @param string $bindParamTypes A string that contains one or more characters that specify the types of the corresponding bind variables (corresponds to $types in mysqli_stmt::bind_param)
+	* @param array $bindParamVarsArr An array of variables to bind to the SQL query (corresponds to $var1 in mysqli_stmt::bind_param, however an array here)
+	* @return string The JSON string with the enclosing object
+	*/
 	function getJSONFromSQLQuery($conn, $sql, $name, $bindParamTypes = null, $bindParamVarsArr = null) {
 		$arr = getArrayFromSQLQuery($conn, $sql, $bindParamTypes, $bindParamVarsArr);
 		$jsonResultObj = (object)array($name => $arr); //Create an enclosing object
