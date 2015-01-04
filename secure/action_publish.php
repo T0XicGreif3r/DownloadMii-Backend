@@ -13,8 +13,9 @@
 	
 	sendResponseCodeAndExitIfTrue(!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])), 403); //Check if logged in
 	
-	sendResponseCodeAndExitIfTrue(!(isset($_POST['name'], $_POST['version'], $_POST['maincat'], $_POST['description'], $_POST['3dsx'], $_POST['smdh'], $_POST["g-recaptcha-response"], $_POST['publishtoken'])), 400); //Check if all expected POST vars are set
-	sendResponseCodeAndExitIfTrue($publishToken != md5(getConfigValue('salt_token') . $_POST['publishtoken']), 422); //Check if POST publishing token is correct
+	sendResponseCodeAndExitIfTrue(!(isset($_POST['name'], $_POST['version'], $_POST['category'], $_POST['description'], $_POST['3dsx'], $_POST['smdh'], $_POST["g-recaptcha-response"], $_POST['publishtoken'])), 400); //Check if all expected POST vars are set
+	sendResponseCodeAndExitIfTrue($publishToken !== md5(getConfigValue('salt_token') . $_POST['publishtoken']), 422); //Check if POST publishing token is correct
+	sendResponseCodeAndExitIfTrue(!is_numeric($_POST['category']), 422); //Check if category selected
 	
 	//Check captcha
 	$reCaptcha = new ReCaptcha(getConfigValue('apikey_recaptcha_secret'));

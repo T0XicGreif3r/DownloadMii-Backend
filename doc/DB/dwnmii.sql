@@ -1,4 +1,4 @@
-CREATE TABLE users (
+CREATE TABLE users(
 	userId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	nick VARCHAR(50) NOT NULL UNIQUE,
 	password VARCHAR(32) NOT NULL,
@@ -12,28 +12,35 @@ CREATE TABLE categories(
 	name VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE appversions(
+	versionId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	number VARCHAR(25) NOT NULL,
+	3dsx VARCHAR(255) NOT NULL,
+	smdh VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE apps(
 	guid CHAR(36) NOT NULL PRIMARY KEY,
 	name VARCHAR(50) NOT NULL,
 	publisher INT NOT NULL,
-	version VARCHAR(25) NOT NULL,
+	version INT NOT NULL,
 	description TEXT NULL,
 	category INT NOT NULL,
 	subcategory INT NULL,
 	othercategory INT NULL,
-	3dsx VARCHAR(255) NOT NULL,
-	smdh VARCHAR(255) NOT NULL,
 	rating TINYINT NOT NULL DEFAULT 0,
 	downloads INT NOT NULL DEFAULT 0,
+	published BOOLEAN NOT NULL DEFAULT 0,
 
 	FOREIGN KEY (publisher) REFERENCES users(userId),
+	FOREIGN KEY (version) REFERENCES appversions(versionId),
 	FOREIGN KEY (category) REFERENCES categories(categoryId),
 	FOREIGN KEY (subcategory) REFERENCES categories(categoryId),
 	FOREIGN KEY (othercategory) REFERENCES categories(categoryId)
 );
 
 CREATE TABLE ratings(
-	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	ratingId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	appGuid CHAR(36) NOT NULL,
 	userId INT NOT NULL,
 	rate TINYINT NOT NULL DEFAULT 0,
@@ -43,9 +50,9 @@ CREATE TABLE ratings(
 );
 
 CREATE TABLE developers(
-	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	developerId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	appGuid CHAR(36) NOT NULL,
-	developerId INT NOT NULL,
+	userId INT NOT NULL,
 	nick VARCHAR(50) NULL,
 
 	FOREIGN KEY (appGuid) REFERENCES apps(guid),

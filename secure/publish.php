@@ -19,13 +19,17 @@
 	
 	$mysqlConn = connectToDatabase();
 	if (isset($_GET['guid'], $_GET['token'], $myappsToken) && $myappsToken == md5(getConfigValue('salt_token') . $_GET['token'])) {
-		$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT * FROM apps WHERE guid = ? AND publisher = ? LIMIT 2', 'is', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
+		$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, appver.number AS version FROM apps app
+															LEFT JOIN appversions appver ON appver.versionId = app.version
+															WHERE app.guid = ? AND app.publisher = ? LIMIT 2', 'is', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
+		
 		printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
 			
 		$appToEdit = $matchingApps[0];
 		$_SESSION['user_app_guid'] = $_GET['guid'];
 	}
-		
+	
+	$editing = isset($appToEdit);
 	$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories');
 ?>
 
@@ -36,19 +40,19 @@
 				<div class="row">
 					<div class="col-md-4 form-group">
 						<label for="name">Name:</label>
-						<input type="text" class="form-control" id="name" name="name" placeholder="e.g. My Application" maxlength="50" required>
+						<input type="text" class="form-control" id="name" name="name" placeholder="e.g. My Application" maxlength="50" value="<?php if ($editing) echo $appToEdit['name']; ?>" required>
 					</div>
 					<div class="col-md-4 form-group">
 						<label for="version">Version:</label>
-						<input type="text" class="form-control" id="version" name="version" placeholder="e.g. 1.0.0.0" maxlength="25" required>
+						<input type="text" class="form-control" id="version" name="version" placeholder="e.g. 1.0.0.0" maxlength="25" value="<?php if ($editing) echo $appToEdit['version']; ?>" required>
 					</div>
 					<div class="col-md-4 form-group">
-						<label for="maincat">Category:</label>
-						<select class="form-control" id="maincat" name="maincat" required>
+						<label for="category">Category:</label>
+						<select class="form-control" id="category" name="category" required>
 							<option value="">Select a category...</option>
 							<?php
 								foreach ($categories as $category) {
-									print('<option value="' . $category['categoryId'] . '">' . $category['name'] . '</option>');
+									echo '<option value="' . $category['categoryId'] . '">' . $category['name'] . '</option>';
 								}
 ?>
 
@@ -57,16 +61,16 @@
 				</div>
 				<div class="form-group">
 					<label for="description">Description (optional):</label>
-					<textarea class="form-control" id="description" name="description" maxlength="255"></textarea>
+					<textarea class="form-control" id="description" name="description" maxlength="255"><?php if ($editing) echo $appToEdit['description']; ?></textarea>
 				</div>
 				<div class="row">
 					<div class="col-md-6 form-group">
-						<label for="3dsx">3dsx file:</label>
-						<input type="file" class="form-control" id="3dsx" name="3dsx" required>
+						<label for="3dsx">3dsx file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
+						<input type="file" class="form-control" id="3dsx" name="3dsx"<?php if (!$editing) echo ' required'; ?>>
 					</div>
 					<div class="col-md-6 form-group">
-						<label for="smdh">smdh file:</label>
-						<input type="file" class="form-control" id="smdh" name="smdh" required>
+						<label for="smdh">smdh file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
+						<input type="file" class="form-control" id="smdh" name="smdh"<?php if (!$editing) echo ' required'; ?>>
 					</div>
 				</div>
 				<div class="form-group">
@@ -78,7 +82,15 @@
 				<input type="hidden" name="publishtoken" value="<?php echo $publishToken; ?>">
 			</form>
 		</div>
-		<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+		<script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script>
+		<?php
+		if ($editing) {
+?>
+
+		<script type="text/javascript">
+			document.getElementById('category').value = <?php echo $appToEdit['category']; ?>;
+		</script>
 <?php
+		}
 	require_once('../common/ucpfooter.php');
 ?>

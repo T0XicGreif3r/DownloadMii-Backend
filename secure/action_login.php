@@ -12,7 +12,7 @@
 	
 	printAndExitIfTrue(isset($_SESSION['user_id']) && $_SESSION['user_id'], 'You are already logged in.'); //Check if already logged in
 	sendResponseCodeAndExitIfTrue(!(isset($_POST['user'], $_POST['pass'], $_POST['logintoken'])), 400); //Check if all expected POST vars are set
-	sendResponseCodeAndExitIfTrue($userToken != md5(getConfigValue('salt_token') . $_POST['logintoken']), 422); //Check if POST login token is correct
+	sendResponseCodeAndExitIfTrue($userToken !== md5(getConfigValue('salt_token') . $_POST['logintoken']), 422); //Check if POST login token is correct
 	
 	$tryUserName = htmlspecialchars($_POST['user']);
 	$tryUserPass = htmlspecialchars($_POST['pass']);

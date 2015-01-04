@@ -22,10 +22,10 @@
 		<link href="/css/bootstrap.css" rel="stylesheet"/>
 		<link href="/css/mainStruct.css" rel="stylesheet"/>
 		<style>
-			header{
+			header {
 				margin-bottom: 75px;
 			}
-			#mainContent{
+			#mainContent {
 				margin-left: auto;
 				margin-right: auto;
 				max-width: 1200px;
@@ -48,14 +48,14 @@
 				<div class="collapse navbar-collapse" id="navbar-collapse-main">
 				  <ul class="nav navbar-nav navbar-right">
 					<?php
-						if(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])){
+						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
 					?>
 					<li><a href="/secure/myapps.php">My Apps</a></li>
 					<li><a href="/secure/publish.php">Publish App</a></li>
-					<li><a href="/secure/action_signout.php">Log out</a></li>
+					<li><a href="/secure/action_signout.php">Log Out</a></li>
 					<?php
 						}
-						else{
+						else {
 					?>
 					<li><a href="/secure/login.php">Login</a></li>
 					<?php

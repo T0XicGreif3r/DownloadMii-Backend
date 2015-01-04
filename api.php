@@ -53,21 +53,22 @@
 			$secondLevelRequest = $param[1];
 			
 			//Base query
-			$mysqlQuery = 'SELECT app.*, maincat.name AS category, subcat.name AS subcategory, othercat.name AS othercategory, user.nick AS publisher FROM apps app
+			$mysqlQuery = 'SELECT app.*, maincat.name AS category, subcat.name AS subcategory, othercat.name AS othercategory, user.nick AS publisher, appver.number AS version, appver.3dsx AS 3dsx, appver.smdh AS smdh FROM apps app
 							LEFT JOIN users user ON user.userId = app.publisher
+							LEFT JOIN appversions appver ON appver.versionId = app.version
 							LEFT JOIN categories maincat ON maincat.categoryId = app.category
 							LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
-							LEFT JOIN categories othercat ON othercat.categoryId = app.othercategory';
+							LEFT JOIN categories othercat ON othercat.categoryId = app.othercategory WHERE app.published = 1';
 			
 			switch ($secondLevelRequest) {
 				case 'TopDownloadedApps':
 				case 'TopDownloadedGames':
 					//Ask for only apps/games depending on request
 					if ($secondLevelRequest == 'TopDownloadedApps') {
-						$mysqlQuery .= ' WHERE maincat.name != "Games"';
+						$mysqlQuery .= ' AND maincat.name != "Games"';
 					}
 					else {
-						$mysqlQuery .= ' WHERE maincat.name = "Games"';
+						$mysqlQuery .= ' AND maincat.name = "Games"';
 					}
 					
 					$mysqlQuery .= ' ORDER BY app.downloads DESC LIMIT 10'; //Select top 10 downloaded apps/games
@@ -87,7 +88,7 @@
 					if (count($param) > 2) {
 						$bindParamTypes = 's';
 						$bindParamArgs = array($param[2]);
-						$mysqlQueryEnd = ' WHERE maincat.name = ?';
+						$mysqlQueryEnd = ' AND maincat.name = ?';
 						
 						if (count($param) > 3) {
 							$bindParamTypes .= 's';

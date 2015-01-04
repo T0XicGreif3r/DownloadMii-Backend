@@ -1,7 +1,6 @@
 #Download Mii DB Table description
 
 ##Users
-
 Column|Description|
 ---|:---|
 `userId`|Unique id for the user|
@@ -17,26 +16,32 @@ Column|Description|
 `categoryId` | id of the category |
 `name` | name of the category |
 
+##AppVersions
+Column|Description|
+---|:---|
+`versionId` | Id of the version |
+`number` | Version number, ex: '1.0.0.0' |
+`3dsx` | 3dsx url |
+`smdh` | smdh url |
+
 ##Apps
 Column|Description|
 ---|:---|
-`guid` | GUID of the app. |
+`guid` | GUID of the app |
 `name` | name of the app |
-`version` | Version of the app, ex: '1.0.0.0' |
-`publisher` | id of the user who can audit the app details |
+`version` | id of the current version, reference into appversions table |
+`publisher` | id of the user who can audit the app details, reference into users table |
 `description` | description  of the app, accept HTML |
 `category` | id of the category, reference into categories table |
 `subcategory`| id of the category, reference into categories table |
 `othercategory`| id of the category, reference into categories table |
-`3dsx` | 3dsx url |
-`smdh` | smdh url |
 `rating` | Average app rating |
 `downloads` | Download count |
 
 ##Ratings
 Column|Description|
 ---|:---|
-`id` | Id of the rating |
+`ratingId` | Id of the rating |
 `appGuid` | Guid of the rated app |
 `userId` | Id of the user who rated the app |
 `rate` | Ratting of the user for the app(Values Between 1 & 5) |
@@ -44,7 +49,7 @@ Column|Description|
 ##Developers
 Column|Description|
 ---|:---|
-`id` | Id of the association |
+`developerId` | Id of the association |
 `appGuid` | Guid of the app |
 `userId` | Id of the user who had worked in the develop of the app(appGuid). If the user isn't registred on the system then this column will be NULL and his nick will be in the next column. |
 `nick` | Nick of a developer if isn't registred on the system |
