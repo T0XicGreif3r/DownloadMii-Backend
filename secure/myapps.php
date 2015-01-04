@@ -5,17 +5,16 @@
 	
 	require_once('../common/ucpheader.php');
 	
-	sendResponseCodeAndExitIfTrue(!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])), 403); //Check if logged in
+	if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
+		$myappsToken = generateRandomString();
+		$_SESSION['myapps_token'] = md5(getConfigValue('salt_token') . $myappsToken);
+		
+		$mysqlConn = connectToDatabase();
+		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, appver.number AS version FROM apps app
+														LEFT JOIN appversions appver ON appver.versionId = app.version
+														WHERE app.publisher = ?', 'i', [$_SESSION['user_id']]);
 	
-	$myappsToken = generateRandomString();
-	$_SESSION['myapps_token'] = md5(getConfigValue('salt_token') . $myappsToken);
-	
-	$mysqlConn = connectToDatabase();
-	$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, appver.number AS version FROM apps app
-													LEFT JOIN appversions appver ON appver.versionId = app.version
-													WHERE app.publisher = ?', 'i', [$_SESSION['user_id']]);
-	
-	foreach ($userApps as $app) {
+		foreach ($userApps as $app) {
 ?>
 		<div class="well clearfix">
 			<h4 class="pull-left"><?php echo $app['name'] . ' (' . $app['version'] . ')'; ?></h4>
@@ -25,6 +24,7 @@
 			</div>
 		</div>
 <?php
+		}
 	}
 	
 	require_once('../common/ucpfooter.php');

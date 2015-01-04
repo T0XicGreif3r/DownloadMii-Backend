@@ -12,25 +12,24 @@
 	
 	unset($_SESSION['user_app_guid']); //Unset GUID setting
 	
-	sendResponseCodeAndExitIfTrue(!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])), 403); //Check if logged in
-	
-	$publishToken = generateRandomString(); //Generate token for publish action
-	$_SESSION['publish_token'] = md5(getConfigValue('salt_token') . $publishToken);
-	
-	$mysqlConn = connectToDatabase();
-	if (isset($_GET['guid'], $_GET['token'], $myappsToken) && $myappsToken == md5(getConfigValue('salt_token') . $_GET['token'])) {
-		$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, appver.number AS version FROM apps app
-															LEFT JOIN appversions appver ON appver.versionId = app.version
-															WHERE app.guid = ? AND app.publisher = ? LIMIT 2', 'is', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
+	if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
+		$publishToken = generateRandomString(); //Generate token for publish action
+		$_SESSION['publish_token'] = md5(getConfigValue('salt_token') . $publishToken);
 		
-		printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
+		$mysqlConn = connectToDatabase();
+		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && $myappsToken == md5(getConfigValue('salt_token') . $_GET['token'])) {
+			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, appver.number AS version FROM apps app
+																LEFT JOIN appversions appver ON appver.versionId = app.version
+																WHERE app.guid = ? AND app.publisher = ? LIMIT 2', 'is', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
 			
-		$appToEdit = $matchingApps[0];
-		$_SESSION['user_app_guid'] = $_GET['guid'];
-	}
-	
-	$editing = isset($appToEdit);
-	$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories');
+			printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
+				
+			$appToEdit = $matchingApps[0];
+			$_SESSION['user_app_guid'] = $_GET['guid'];
+		}
+		
+		$editing = isset($appToEdit);
+		$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories');
 ?>
 
 		<div class="well">
@@ -84,13 +83,14 @@
 		</div>
 		<script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script>
 		<?php
-		if ($editing) {
+			if ($editing) {
 ?>
 
 		<script type="text/javascript">
 			document.getElementById('category').value = <?php echo $appToEdit['category']; ?>;
 		</script>
 <?php
+			}
 		}
 	require_once('../common/ucpfooter.php');
 ?>
