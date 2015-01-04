@@ -5,11 +5,20 @@
 	
 	require_once('../common/ucpheader.php');
 	
+	if (isset($_SESSION['myapps_token'])) {
+		$myappsToken = $_SESSION['myapps_token'];
+		unset($_SESSION['myapps_token']);
+	}
+	
 	unset($_SESSION['user_app_guid']); //Unset GUID setting
+	
 	sendResponseCodeAndExitIfTrue(!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])), 403); //Check if logged in
 	
+	$publishToken = generateRandomString(); //Generate token
+	$_SESSION['publish_token'] = md5(getConfigValue('salt_token') . $publishToken);
+	
 	$mysqlConn = connectToDatabase();
-	if (isset($_GET['guid'])) {
+	if (isset($_GET['guid'], $_GET['token'], $myappsToken) && $myappsToken == md5(getConfigValue('salt_token') . $_GET['token'])) {
 		$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT * FROM apps WHERE guid = ? AND publisher = ? LIMIT 2', 'is', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
 		printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
 		
@@ -53,18 +62,23 @@
 				<div class="row">
 					<div class="col-md-6 form-group">
 						<label for="3dsx">3dsx file:</label>
-						<input type="file" class="form-control" class="form-control" id="3dsx" name="3dsx" required>
+						<input type="file" class="form-control" id="3dsx" name="3dsx" required>
 					</div>
 					<div class="col-md-6 form-group">
 						<label for="smdh">smdh file:</label>
-						<input type="file" class="form-control" class="form-control" id="smdh" name="smdh" required>
+						<input type="file" class="form-control" id="smdh" name="smdh" required>
 					</div>
+				</div>
+				<div class="form-group">
+					<div class="g-recaptcha" data-sitekey="<?php echo getConfigValue('apikey_recaptcha_site'); ?>"></div>
 				</div>
 				<div class="form-group">
 					<button type="submit" name="submit" class="btn btn-primary">Submit</button>
 				</div>
+				<input type="hidden" name="publishtoken" value="<?php echo $publishToken; ?>">
 			</form>
 		</div>
+		<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <?php
 	require_once('../common/ucpfooter.php');
 ?>

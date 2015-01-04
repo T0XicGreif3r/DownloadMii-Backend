@@ -1,14 +1,19 @@
 <?php
 	/*
 		TEST/TEMPORARY
+		This file automatically includes user.php and functions.php
 	*/
 	
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\user.php');
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\functions.php');
 	
-	//Redirect to login page
-	if (!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) && strcasecmp($_SERVER['REQUEST_URI'], '/secure/login.php') ) {
-		header('Location: http://' . $_SERVER['HTTP_HOST'] . '/secure/login.php');
+	if (!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']))) {
+		if (strcasecmp($_SERVER['REQUEST_URI'], '/secure/login.php')) {
+			header('Location: http://' . $_SERVER['HTTP_HOST'] . '/secure/login.php'); //Redirect to login page if logged out and not there already
+		}
+	}
+	else if (!strcasecmp($_SERVER['REQUEST_URI'], '/secure/login.php')) {
+		header('Location: http://' . $_SERVER['HTTP_HOST'] . '/secure/myapps.php'); //Redirect to "my apps" page if trying to access login page while logged in
 	}
 ?>
 <html>
@@ -19,6 +24,11 @@
 		<style>
 			header{
 				margin-bottom: 75px;
+			}
+			#mainContent{
+				margin-left: auto;
+				margin-right: auto;
+				max-width: 1200px;
 			}
 		</style>
 	</head>
@@ -46,3 +56,4 @@
 			</nav>
 		</header>
 		<div id="content">
+			<div id="mainContent">

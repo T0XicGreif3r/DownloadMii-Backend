@@ -7,12 +7,12 @@
 	require_once('../common/functions.php');
 	
 	sendResponseCodeAndExitIfTrue(!isset($_SESSION['login_token']), 422); //Check if session login token is set
-	$sessionToken = $_SESSION['login_token'];
+	$userToken = $_SESSION['login_token'];
 	unset($_SESSION['login_token']);
 	
 	printAndExitIfTrue(isset($_SESSION['user_id']) && $_SESSION['user_id'], 'You are already logged in.'); //Check if already logged in
 	sendResponseCodeAndExitIfTrue(!(isset($_POST['user'], $_POST['pass'], $_POST['logintoken'])), 400); //Check if all expected POST vars are set
-	sendResponseCodeAndExitIfTrue($sessionToken != md5(getConfigValue('salt_token') . $_POST['logintoken']), 422); //Check if POST login token is correct
+	sendResponseCodeAndExitIfTrue($userToken != md5(getConfigValue('salt_token') . $_POST['logintoken']), 422); //Check if POST login token is correct
 	
 	$tryUserName = htmlspecialchars($_POST['user']);
 	$tryUserPass = htmlspecialchars($_POST['pass']);
@@ -24,12 +24,12 @@
 	printAndExitIfTrue(count($matchingUsers) != 1, 'Invalid username and/or password.'); //Check if there is one user matching attempted user/pass combination
 	$user = $matchingUsers[0];
 	
-	executePreparedSQLQuery($mysqlConn, 'UPDATE users SET token = ? WHERE userId = ? LIMIT 1', 'ss', [$sessionToken, $user['userId']]); //Update user token in database
+	executePreparedSQLQuery($mysqlConn, 'UPDATE users SET token = ? WHERE userId = ? LIMIT 1', 'ss', [$userToken, $user['userId']]); //Update user token in database
 	$mysqlConn->close();
 	
 	$_SESSION['user_id'] = $user['userId'];
 	$_SESSION['user_nick'] = $user['nick'];
-	$_SESSION['user_token'] = $sessionToken;
+	$_SESSION['user_token'] = $userToken;
 	
 	//Redirect somewhere based on the domain root. If no redirect URL set, redirect to "my apps" list
 	$redirectUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/';
