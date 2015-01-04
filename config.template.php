@@ -5,17 +5,17 @@
 	
 	return array(
 		//MySQL
-		'mysql_host' => 'localhost',
-		'mysql_user' => 'root',
+		'mysql_host' => '',
+		'mysql_user' => '',
 		'mysql_pass' => '',
-		'mysql_db' => 'dwnmii_db',
+		'mysql_db' => '',
 		
 		//Salts
-		'salt_token' => 'd21vnsymyun5en8rki0b36vv7vka63s50jmhve09fhki40b',
-		'salt_password' => 'owDK8xH1WBpWig8tEdaHVQkSUuIAqjtnRTXDgGvb653vNsGP',
+		'salt_token' => '',
+		'salt_password' => '',
 		
 		//API keys
-		'apikey_recaptcha_site' => '6LdP3_8SAAAAAN3emtaNBthSMybF-sYDpB4YALsF',
-		'apikey_recaptcha_secret' => '6LdP3_8SAAAAAA0MHVh9psXlb5JNaJ55tpgT2qof'
+		'apikey_recaptcha_site' => '',
+		'apikey_recaptcha_secret' => ''
 	);
 ?>
