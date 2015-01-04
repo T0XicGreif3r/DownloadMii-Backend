@@ -6,13 +6,13 @@
 			</div>
 			<br />
 			<!-- ADS -->
-			<div id="FULLSCREEN" class="pad-section" style="height:300px;">
+			<div id="FULLSCREEN" class="pad-section" style="height:350px;">
 			  <div class="container">
 				<div class="row">
 						<style>
 							.downloadmii {
 								width: 100%;
-								height: 250px;
+								height: 300px;
 							}
 						</style>
 						<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -65,5 +65,20 @@
 				&copy;filfat Studio's 2014-2015; Website designed by <a href="http://www.filfatstudios.com">filfat Studio's</a>
 			</div>
 		</footer>
+		<!-- SCRIPTS  -->
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+		<script src="js/smooth-scroll.js"></script>
+		<script>
+			smoothScroll.init({
+			speed: 500, // Integer. How fast to complete the scroll in milliseconds
+			easing: 'easeInOutQuint', // Easing pattern to use
+			updateURL: false
+		});
+		$(function () {
+		  $('[data-toggle="tooltip"]').tooltip();
+		})
+		$("[rel=tooltip]").tooltip({html:true});
+		</script>
 	</body>
 </html>
