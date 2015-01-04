@@ -23,18 +23,25 @@
 		</style>
 	</head>
 	<body>
-		<div class="container">
-			<nav class="navbar navbar-default" role="navigation">
+		<header>
+			<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			  <div class="container-fluid">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="/">DownloadMii</a>
+				  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-main">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				  </button>
+				  <a class="navbar-brand" href="#">DownloadMii</a>
 				</div>
-				<div id="navbar" class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						<li><a href="/secure/myapps.php">My Apps</a></li>
-						<li><a href="/secure/publish.php">Publish App</a></li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="/secure/action_signout.php">Log out</a></li>
-					</ul>
+				<div class="collapse navbar-collapse" id="navbar-collapse-main">
+				  <ul class="nav navbar-nav navbar-right">
+					<li><a href="/secure/myapps.php">My Apps</a></li>
+					<li><a href="/secure/publish.php">Publish App</a></li>
+					<li><a href="/secure/action_signout.php">Log out</a></li>
+				  </ul>
 				</div>
+			  </div>
 			</nav>
+		</header>
