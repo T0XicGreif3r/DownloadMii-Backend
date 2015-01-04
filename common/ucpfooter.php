@@ -3,9 +3,6 @@
 		TEST/TEMPORARY
 	*/
 ?>
-					</div>
-				</div>
-			</div>
 		</div>
 	</body>
 </html>

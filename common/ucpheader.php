@@ -44,8 +44,5 @@
 			</nav>
 		</header>
 		<div id="content">
-			<div id="FULLSCREEN" class="pad-section">
-			  <div class="container">
-				
-			  </div>
-			</div>
+			<br/>
+			<br/>
