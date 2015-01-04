@@ -5,7 +5,7 @@
 ?>
 			<br />
 			<!-- ADS -->
-			<div id="FULLSCREEN" class="pad-section">
+			<div id="FULLSCREEN" class="pad-section" style="height:300px;">
 			  <div class="container">
 				<div class="row">
 						<style>
