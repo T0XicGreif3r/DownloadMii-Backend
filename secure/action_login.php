@@ -11,7 +11,7 @@
 	unset($_SESSION['login_token']);
 	
 	printAndExitIfTrue(isset($_SESSION['user_id']) && $_SESSION['user_id'], 'You are already logged in.'); //Check if already logged in
-	sendResponseCodeAndExitIfTrue(!(isset($_POST['user'], $_POST['pass'], $_POST['logintoken'], $_POST['submit'])), 400); //Check if all expected POST vars are set
+	sendResponseCodeAndExitIfTrue(!(isset($_POST['user'], $_POST['pass'], $_POST['logintoken'])), 400); //Check if all expected POST vars are set
 	sendResponseCodeAndExitIfTrue($sessionToken != md5(getConfigValue('salt_token') . $_POST['logintoken']), 422); //Check if POST login token is correct
 	
 	$tryUserName = htmlspecialchars($_POST['user']);
@@ -19,21 +19,25 @@
 	$hashedTryUserPass = crypt($tryUserPass, getConfigValue('salt_password'));
 	
 	$mysqlConn = connectToDatabase();
-	$queryResponseArr = getArrayFromSQLQuery($mysqlConn, 'SELECT userId, nick FROM users WHERE nick = ? AND password = ? LIMIT 2', 'ss', [$tryUserName, $hashedTryUserPass]);
+	$matchingUsers = getArrayFromSQLQuery($mysqlConn, 'SELECT userId, nick FROM users WHERE nick = ? AND password = ? LIMIT 2', 'ss', [$tryUserName, $hashedTryUserPass]);
 	
-	printAndExitIfTrue(count($queryResponseArr) != 1, 'Invalid username and/or password.'); //Check if there is one user matching attempted user/pass combination
+	printAndExitIfTrue(count($matchingUsers) != 1, 'Invalid username and/or password.'); //Check if there is one user matching attempted user/pass combination
+	$user = $matchingUsers[0];
 	
-	executePreparedSQLQuery($mysqlConn, 'UPDATE users SET token = ? WHERE userId = ? LIMIT 1', 'ss', [$sessionToken, $queryResponseArr[0]['userId']]); //Update user token in database
+	executePreparedSQLQuery($mysqlConn, 'UPDATE users SET token = ? WHERE userId = ? LIMIT 1', 'ss', [$sessionToken, $user['userId']]); //Update user token in database
 	$mysqlConn->close();
 	
-	$_SESSION['user_id'] = $queryResponseArr[0]['userId'];
-	$_SESSION['user_nick'] = $queryResponseArr[0]['nick'];
+	$_SESSION['user_id'] = $user['userId'];
+	$_SESSION['user_nick'] = $user['nick'];
 	$_SESSION['user_token'] = $sessionToken;
 	
-	//Redirect somewhere based on the domain root. If no redirect URL set, redirect to domain root
+	//Redirect somewhere based on the domain root. If no redirect URL set, redirect to "my apps" list
 	$redirectUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/';
 	if (isset($_GET['redirect'])) {
 		$redirectUrl .= $_GET['redirect'];
+	}
+	else {
+		$redirectUrl .= 'secure/myapps.php';
 	}
 	
 	header('Location: ' . $redirectUrl);

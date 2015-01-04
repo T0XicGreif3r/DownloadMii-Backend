@@ -13,6 +13,15 @@
 		$str = implode(range(0, 9)) . implode(range('A', 'Z')) . implode(range('a', 'z'));
 		return substr(str_shuffle(str_repeat($str, 2)), 0, $len);
 	}
+	
+	/**
+	* Generate a random GUID
+	*
+	* @return string The generated GUID
+	*/
+	function generateGUID() {
+		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+	}
 
 	/**
 	* Evaluate a condition and, if it is true, exit with a HTTP response code

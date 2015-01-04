@@ -87,19 +87,16 @@
 					if (count($param) > 2) {
 						$bindParamTypes = 's';
 						$bindParamArgs = array($param[2]);
-						
 						$mysqlQueryEnd = ' WHERE maincat.name = ?';
 						
 						if (count($param) > 3) {
 							$bindParamTypes .= 's';
 							array_push($bindParamArgs, $param[3]);
-							
 							$mysqlQueryEnd .= ' AND subcat.name = ?';
 						
 							if (count($param) > 4) {
 								$bindParamTypes .= 's';
 								array_push($bindParamArgs, $param[4]);
-								
 								$mysqlQueryEnd .= ' AND othercat.name = ?';
 							}
 						}
