@@ -6,18 +6,18 @@
 	require_once('../common/ucpheader.php');
 	
 	unset($_SESSION['user_app_guid']); //Unset GUID setting
-	sendResponseCodeAndExitIfTrue(!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])), 403); //Check if logged in
-	
-	$mysqlConn = connectToDatabase();
-	if (isset($_GET['guid'])) {
-		$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT * FROM apps WHERE guid = ? AND publisher = ? LIMIT 2', 'is', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
-		printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
+	//sendResponseCodeAndExitIfTrue(!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])), 403); //Check if logged in
+	if(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])){
+		$mysqlConn = connectToDatabase();
+		if (isset($_GET['guid'])) {
+			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT * FROM apps WHERE guid = ? AND publisher = ? LIMIT 2', 'is', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
+			printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
+			
+			$appToEdit = $matchingApps[0];
+			$_SESSION['user_app_guid'] = $_GET['guid'];
+		}
 		
-		$appToEdit = $matchingApps[0];
-		$_SESSION['user_app_guid'] = $_GET['guid'];
-	}
-	
-	$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories');
+		$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories');
 ?>
 
 		<div class="well">
@@ -66,5 +66,6 @@
 			</form>
 		</div>
 <?php
+	}
 	require_once('../common/ucpfooter.php');
 ?>

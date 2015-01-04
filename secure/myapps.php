@@ -5,11 +5,11 @@
 	
 	require_once('../common/ucpheader.php');
 	
-	sendResponseCodeAndExitIfTrue(!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])), 403); //Check if logged in
-	
-	$mysqlConn = connectToDatabase();
-	$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT guid, name, version FROM apps WHERE publisher = ?', 'i', [$_SESSION['user_id']]);
-	foreach ($userApps as $app) {
+	//sendResponseCodeAndExitIfTrue(!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])), 403); //Check if logged in
+	if(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])){
+		$mysqlConn = connectToDatabase();
+		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT guid, name, version FROM apps WHERE publisher = ?', 'i', [$_SESSION['user_id']]);
+		foreach ($userApps as $app) {
 ?>
 		<div class="well clearfix">
 			<h4 class="pull-left"><?php print($app['name'] . ' (' . $app['version'] . ')'); ?></h4>
@@ -19,7 +19,7 @@
 			</div>
 		</div>
 <?php
+		}
 	}
-	
 	require_once('../common/ucpfooter.php');
 ?>

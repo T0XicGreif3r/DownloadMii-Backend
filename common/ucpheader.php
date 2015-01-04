@@ -39,7 +39,18 @@
 				  <ul class="nav navbar-nav navbar-right">
 					<li><a href="/secure/myapps.php">My Apps</a></li>
 					<li><a href="/secure/publish.php">Publish App</a></li>
+					<?php
+						if(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])){
+					?>
 					<li><a href="/secure/action_signout.php">Log out</a></li>
+					<?php
+						}
+						else{
+					?>
+					<li><a href="/secure/login.php">Login</a></li>
+					<?php
+						}
+					?>
 				  </ul>
 				</div>
 			  </div>
