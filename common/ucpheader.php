@@ -15,6 +15,7 @@
 	<head>
 		<title>DownloadMii User CP</title>
 		<link href="/css/bootstrap.css" rel="stylesheet"/>
+		<link href="/css/mainStruct.css" rel="stylesheet"/>
 		<style>
 			body {
 				margin-top: 24px;
