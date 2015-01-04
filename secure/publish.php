@@ -14,18 +14,18 @@
 	
 	sendResponseCodeAndExitIfTrue(!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])), 403); //Check if logged in
 	
-	$publishToken = generateRandomString(); //Generate token
+	$publishToken = generateRandomString(); //Generate token for publish action
 	$_SESSION['publish_token'] = md5(getConfigValue('salt_token') . $publishToken);
 	
 	$mysqlConn = connectToDatabase();
 	if (isset($_GET['guid'], $_GET['token'], $myappsToken) && $myappsToken == md5(getConfigValue('salt_token') . $_GET['token'])) {
 		$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT * FROM apps WHERE guid = ? AND publisher = ? LIMIT 2', 'is', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
 		printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
-		
+			
 		$appToEdit = $matchingApps[0];
 		$_SESSION['user_app_guid'] = $_GET['guid'];
 	}
-	
+		
 	$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories');
 ?>
 
