@@ -17,9 +17,7 @@
 		<link href="/css/bootstrap.css" rel="stylesheet"/>
 		<link href="/css/mainStruct.css" rel="stylesheet"/>
 		<style>
-			body {
-				margin-top: 24px;
-			}
+			
 		</style>
 	</head>
 	<body>
@@ -45,3 +43,4 @@
 			  </div>
 			</nav>
 		</header>
+		<div id="content">
