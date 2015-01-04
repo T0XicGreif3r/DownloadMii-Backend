@@ -21,7 +21,7 @@
 	$resp = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 	printAndExitIfTrue($resp == null || !$resp->success, 'Invalid or no captcha response.');
 	
-	//TODO: Handle file uploads
+	//TODO: Handle file uploads and update database
 	
-	print('Your application has been submitted. It will be reviewed and be available soon.');
+	print('Your application has been submitted and is now waiting to be reviewed.');
 ?>
