@@ -42,7 +42,7 @@
 		<link rel="prerender" href="http://filfatstudios.com" />
 		
 		<!-- IE SITE PIN -->
-		<meta name="msapplication-starturl" content="http://downloadmii.filfatstudios.com" />
+		<meta name="msapplication-starturl" content="http://www.downloadmii.com" />
 		<meta name="msapplication-navbutton-color" content="#1009FFF" />
 		<meta name="msapplication-window" content="width=1024;height=768" />
 		<meta name="msapplication-tooltip" content="Visit DownloadMii" />
@@ -106,7 +106,7 @@
 				<img class="Product" src="img/Logo.png" alt="" />
 				<p class="lead" style="margin-top:75px;">
 					DownloadMii is an Online marketplace for Nintendo 3DS homebrew applications and its 100% free of charge for the end-user. It is currently under development, and the Github project can be found <a href="https://github.com/DownloadMii/DownloadMii">here</a>!<br />
-					We expect to deliver the first consumer release of Download late January or early February 2015.<br />
+					We expect to deliver the first consumer release of DownloadMii late January or early February 2015.<br />
 					We will also in the future add an blog so you can stay up-to-date with the latest store news and such, stay tuned!
 				</p>
 			  </div>
