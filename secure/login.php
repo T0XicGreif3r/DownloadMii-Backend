@@ -8,8 +8,8 @@
 	$logintoken = generateRandomString();
 	$_SESSION['login_token'] = md5(getConfigValue('salt_token') . $logintoken);
 ?>
-
-		<div class="well text-center">
+		<div class="text-center">
+			<h1>Login</h1>
 			<form role="form" action="action_login.php" method="post" accept-charset="utf-8" style="max-width: 400px; margin-left: auto; margin-right: auto;">
 				<label class="sr-only" for="name">Username:</label>
 				<input type="text" class="form-control" id="user" name="user" placeholder="Username" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;" required>
@@ -18,6 +18,7 @@
 				<input type="hidden" name="logintoken" value="<?php echo $logintoken; ?>">
 				<button type="submit" name="submit" class="btn btn-lg btn-primary btn-block" style="border-top-left-radius: 0; border-top-right-radius: 0;">Login</button>
 			</form>
+			<a href="register.php">Register</a>
 		</div>
 <?php
 	require_once('../common/ucpfooter.php');

@@ -17,7 +17,9 @@
 		<link href="/css/bootstrap.css" rel="stylesheet"/>
 		<link href="/css/mainStruct.css" rel="stylesheet"/>
 		<style>
-			
+			header{
+				margin-bottom: 75px;
+			}
 		</style>
 	</head>
 	<body>
@@ -44,6 +46,3 @@
 			</nav>
 		</header>
 		<div id="content">
-			<br/>
-			<br/>
-			<br/>
