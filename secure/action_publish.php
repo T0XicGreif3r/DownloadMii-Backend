@@ -23,5 +23,5 @@
 	
 	//TODO: Handle file uploads and update database
 	
-	print('Your application has been submitted and is now waiting to be reviewed.');
+	print('Your application has been submitted and is now waiting approval from our staff.');
 ?>
