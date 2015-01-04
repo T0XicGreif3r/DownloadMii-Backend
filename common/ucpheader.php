@@ -8,11 +8,11 @@
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\functions.php');
 	
 	if (!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']))) {
-		if (strcasecmp($_SERVER['REQUEST_URI'], '/secure/login.php')) {
+		if (strcasecmp($_SERVER['REQUEST_URI'], '/secure/login.php') && strcasecmp($_SERVER['REQUEST_URI'], '/secure/register.php')) {
 			header('Location: http://' . $_SERVER['HTTP_HOST'] . '/secure/login.php'); //Redirect to login page if logged out and not there already
 		}
 	}
-	else if (!strcasecmp($_SERVER['REQUEST_URI'], '/secure/login.php')) {
+	else if (!strcasecmp($_SERVER['REQUEST_URI'], '/secure/login.php') || !strcasecmp($_SERVER['REQUEST_URI'], '/secure/register.php')) {
 		header('Location: http://' . $_SERVER['HTTP_HOST'] . '/secure/myapps.php'); //Redirect to "my apps" page if trying to access login page while logged in
 	}
 ?>
@@ -51,13 +51,14 @@
 						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
 					?>
 					<li><a href="/secure/myapps.php">My Apps</a></li>
-					<li><a href="/secure/publish.php">Publish App</a></li>
+					<li><a href="/secure/publish.php">Submit App</a></li>
 					<li><a href="/secure/action_signout.php">Log Out</a></li>
 					<?php
 						}
 						else {
 					?>
-					<li><a href="/secure/login.php">Login</a></li>
+					<li><a href="/secure/login.php">Log In</a></li>
+					<li><a href="/secure/register.php">Register</a></li>
 					<?php
 						}
 					?>
