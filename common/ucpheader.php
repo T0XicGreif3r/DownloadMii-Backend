@@ -32,6 +32,11 @@
 				max-width: 1200px;
 			}
 			
+			.downloadmii {
+				width: 100%;
+				height: 300px;
+			}
+			
 			.no-border-radius {
 				border-radius: 0;
 			}

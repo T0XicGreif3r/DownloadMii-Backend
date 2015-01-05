@@ -35,14 +35,14 @@
 		}
 		
 		$editing = isset($appToEdit);
-		$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories');
+		$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories WHERE type = 0');
 		$mysqlConn->close();
 ?>
 
 		<div class="well">
 			<h3><?php if (isset($appToEdit)) print('Updating ' . $appToEdit['name']); else print('Adding new application'); ?></h3>
 			<br />
-			<form role="form" action="action_publish.php" method="post" accept-charset="utf-8">
+			<form role="form" action="action_publish.php" method="post" enctype="multipart/form-data" accept-charset="utf-8">
 				<div class="row">
 					<div class="col-md-4 form-group">
 						<label for="name">Name:</label>

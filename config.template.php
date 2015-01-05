@@ -4,6 +4,12 @@
 	*/
 	
 	return array(
+		//Azure
+		'azure_connection_string' => '',
+		'azure_storage_account' => '',
+		'azure_container_3dsx' => '',
+		'azure_container_smdh' => '',
+		
 		//MySQL
 		'mysql_host' => '',
 		'mysql_user' => '',

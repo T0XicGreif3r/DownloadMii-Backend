@@ -29,3 +29,7 @@
 
 # Configuration files
 config.php
+
+# Composer
+composer.phar
+vendor/

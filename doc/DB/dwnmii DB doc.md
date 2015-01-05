@@ -14,6 +14,7 @@ Column|Description|
 Column|Description|
 ---|:---|
 `categoryId` | id of the category |
+`type` | 0 - top level, 1 - subcategory, 2 - other category
 `name` | name of the category |
 
 ##AppVersions

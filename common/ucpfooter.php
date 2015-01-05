@@ -9,12 +9,6 @@
 			<div id="FULLSCREEN" class="pad-section" style="height:350px;">
 			  <div class="container">
 				<div class="row">
-						<style>
-							.downloadmii {
-								width: 100%;
-								height: 300px;
-							}
-						</style>
 						<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 						<!-- DownloadMii -->
 						<ins class="adsbygoogle downloadmii"
