@@ -43,24 +43,24 @@
 	
 	//TODO: Error check
 	switch ($topLevelRequest) {
-		case 'bydev':
-			$mysqlQuery = 'SELECT app.* FROM apps app JOIN users usr ON usr.userId = app.creator WHERE usr.nick = ?'; //Select rows from apps table by queried developer
-			print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, $param[1], 's', [$param[1]]));
-			break;
-		
 		case 'apps':
 			sendResponseCodeAndExitIfTrue(count($param) < 2, 400);
 			$secondLevelRequest = $param[1];
 			
 			//Base query
-			$mysqlQuery = 'SELECT app.*, maincat.name AS category, subcat.name AS subcategory, othercat.name AS othercategory, user.nick AS publisher, appver.number AS version, appver.3dsx AS 3dsx, appver.smdh AS smdh FROM apps app
+			$mysqlQuery = 'SELECT app.*, user.nick AS publisher, appver.number AS version, appver.3dsx AS 3dsx, appver.smdh AS smdh, maincat.name AS category, subcat.name AS subcategory, othercat.name AS othercategory FROM apps app
 							LEFT JOIN users user ON user.userId = app.publisher
 							LEFT JOIN appversions appver ON appver.versionId = app.version
 							LEFT JOIN categories maincat ON maincat.categoryId = app.category
 							LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
-							LEFT JOIN categories othercat ON othercat.categoryId = app.othercategory WHERE app.published = 1';
+							LEFT JOIN categories othercat ON othercat.categoryId = app.othercategory WHERE app.publishstate = 1';
 			
 			switch ($secondLevelRequest) {
+				case 'ByDev':
+					$mysqlQuery .= ' AND user.nick = ?';
+					print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, $param[2], 's', [$param[2]]));
+					break;
+				
 				case 'TopDownloadedApps':
 				case 'TopDownloadedGames':
 					//Ask for only apps/games depending on request

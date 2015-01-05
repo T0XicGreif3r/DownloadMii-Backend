@@ -25,10 +25,23 @@
 			header {
 				margin-bottom: 75px;
 			}
-			#mainContent {
+			
+			#maincontent {
 				margin-left: auto;
 				margin-right: auto;
 				max-width: 1200px;
+			}
+			
+			.no-border-radius {
+				border-radius: 0;
+			}
+			
+			.no-bottom-border-radius {
+				border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+			}
+			
+			.no-top-border-radius {
+				border-top-left-radius: 0; border-top-right-radius: 0;
 			}
 		</style>
 	</head>
@@ -68,4 +81,4 @@
 			</nav>
 		</header>
 		<div id="content">
-			<div id="mainContent">
+			<div id="maincontent">

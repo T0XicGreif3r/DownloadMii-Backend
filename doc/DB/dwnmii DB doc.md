@@ -37,6 +37,7 @@ Column|Description|
 `othercategory`| id of the category, reference into categories table |
 `rating` | Average app rating |
 `downloads` | Download count |
+`publishstate` | Publish state: 0 - pending approval, 1 - published, 2 - rejected |
 
 ##Ratings
 Column|Description|
@@ -44,7 +45,7 @@ Column|Description|
 `ratingId` | Id of the rating |
 `appGuid` | Guid of the rated app |
 `userId` | Id of the user who rated the app |
-`rate` | Ratting of the user for the app(Values Between 1 & 5) |
+`rate` | User's rating of the app (values between 1 & 5) |
 
 ##Developers
 Column|Description|

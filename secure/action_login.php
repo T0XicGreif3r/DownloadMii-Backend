@@ -14,12 +14,12 @@
 	sendResponseCodeAndExitIfTrue(!(isset($_POST['user'], $_POST['pass'], $_POST['logintoken'])), 400); //Check if all expected POST vars are set
 	sendResponseCodeAndExitIfTrue($userToken !== md5(getConfigValue('salt_token') . $_POST['logintoken']), 422); //Check if POST login token is correct
 	
-	$tryUserName = htmlspecialchars($_POST['user']);
-	$tryUserPass = htmlspecialchars($_POST['pass']);
+	$tryUserName = $_POST['user'];
+	$tryUserPass = $_POST['pass'];
 	$hashedTryUserPass = crypt($tryUserPass, getConfigValue('salt_password'));
 	
 	$mysqlConn = connectToDatabase();
-	$matchingUsers = getArrayFromSQLQuery($mysqlConn, 'SELECT userId, nick FROM users WHERE nick = ? AND password = ? LIMIT 2', 'ss', [$tryUserName, $hashedTryUserPass]);
+	$matchingUsers = getArrayFromSQLQuery($mysqlConn, 'SELECT userId, nick FROM users WHERE LOWER(nick) = LOWER(?) AND password = ? LIMIT 2', 'ss', [$tryUserName, $hashedTryUserPass]);
 	
 	printAndExitIfTrue(count($matchingUsers) != 1, 'Invalid username and/or password.'); //Check if there is one user matching attempted user/pass combination
 	$user = $matchingUsers[0];
@@ -31,14 +31,7 @@
 	$_SESSION['user_nick'] = $user['nick'];
 	$_SESSION['user_token'] = $userToken;
 	
-	//Redirect somewhere based on the domain root. If no redirect URL set, redirect to "my apps" list
-	$redirectUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/';
-	if (isset($_GET['redirect'])) {
-		$redirectUrl .= $_GET['redirect'];
-	}
-	else {
-		$redirectUrl .= 'secure/myapps.php';
-	}
-	
+	//Redirect to "my apps" list
+	$redirectUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/secure/myapps.php';
 	header('Location: ' . $redirectUrl);
 ?>

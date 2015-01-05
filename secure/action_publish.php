@@ -17,12 +17,23 @@
 	sendResponseCodeAndExitIfTrue($publishToken !== md5(getConfigValue('salt_token') . $_POST['publishtoken']), 422); //Check if POST publishing token is correct
 	sendResponseCodeAndExitIfTrue(!is_numeric($_POST['category']), 422); //Check if category selected
 	
+	//TODO: Check that if one of 3dsx, smdh, version is changed, the others also are.
+	
 	//Check captcha
 	$reCaptcha = new ReCaptcha(getConfigValue('apikey_recaptcha_secret'));
 	$resp = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 	printAndExitIfTrue($resp == null || !$resp->success, 'Invalid or no captcha response.');
 	
-	//TODO: Handle file uploads and update database
+	$appName = htmlspecialchars($_POST['name']);
+	$appVersion = htmlspecialchars($_POST['version']);
+	$appCategory = htmlspecialchars($_POST['category']);
+	$appDescription = htmlspecialchars($_POST['description']);
+	
+	if (isset($_SESSION['user_app_guid'])) {
+		//TODO
+	}
+	
+	//TODO: Handle file uploads, database INSERT/UPDATE
 	
 	print('Your application has been submitted and is now waiting approval from our staff.');
 ?>
