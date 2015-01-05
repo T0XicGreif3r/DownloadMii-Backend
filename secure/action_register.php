@@ -11,6 +11,7 @@
 	$registerToken = $_SESSION['register_token'];
 	unset($_SESSION['register_token']);
 	
+	printAndExitIfTrue(clientLoggedIn(), 'You can\'t register while logged in.'); //Check if already logged in
 	sendResponseCodeAndExitIfTrue(!(isset($_POST['user'], $_POST['pass'], $_POST['pass2'], $_POST['email'], $_POST["g-recaptcha-response"], $_POST['registertoken'])), 400); //Check if all expected POST vars are set
 	sendResponseCodeAndExitIfTrue($registerToken !== md5(getConfigValue('salt_token') . $_POST['registertoken']), 422); //Check if POST register token is correct
 	
@@ -36,8 +37,8 @@
 	printAndExitIfTrue(count($matchingUsers) != 0, 'User with this name and/or email already exists.');
 	
 	//Insert user into database
-	executePreparedSQLQuery($mysqlConn, 'INSERT INTO users (nick, password, email)
-											VALUES (?, ?, ?)', 'sss', [$tryRegisterName, $hashedTryRegisterPass, $tryRegisterEmail]);
+	executePreparedSQLQuery($mysqlConn, 'INSERT INTO users (nick, password, role, email)
+											VALUES (?, ?, 1, ?)', 'sss', [$tryRegisterName, $hashedTryRegisterPass, $tryRegisterEmail]);
 	
 	$mysqlConn->close();
 	

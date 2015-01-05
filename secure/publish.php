@@ -12,11 +12,15 @@
 	
 	unset($_SESSION['user_app_guid']); //Unset GUID setting
 	
-	if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
+	if (clientLoggedIn()) {
+		printAndExitIfTrue($_SESSION['user_role'] < 1, 'You do not have permission to publish apps.');
+		
 		$publishToken = generateRandomString(); //Generate token for publish action
 		$_SESSION['publish_token'] = md5(getConfigValue('salt_token') . $publishToken);
 		
 		$mysqlConn = connectToDatabase();
+		
+		
 		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && $myappsToken == md5(getConfigValue('salt_token') . $_GET['token'])) {
 			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, appver.number AS version FROM apps app
 																LEFT JOIN appversions appver ON appver.versionId = app.version

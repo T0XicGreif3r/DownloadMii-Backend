@@ -51,6 +51,15 @@
 	}
 	
 	/**
+	* Find out whether the client is logged in
+	*
+	* @return bool Whether the client is logged in
+	*/
+	function clientLoggedIn() {
+		return isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_role'], $_SESSION['user_token']);
+	}
+	
+	/**
 	* Get a value from the config.php file
 	*
 	* @param string $key The configuration key to get a value from

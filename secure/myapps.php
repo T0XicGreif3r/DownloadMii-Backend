@@ -5,7 +5,7 @@
 	
 	require_once('../common/ucpheader.php');
 	
-	if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
+	if (clientLoggedIn()) {
 		$myappsToken = generateRandomString();
 		$_SESSION['myapps_token'] = md5(getConfigValue('salt_token') . $myappsToken);
 		
