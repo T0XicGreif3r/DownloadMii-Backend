@@ -16,7 +16,7 @@
 	
 	sendResponseCodeAndExitIfTrue(!clientLoggedIn(), 403);
 	printAndExitIfTrue($_SESSION['user_role'] < 1, 'You do not have permission to publish apps.');
-	print_r($_POST);
+	
 	sendResponseCodeAndExitIfTrue(!(isset($_POST['name'], $_POST['version'], $_POST['category'], $_POST['description'], $_FILES['3dsx'], $_FILES['smdh'], $_POST["g-recaptcha-response"], $_POST['publishtoken'])), 400); //Check if all expected POST vars are set
 	sendResponseCodeAndExitIfTrue($publishToken !== md5(getConfigValue('salt_token') . $_POST['publishtoken']), 422); //Check if POST publishing token is correct
 	sendResponseCodeAndExitIfTrue(!is_numeric($_POST['category']), 422); //Check if category selected
