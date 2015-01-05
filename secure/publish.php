@@ -36,6 +36,7 @@
 		
 		$editing = isset($appToEdit);
 		$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories');
+		$mysqlConn->close();
 ?>
 
 		<div class="well">
