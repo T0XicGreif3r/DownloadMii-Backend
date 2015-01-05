@@ -16,6 +16,7 @@
 	
 	printAndExitIfTrue($_POST['pass'] !== $_POST['pass2'], 'Passwords don\'t match.'); //Check if passwords match
 	printAndExitIfTrue(strlen($_POST['pass']) < 8, 'Password is too short.'); //Check password length
+	printAndExitIfTrue(!preg_match('`^[a-zA-Z0-9_]{1,}$`', $_POST['user']), 'Invalid username.')
 	printAndExitIfTrue(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL), 'Invalid email address.');
 	
 	//Check captcha
@@ -23,9 +24,9 @@
 	$resp = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 	printAndExitIfTrue($resp == null || !$resp->success, 'Invalid or no captcha response.');
 	
-	$tryRegisterName = htmlspecialchars($_POST['user']);
+	$tryRegisterName = $_POST['user'];
 	$tryRegisterPass = $_POST['pass'];
-	$tryRegisterEmail = htmlspecialchars($_POST['email']);
+	$tryRegisterEmail = $_POST['email'];
 	$hashedTryRegisterPass = crypt($tryRegisterPass, getConfigValue('salt_password'));
 	
 	$mysqlConn = connectToDatabase();
