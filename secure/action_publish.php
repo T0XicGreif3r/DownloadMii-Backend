@@ -64,8 +64,9 @@
 	
 	//Insert app
 	if (!isset($_SESSION['user_app_guid'])) {
-		executePreparedSQLQuery($mysqlConn, 'INSERT INTO apps (guid, name, publisher, version, description, category)
-												VALUES (?, ?, ?, ?, ?, ?)', 'ssiisi', [generateGUID(), $appName, $_SESSION['user_id'], $versionId, $appDescription, $appCategory]);
+		executePreparedSQLQuery($mysqlConn, 'INSERT INTO apps (guid, name, publisher, version, description, category, publishstate)
+												VALUES (?, ?, ?, ?, ?, ?, ?)',
+												'ssiisi', [generateGUID(), $appName, $_SESSION['user_id'], $versionId, $appDescription, $appCategory, $_SESSION['user_role'] < 2 ? 0 : 1]);
 	}
 	
 	echo 'Your application has been submitted and is now waiting approval from our staff.';
