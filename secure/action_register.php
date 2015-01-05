@@ -16,6 +16,7 @@
 	
 	printAndExitIfTrue($_POST['pass'] !== $_POST['pass2'], 'Passwords don\'t match.'); //Check if passwords match
 	printAndExitIfTrue(strlen($_POST['pass']) < 8, 'Password is too short.'); //Check password length
+	printAndExitIfTrue(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL), 'Invalid email address.');
 	
 	//Check captcha
 	$reCaptcha = new ReCaptcha(getConfigValue('apikey_recaptcha_secret'));
