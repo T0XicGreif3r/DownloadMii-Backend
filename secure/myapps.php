@@ -6,8 +6,7 @@
 	require_once('../common/ucpheader.php');
 	
 	if (clientLoggedIn()) {
-		$myappsToken = generateRandomString();
-		$_SESSION['myapps_token'] = md5(getConfigValue('salt_token') . $myappsToken);
+		$_SESSION['myapps_token'] = uniqid(mt_rand(), true);
 		
 		$mysqlConn = connectToDatabase();
 		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.publishstate, appver.number AS version FROM apps app
@@ -40,8 +39,8 @@
 
 			</h4>
 			<div class="btn-toolbar pull-right">
-				<a role="button" class="btn btn-primary<?php if ($app['publishstate'] === 0) echo ' disabled'; ?>" href="publish.php?guid=<?php print($app['guid']); ?>&token=<?php print($myappsToken); ?>">Update</a>
-				<a role="button" class="btn btn-danger" href="remove.php?guid=<?php print($app['guid']); ?>&token=<?php print($myappsToken); ?>">Remove</a> <!-- Take user to confirmation -->
+				<a role="button" class="btn btn-primary<?php if ($app['publishstate'] === 0) echo ' disabled'; ?>" href="publish.php?guid=<?php echo $app['guid']; ?>&token=<?php echo md5($_SESSION['myapps_token']); ?>">Update</a>
+				<a role="button" class="btn btn-danger" href="remove.php?guid=<?php print($app['guid']); ?>&token=<?php echo md5($_SESSION['myapps_token']); ?>">Remove</a> <!-- Take user to confirmation -->
 			</div>
 		</div>
 <?php

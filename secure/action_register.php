@@ -8,13 +8,14 @@
 	require_once('../common/recaptchalib.php');
 	
 	sendResponseCodeAndExitIfTrue(!isset($_SESSION['register_token']), 422); //Check if session register token is set
-	$registerToken = $_SESSION['register_token'];
+	$registerToken = md5($_SESSION['register_token']);
 	unset($_SESSION['register_token']);
 	
 	printAndExitIfTrue(clientLoggedIn(), 'You can\'t register while logged in.'); //Check if already logged in
 	sendResponseCodeAndExitIfTrue(!(isset($_POST['user'], $_POST['pass'], $_POST['pass2'], $_POST['email'], $_POST["g-recaptcha-response"], $_POST['registertoken'])), 400); //Check if all expected POST vars are set
-	sendResponseCodeAndExitIfTrue($registerToken !== md5(getConfigValue('salt_token') . $_POST['registertoken']), 422); //Check if POST register token is correct
+	sendResponseCodeAndExitIfTrue($registerToken !== $_POST['registertoken'], 422); //Check if POST register token is correct
 	
+	printAndExitIfTrue(strlen($_POST['user']) < 3, 'Username is too short.'); //Check username length
 	printAndExitIfTrue($_POST['pass'] !== $_POST['pass2'], 'Passwords don\'t match.'); //Check if passwords match
 	printAndExitIfTrue(strlen($_POST['pass']) < 8, 'Password is too short.'); //Check password length
 	printAndExitIfTrue(!preg_match('`^[a-zA-Z0-9_]{1,}$`', $_POST['user']), 'Invalid username.');
@@ -28,7 +29,7 @@
 	$tryRegisterName = $_POST['user'];
 	$tryRegisterPass = $_POST['pass'];
 	$tryRegisterEmail = $_POST['email'];
-	$hashedTryRegisterPass = crypt($tryRegisterPass, getConfigValue('salt_password'));
+	$hashedTryRegisterPass = crypt($tryRegisterPass, '$2y$07$' . uniqid(mt_rand(), true));
 	
 	$mysqlConn = connectToDatabase();
 	

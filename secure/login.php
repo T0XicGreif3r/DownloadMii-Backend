@@ -5,8 +5,7 @@
 	
 	require_once('../common/ucpheader.php');
 	
-	$loginToken = generateRandomString();
-	$_SESSION['login_token'] = md5(getConfigValue('salt_token') . $loginToken);
+	$_SESSION['login_token'] = uniqid(mt_rand(), true);
 ?>
 		<div class="text-center">
 			<h1>Log in</h1>
@@ -19,7 +18,7 @@
 				
 				<button type="submit" name="submit" class="btn btn-lg btn-primary btn-block no-top-border-radius">Log in</button>
 				
-				<input type="hidden" name="logintoken" value="<?php echo $loginToken; ?>">
+				<input type="hidden" name="logintoken" value="<?php echo md5($_SESSION['login_token']); ?>">
 			</form>
 			<a href="register.php">Create a DownloadMii account</a>
 		</div>

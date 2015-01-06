@@ -6,7 +6,7 @@
 	require_once('../common/ucpheader.php');
 	
 	if (isset($_SESSION['myapps_token'])) {
-		$myappsToken = $_SESSION['myapps_token'];
+		$myappsToken = md5($_SESSION['myapps_token']);
 		unset($_SESSION['myapps_token']);
 	}
 	
@@ -15,13 +15,12 @@
 	if (clientLoggedIn()) {
 		printAndExitIfTrue($_SESSION['user_role'] < 1, 'You do not have permission to publish apps.');
 		
-		$publishToken = generateRandomString(); //Generate token for publish action
-		$_SESSION['publish_token'] = md5(getConfigValue('salt_token') . $publishToken);
+		$_SESSION['publish_token'] = uniqid(mt_rand(), true);
 		
 		$mysqlConn = connectToDatabase();
 		
 		
-		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && $myappsToken == md5(getConfigValue('salt_token') . $_GET['token'])) {
+		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && $myappsToken === $_GET['token']) {
 			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, appver.number AS version FROM apps app
 																LEFT JOIN appversions appver ON appver.versionId = app.version
 																WHERE app.guid = ? AND app.publisher = ? LIMIT 2', 'is', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
@@ -84,7 +83,7 @@
 				<div class="form-group">
 					<button type="submit" name="submit" class="btn btn-primary">Submit</button>
 				</div>
-				<input type="hidden" name="publishtoken" value="<?php echo $publishToken; ?>">
+				<input type="hidden" name="publishtoken" value="<?php echo md5($_SESSION['publish_token']); ?>">
 			</form>
 		</div>
 		<script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script>

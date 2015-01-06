@@ -4,8 +4,7 @@
 	
 	printAndExitIfTrue(!clientLoggedIn() || $_SESSION['user_role'] < 3, 'You do not have permission to access this page.');
 	
-	$adminToken = generateRandomString(); //Generate token for admin action
-	$_SESSION['admin_token'] = md5(getConfigValue('salt_token') . $adminToken);
+	$_SESSION['admin_token'] = uniqid(mt_rand(), true); //Generate token for admin action
 	
 	$mysqlConn = connectToDatabase();
 	$pendingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, appver.number AS version, user.nick AS publisher FROM apps app
@@ -18,6 +17,6 @@
 	echo 'Pending apps (showing only oldest 50):<br />';
 	
 	foreach ($pendingApps as $app) {
-		echo '<br />' . '<a href="admin_appview.php?guid=' . $app['guid'] . '&token=' . $adminToken . '">' . $app['guid'] . '</a> (n: ' . $app['name'] . ', v: ' . $app['version'] . ', p: ' . $app['publisher'] . ')';
+		echo '<br />' . '<a href="admin_appview.php?guid=' . $app['guid'] . '&token=' . md5($_SESSION['admin_token']) . '">' . $app['guid'] . '</a> (n: ' . $app['name'] . ', v: ' . $app['version'] . ', p: ' . $app['publisher'] . ')';
 	}
 ?>
