@@ -3,10 +3,10 @@
 ##Users
 Column|Description|
 ---|:---|
-`userId`|Unique id for the user|
-`nick` | nickname choosed by the user|
-`password` | pasword for the user. Is MDhased|
-`role` | Composed role: 1- User can login into system and rate(val 0:1:2[2=mod]:3[3= admin]), 2- Is a developer and can audit/edit/create apps into repo Ex: [3,1] Developer admin user.|
+`userId`| Unique id for the user |
+`nick` | nickname choosed by the user |
+`password` | bcrypted password for the user |
+`role` | val 0:1:2[2=mod (can audit/edit/create apps into repo)]:3[3=admin] |
 `email` | Email of the user |
 `token` | Token of the user, it will be regenerated every time the user relog into the 3ds app |
 
