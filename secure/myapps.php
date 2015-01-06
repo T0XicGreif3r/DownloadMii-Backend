@@ -15,6 +15,7 @@
 ?>
 
 		<h1 class="text-center">My apps</h1>
+		<br />
 <?php
 		foreach ($userApps as $app) {
 ?>
