@@ -21,6 +21,10 @@
 	sendResponseCodeAndExitIfTrue($publishToken !== $_POST['publishtoken'], 422); //Check if POST publishing token is correct
 	sendResponseCodeAndExitIfTrue(!is_numeric($_POST['category']), 422); //Check if category selected
 	
+	//Check POST var lengths
+	printAndExitIfTrue(strlen($_POST['name']) > 50, 'App name is too long.'); 
+	printAndExitIfTrue(strlen($_POST['version']) > 25, 'Version is too long.'); 
+	
 	//Check captcha
 	$reCaptcha = new ReCaptcha(getConfigValue('apikey_recaptcha_secret'));
 	$resp = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);

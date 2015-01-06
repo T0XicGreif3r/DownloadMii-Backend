@@ -14,7 +14,7 @@
 				<input type="text" class="form-control no-bottom-border-radius" id="user" name="user" placeholder="Username" maxlength="24" required>
 				
 				<label class="sr-only" for="pass">Password:</label>
-				<input type="password" class="form-control no-border-radius" id="pass" name="pass" placeholder="Password" maxlength="32" required>
+				<input type="password" class="form-control no-border-radius" id="pass" name="pass" placeholder="Password" required>
 				
 				<button type="submit" name="submit" class="btn btn-lg btn-primary btn-block no-top-border-radius">Log in</button>
 				

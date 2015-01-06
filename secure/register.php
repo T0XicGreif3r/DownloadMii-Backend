@@ -13,11 +13,11 @@
 				<label class="sr-only" for="name">Username (3-24 characters):</label>
 				<input type="text" class="form-control no-bottom-border-radius" id="user" name="user" placeholder="Username (3-24 characters)" maxlength="24" required>
 				
-				<label class="sr-only" for="pass">Password (8-32 characters):</label>
-				<input type="password" class="form-control no-border-radius" id="pass" name="pass" placeholder="Password (8-32 characters)" maxlength="32" required>
+				<label class="sr-only" for="pass">Password (at least 8 characters):</label>
+				<input type="password" class="form-control no-border-radius" id="pass" name="pass" placeholder="Password (at least 8 characters)" required>
 				
 				<label class="sr-only" for="pass2">Confirm password:</label>
-				<input type="password" class="form-control no-border-radius" id="pass2" name="pass2" placeholder="Confirm password" maxlength="32" required>
+				<input type="password" class="form-control no-border-radius" id="pass2" name="pass2" placeholder="Confirm password" required>
 				
 				<label class="sr-only" for="email">Email address:</label>
 				<input type="email" class="form-control no-border-radius" id="email" name="email" placeholder="Email address" maxlength="255" required>
