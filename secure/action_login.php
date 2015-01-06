@@ -25,8 +25,6 @@
 	$user = $matchingUsers[0];
 	printAndExitIfTrue(crypt($tryUserPass, $user['password']) != $user['password'], 'Invalid username and/or password.'); //Check if password is correct
 	
-	$user = $matchingUsers[0];
-	
 	executePreparedSQLQuery($mysqlConn, 'UPDATE users SET token = ? WHERE userId = ? LIMIT 1', 'ss', [$userToken, $user['userId']]); //Update user token in database
 	$mysqlConn->close();
 	

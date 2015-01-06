@@ -37,6 +37,12 @@
 				height: 300px;
 			}
 			
+			.small-width {
+				max-width: 400px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			
 			.no-border-radius {
 				border-radius: 0;
 			}

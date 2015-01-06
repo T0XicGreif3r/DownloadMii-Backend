@@ -17,16 +17,16 @@
 	
 	//Check username
 	printAndExitIfTrue(!preg_match('`^[a-zA-Z0-9_]{1,}$`', $_POST['user']), 'Invalid username.');
-	printAndExitIfTrue(strlen($_POST['user']) < 3, 'Username is too short.');
-	printAndExitIfTrue(strlen($_POST['user']) > 24, 'Username is too long.'); 
+	printAndExitIfTrue(mb_strlen($_POST['user']) < 3, 'Username is too short.');
+	printAndExitIfTrue(mb_strlen($_POST['user']) > 24, 'Username is too long.'); 
 	
 	//Check passwords
 	printAndExitIfTrue($_POST['pass'] !== $_POST['pass2'], 'Passwords don\'t match.');
-	printAndExitIfTrue(strlen($_POST['pass']) < 8, 'Password is too short.');
+	printAndExitIfTrue(mb_strlen($_POST['pass']) < 8, 'Password is too short.');
 	
 	//Check e-mail
 	printAndExitIfTrue(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL), 'Invalid email address.');
-	printAndExitIfTrue(strlen($_POST['email']) > 255, 'E-mail is too long.');
+	printAndExitIfTrue(mb_strlen($_POST['email']) > 255, 'E-mail is too long.');
 	
 	//Check captcha
 	$reCaptcha = new ReCaptcha(getConfigValue('apikey_recaptcha_secret'));

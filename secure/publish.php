@@ -23,21 +23,21 @@
 		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && $myappsToken === $_GET['token']) {
 			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, appver.number AS version FROM apps app
 																LEFT JOIN appversions appver ON appver.versionId = app.version
-																WHERE app.guid = ? AND app.publisher = ? LIMIT 2', 'is', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
+																WHERE app.guid = ? AND app.publisher = ? LIMIT 2', 'ss', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
 			
 			printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
 			
 			$appToEdit = $matchingApps[0];
 			printAndExitIfTrue($matchingApps[0]['publishstate'] === 0, 'This app is pending approval and can not be updated at this time.'); //Check if app not pending approval
 			
-			$_SESSION['user_app_guid'] = $_GET['guid'];
+			$_SESSION['user_app_guid'] = $appToEdit['guid'];
 		}
 		
 		$editing = isset($appToEdit);
 		$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories WHERE type = 0');
 		$mysqlConn->close();
 ?>
-		<h1 class="text-center"><?php if (isset($appToEdit)) print('Updating ' . $appToEdit['name']); else print('Add a new application'); ?></h1>
+		<h1 class="text-center"><?php if (isset($appToEdit)) echo 'Updating ' . $appToEdit['name']; else echo 'Add a new application'; ?></h1>
 		<br />
 		<div class="well">
 			<form role="form" action="action_publish.php" method="post" enctype="multipart/form-data" accept-charset="utf-8">
@@ -64,8 +64,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="description">Description (optional):</label>
-					<textarea class="form-control" id="description" name="description" maxlength="255"><?php if ($editing) echo $appToEdit['description']; ?></textarea>
+					<label for="description">Description (3000 character limit):</label>
+					<textarea class="form-control" id="description" name="description" maxlength="3000"><?php if ($editing) echo $appToEdit['description']; ?></textarea>
 				</div>
 				<div class="row">
 					<div class="col-md-6 form-group">

@@ -11,7 +11,7 @@
 	*/
 	function generateRandomString($len = 48) {
 		$str = implode(range(0, 9)) . implode(range('A', 'Z')) . implode(range('a', 'z'));
-		return substr(str_shuffle(str_repeat($str, 2)), 0, $len);
+		return substr(str_shuffle(str_repeat($str, ceil($len / strlen($str)))), 0, $len);
 	}
 	
 	/**
