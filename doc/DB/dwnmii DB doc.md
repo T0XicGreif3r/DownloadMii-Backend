@@ -21,6 +21,7 @@ Column|Description|
 Column|Description|
 ---|:---|
 `versionId` | Id of the version |
+`appGuid` | Guid of the app |
 `number` | Version number, ex: '1.0.0.0' |
 `3dsx` | 3dsx url |
 `smdh` | smdh url |

@@ -48,7 +48,7 @@
 					</div>
 					<div class="col-md-4 form-group">
 						<label for="version">Version:</label>
-						<input type="text" class="form-control" id="version" name="version" placeholder="e.g. 1.0.0.0" maxlength="25" value="<?php if ($editing) echo $appToEdit['version']; ?>" required>
+						<input type="text" class="form-control" id="version" name="version" placeholder="e.g. 1.0.0.0" maxlength="12" value="<?php if ($editing) echo $appToEdit['version']; ?>" required>
 					</div>
 					<div class="col-md-4 form-group">
 						<label for="category">Category:</label>
