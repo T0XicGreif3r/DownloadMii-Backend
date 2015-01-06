@@ -14,12 +14,23 @@
 		To rate an APP
 		<domain>/api/rate/[securetoken]/[appguid]/[rating]
 		
-		To get banner
+		To get main banner
 		<domain>/api/banner
 		
 		To get APP banner
 		<domain>/api/banner/[appguid]
-
+		
+		To get a list of all the categories
+		<domain>/api/categories
+		
+		To get a list of subcategories
+		<domain>/api/categories/[category_name]
+		
+		To get DownloadMii version string (eg "1.0.0.0")
+		<domain>/api/dmii/version
+		
+		To get API version string (eg "1.0.0.0")
+		<domain>/api/version
 	*/
 	
 	require_once('common/user.php');
