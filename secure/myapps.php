@@ -47,6 +47,12 @@
 <?php
 		}
 	}
-	
+	if($userApps == null){
+?>
+	<br />
+	<h4 class="text-center">You have not yet published an app :(</h4>
+	<br />
+<?php
+	}
 	require_once('../common/ucpfooter.php');
 ?>
