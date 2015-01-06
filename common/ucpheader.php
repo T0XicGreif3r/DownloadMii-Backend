@@ -65,18 +65,20 @@
 				</div>
 				<div class="collapse navbar-collapse" id="navbar-collapse-main">
 				  <ul class="nav navbar-nav navbar-right">
+					<li><a data-scroll href="/#HOMEwp">HOME</a></li>
+					<li><a href="/donate">DONATE</a></li>
 					<?php
 						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
 					?>
-					<li><a href="/secure/myapps.php">My Apps</a></li>
-					<li><a href="/secure/publish.php">Submit App</a></li>
-					<li><a href="/secure/action_signout.php">Log Out</a></li>
+					<li><a href="/secure/myapps.php">MY APPS</a></li>
+					<li><a href="/secure/publish.php">SUBMIT APP</a></li>
+					<li><a href="/secure/action_signout.php">LOGOUT</a></li>
 					<?php
 						}
 						else {
 					?>
-					<li><a href="/secure/login.php">Log In</a></li>
-					<li><a href="/secure/register.php">Register</a></li>
+					<li><a href="/secure/login.php">LOGIN</a></li>
+					<li><a href="/secure/register.php">REGISTER</a></li>
 					<?php
 						}
 					?>

@@ -37,7 +37,7 @@
 	
 	<!-- PLATFORM SPECIFIC -->
 		<!-- MICROSOFT -->
-		<meta name="application-name" content="Website name" />
+		<meta name="application-name" content="DownloadMii" />
 		<link rel="dns-prefetch" href="http://filfatstudios.com/"/>
 		<link rel="prerender" href="http://filfatstudios.com" />
 		
