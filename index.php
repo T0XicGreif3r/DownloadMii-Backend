@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" manifest="/Manifest.ashx">
+<html>
 <head runat="server">
 	<!-- SEO -->
-	<meta name="description" content="DownloadMii is a online marketplcae for Homebrew applications" />
+	<meta name="description" content="DownloadMii is an online marketplcae for Homebrew applications" />
     <meta name="keywords" content="Nintendo 3DS Homebrew, Homebrew Browser, 3ds, filfat, Wii U Homebrew" />
 	<meta name="AUTHOR" CONTENT="DownloadMii Team">
 	<meta name="COPYRIGHT" CONTENT="&copy; 2013-2015 Filiph Sandström && DownloadMii Team">
