@@ -20,7 +20,7 @@
 			
 			<input type="hidden" name="logintoken" value="<?php echo md5($_SESSION['login_token']); ?>">
 		</form>
-		<a class="text-center" href="register.php">Create a DownloadMii account</a>
+		<div class="text-center"><a href="register.php">Create a DownloadMii account</a></div>
 <?php
 	require_once('../common/ucpfooter.php');
 ?>
