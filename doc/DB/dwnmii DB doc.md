@@ -21,7 +21,6 @@ Column|Description|
 Column|Description|
 ---|:---|
 `versionId` | Id of the version |
-`appGuid` | Guid of the app |
 `number` | Version number, ex: '1.0.0.0' |
 `3dsx` | 3dsx url |
 `smdh` | smdh url |
@@ -39,7 +38,7 @@ Column|Description|
 `othercategory`| id of the category, reference into categories table |
 `rating` | Average app rating |
 `downloads` | Download count |
-`publishstate` | Publish state: 0 - pending approval, 1 - published, 2 - rejected |
+`publishstate` | Publish state: 0 - pending approval, 1 - published, 2 - rejected, 3 - hidden |
 
 ##Ratings
 Column|Description|

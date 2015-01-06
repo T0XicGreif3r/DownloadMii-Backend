@@ -24,9 +24,14 @@
 	$user = $matchingUsers[0];
 	printAndExitIfTrue(crypt($tryUserPass, $user['password']) != $user['password'], 'Invalid password.'); //Check if password is correct
 	
-	//TODO: Remove stuff
+	//Check if app not hidden already
+	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT publishstate FROM apps WHERE guid = ?', 's', [$_SESSION['user_app_guid']]);
+	printAndExitIfTrue($matchingApps[0]['publishstate'] === 3, 'This app is already hidden.');
 	
+	executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET publishstate = 3 WHERE guid = ? LIMIT 1', 's', [$_SESSION['user_app_guid']]); //Update publish state in database
 	$mysqlConn->close();
 	
-	print('App removed.');
+	//TODO: Actually remove the apps in the future?
+	
+	print('App hidden.');
 ?>

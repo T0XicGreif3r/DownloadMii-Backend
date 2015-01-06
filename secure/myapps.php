@@ -35,13 +35,17 @@
 				case 2:
 					echo ' (rejected)';
 					break;
+					
+				case 3:
+					echo ' (hidden)';
+					break;
 			}
 ?>
 
 			</h4>
 			<div class="btn-toolbar pull-right">
 				<a role="button" class="btn btn-primary<?php if ($app['publishstate'] === 0) echo ' disabled'; ?>" href="publish.php?guid=<?php echo $app['guid']; ?>&token=<?php echo md5($_SESSION['myapps_token']); ?>">Update</a>
-				<a role="button" class="btn btn-danger" href="remove.php?guid=<?php print($app['guid']); ?>&token=<?php echo md5($_SESSION['myapps_token']); ?>">Remove</a> <!-- Take user to confirmation -->
+				<a role="button" class="btn btn-danger<?php if ($app['publishstate'] === 3) echo ' disabled'; ?>" href="hide.php?guid=<?php print($app['guid']); ?>&token=<?php echo md5($_SESSION['myapps_token']); ?>">Hide</a>
 			</div>
 		</div>
 <?php

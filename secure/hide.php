@@ -28,17 +28,23 @@
 			
 		$_SESSION['user_app_guid'] = $appToRemove['guid'];
 ?>
-		<h1 class="text-center"><?php echo 'Removing ' . $appToRemove['name']; ?></h1>
+		<h1 class="text-center"><?php echo 'Hiding ' . $appToRemove['name']; ?></h1>
 		<br />
-		<form role="form" class="small-width" action="action_remove.php" method="post" accept-charset="utf-8">
-			<label for="pass">Enter your password and an exclamation mark to confirm removal:</label>
+		<form role="form" class="small-width" action="action_hide.php" method="post" accept-charset="utf-8">
+			<label for="pass">Enter your password and an exclamation mark to confirm hiding the app:</label>
 			<input type="password" class="form-control no-bottom-border-radius" id="pass" name="pass" placeholder="Password" required>
 			
-			<button type="submit" name="submit" class="btn btn-lg btn-danger btn-block no-top-border-radius">Remove</button>
+			<button type="submit" name="submit" class="btn btn-lg btn-danger btn-block no-top-border-radius">Hide</button>
 			
 			<input type="hidden" name="removetoken" value="<?php echo md5($_SESSION['remove_token']); ?>">
 		</form>
 <?php
+		if ($_SESSION['user_role'] < 2) {
+?>
+
+		<div class="text-center" style="color: red; font-weight: bold;">WARNING: You'll have to republish the app to unhide it.</div>
+<?php
+		}
 	}
 	
 	require_once('../common/ucpfooter.php');
