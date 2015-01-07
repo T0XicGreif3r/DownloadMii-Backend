@@ -33,7 +33,7 @@ Column|Description|
 `name` | name of the app |
 `version` | id of the current version, reference into appversions table |
 `publisher` | id of the user who can audit the app details, reference into users table |
-`description` | description  of the app, accept HTML |
+`description` | description  of the app, don't accept HTML NOR newline("\n") |
 `category` | id of the category, reference into categories table |
 `subcategory`| id of the category, reference into categories table |
 `othercategory`| id of the category, reference into categories table |
