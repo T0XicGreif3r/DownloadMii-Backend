@@ -112,7 +112,6 @@
 			  </div>
 			</div>
 		  </div>
-		  <div class="WayPoint" id="ABOUTwp"></div>
 		</div>
 		<!-- /HOME -->
 <?php
