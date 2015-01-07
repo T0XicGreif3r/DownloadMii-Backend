@@ -25,7 +25,7 @@
 	printAndExitIfTrue(mb_strlen($_POST['pass']) < 8, 'Password is too short.');
 	
 	//Check e-mail
-	printAndExitIfTrue(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL), 'Invalid email address.');
+	printAndExitIfTrue(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !checkdnsrr(substr($_POST['email'], strpos($_POST['email'], '@') + 1), 'MX'), 'Invalid email address.');
 	printAndExitIfTrue(mb_strlen($_POST['email']) > 255, 'E-mail is too long.');
 	
 	//Check captcha
