@@ -45,7 +45,7 @@
 				<div class="row">
 					<div class="col-md-4 form-group">
 						<label for="name">Name:</label>
-						<input type="text" class="form-control" id="name" name="name" placeholder="e.g. My Application" maxlength="50" value="<?php if ($editing) echo $appToEdit['name']; ?>" required>
+						<input type="text" class="form-control" id="name" name="name" placeholder="e.g. My Application" maxlength="32" value="<?php if ($editing) echo $appToEdit['name']; ?>" required>
 					</div>
 					<div class="col-md-4 form-group">
 						<label for="version">Version:</label>
@@ -65,8 +65,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="description">Description (3000 character limit):</label>
-					<textarea class="form-control" id="description" name="description" rows="6" maxlength="3000"><?php if ($editing) echo $appToEdit['description']; ?></textarea>
+					<label for="description">Description (300 character limit):</label>
+					<textarea class="form-control" id="description" name="description" rows="6" maxlength="300"><?php if ($editing) echo $appToEdit['description']; ?></textarea>
 				</div>
 				<div class="row">
 					<div class="col-md-6 form-group">

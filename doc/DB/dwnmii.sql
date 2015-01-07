@@ -25,10 +25,10 @@ CREATE TABLE appversions(
 
 CREATE TABLE apps(
 	guid CHAR(36) NOT NULL PRIMARY KEY,
-	name VARCHAR(50) NOT NULL,
+	name VARCHAR(32) NOT NULL,
 	publisher INT NOT NULL,
 	version INT NOT NULL,
-	description TEXT NULL,
+	description VARCHAR(300) NULL,
 	category INT NOT NULL,
 	subcategory INT NULL,
 	othercategory INT NULL,
