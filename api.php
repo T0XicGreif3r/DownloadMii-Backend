@@ -29,6 +29,9 @@
 		To get DownloadMii version string (eg "1.0.0.0")
 		<domain>/api/dmii/version
 		
+		To get a list of apps that only includes the app with the name "DownloadMii"
+		<domain>/api/dmii/data
+		
 		To get API version string (eg "1.0.0.0")
 		<domain>/api/version
 	*/
