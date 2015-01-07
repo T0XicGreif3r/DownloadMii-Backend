@@ -33,9 +33,9 @@
 	$resp = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 	printAndExitIfTrue($resp == null || !$resp->success, 'Invalid or no captcha response.');
 	
-	$tryRegisterName = $_POST['user'];
+	$tryRegisterName = filter_var($_POST['user'], FILTER_SANITIZE_SPECIAL_CHARS);
 	$tryRegisterPass = $_POST['pass'];
-	$tryRegisterEmail = $_POST['email'];
+	$tryRegisterEmail = filter_var($_POST['email'], FILTER_SANITIZE_SPECIAL_CHARS);
 	$hashedTryRegisterPass = crypt($tryRegisterPass, '$2y$07$' . uniqid(mt_rand(), true));
 	
 	$mysqlConn = connectToDatabase();

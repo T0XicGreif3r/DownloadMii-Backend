@@ -31,10 +31,10 @@
 	$resp = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 	printAndExitIfTrue($resp == null || !$resp->success, 'Invalid or no captcha response.');
 	
-	$appName = htmlspecialchars($_POST['name']);
-	$appVersion = htmlspecialchars($_POST['version']);
+	$appName = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
+	$appVersion = filter_var($_POST['version'], FILTER_SANITIZE_SPECIAL_CHARS);
 	$appCategory = $_POST['category'];
-	$appDescription = str_replace(['\r\n', '\r', '\n'], ' ', htmlspecialchars($_POST['description']);
+	$appDescription = filter_var(str_replace(['\r\n', '\r', '\n'], ' ', $_POST['description']), FILTER_SANITIZE_SPECIAL_CHARS);
 	
 	$isDeveloper = $_SESSION['user_role'] > 1;
 	$updatingApp = isset($_SESSION['user_app_guid']);
