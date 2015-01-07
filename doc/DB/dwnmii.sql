@@ -4,7 +4,7 @@ CREATE TABLE users(
 	password VARCHAR(60) NOT NULL,
 	role TINYINT NOT NULL,
 	email VARCHAR(255) NOT NULL UNIQUE,
-	token VARCHAR(32) NULL UNIQUE
+	token VARCHAR(40) NULL UNIQUE
 );
 
 CREATE TABLE categories(
@@ -15,9 +15,12 @@ CREATE TABLE categories(
 
 CREATE TABLE appversions(
 	versionId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	appGuid CHAR(36) NOT NULL,								-- Not a very nice solution...
 	number VARCHAR(12) NOT NULL,
 	3dsx VARCHAR(255) NOT NULL,
-	smdh VARCHAR(255) NOT NULL
+	smdh VARCHAR(255) NOT NULL,
+	3dsx_md5 VARCHAR(32) NOT NULL,
+	smdh_md5 VARCHAR(32) NOT NULL
 );
 
 CREATE TABLE apps(
@@ -48,6 +51,12 @@ CREATE TABLE ratings(
 
 	FOREIGN KEY (appGuid) REFERENCES apps(guid),
 	FOREIGN KEY (userId) REFERENCES users(userId)
+);
+
+CREATE TABLE downloads(
+	downloadId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	appGuid CHAR(36) NOT NULL,
+	ipHash CHAR(32) NOT NULL
 );
 
 CREATE TABLE developers(

@@ -6,7 +6,7 @@
 	require_once('../common/ucpheader.php');
 	
 	if (isset($_SESSION['myapps_token'])) {
-		$myappsToken = md5($_SESSION['myapps_token']);
+		$myappsToken = $_SESSION['myapps_token'];
 		unset($_SESSION['myapps_token']);
 	}
 	
@@ -20,10 +20,10 @@
 		$mysqlConn = connectToDatabase();
 		
 		
-		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && $myappsToken === $_GET['token']) {
+		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && md5($myappsToken) === $_GET['token']) {
 			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, appver.number AS version FROM apps app
 																LEFT JOIN appversions appver ON appver.versionId = app.version
-																WHERE app.guid = ? AND app.publisher = ? LIMIT 2', 'ss', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
+																WHERE app.guid = ? AND app.publisher = ? LIMIT 1', 'ss', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
 			
 			printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
 			
@@ -31,6 +31,7 @@
 			printAndExitIfTrue($matchingApps[0]['publishstate'] === 0, 'This app is pending approval and can not be updated at this time.'); //Check if app not pending approval
 			
 			$_SESSION['user_app_guid'] = $appToEdit['guid'];
+			$_SESSION['user_app_version'] = $appToEdit['version'];
 		}
 		
 		$editing = isset($appToEdit);

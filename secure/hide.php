@@ -6,19 +6,19 @@
 	require_once('../common/ucpheader.php');
 	
 	if (isset($_SESSION['myapps_token'])) {
-		$myappsToken = md5($_SESSION['myapps_token']);
+		$myappsToken = $_SESSION['myapps_token'];
 		unset($_SESSION['myapps_token']);
 	}
 	
 	unset($_SESSION['user_app_guid']); //Unset GUID setting
 	
-	if (clientLoggedIn() && isset($_GET['guid'], $_GET['token'], $myappsToken) && $myappsToken === $_GET['token']) {
+	if (clientLoggedIn() && isset($_GET['guid'], $_GET['token'], $myappsToken) && md5($myappsToken) === $_GET['token']) {
 		$_SESSION['remove_token'] = uniqid(mt_rand(), true);
 		
 		$mysqlConn = connectToDatabase();
 		
 		$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT guid, name FROM apps
-															WHERE guid = ? AND publisher = ? LIMIT 2', 'ss', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
+															WHERE guid = ? AND publisher = ? LIMIT 1', 'ss', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
 		
 		$mysqlConn->close();
 		

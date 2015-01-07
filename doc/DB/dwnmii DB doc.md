@@ -6,7 +6,7 @@ Column|Description|
 `userId`| Unique id for the user |
 `nick` | nickname choosed by the user |
 `password` | bcrypted password for the user |
-`role` | val 0:1:2[2=mod (can audit/edit/create apps into repo)]:3[3=admin] |
+`role` | val 0:1[user (can publish apps)]:2[developer (can publish apps without approval)]:3[moderator (can approve apps)]:4[admin] |
 `email` | Email of the user |
 `token` | Token of the user, it will be regenerated every time the user relog into the 3ds app |
 
@@ -21,6 +21,7 @@ Column|Description|
 Column|Description|
 ---|:---|
 `versionId` | Id of the version |
+`appGuid` | Guid of the app |
 `number` | Version number, ex: '1.0.0.0' |
 `3dsx` | 3dsx url |
 `smdh` | smdh url |

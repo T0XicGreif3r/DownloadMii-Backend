@@ -52,7 +52,6 @@
 	sendResponseCodeAndExitIfTrue(count($param) < 1, 400);
 	sendResponseCodeAndExitIfTrue($origKey != $appKey, 403);
 	
-	$mysqlConn = connectToDatabase();
 	$topLevelRequest = $param[0];
 	
 	//TODO: Error check
@@ -61,8 +60,10 @@
 			sendResponseCodeAndExitIfTrue(count($param) < 2, 400);
 			$secondLevelRequest = $param[1];
 			
+			$mysqlConn = connectToDatabase();
+			
 			//Base query
-			$mysqlQuery = 'SELECT app.*, user.nick AS publisher, appver.number AS version, appver.3dsx AS 3dsx, appver.smdh AS smdh, maincat.name AS category, subcat.name AS subcategory, othercat.name AS othercategory FROM apps app
+			$mysqlQuery = 'SELECT app.*, user.nick AS publisher, appver.number AS version, appver.3dsx_md5 AS 3dsx_md5, appver.smdh_md5 AS smdh_md5, maincat.name AS category, subcat.name AS subcategory, othercat.name AS othercategory FROM apps app
 							LEFT JOIN users user ON user.userId = app.publisher
 							LEFT JOIN appversions appver ON appver.versionId = app.version
 							LEFT JOIN categories maincat ON maincat.categoryId = app.category
@@ -122,6 +123,57 @@
 					print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps', $bindParamTypes, $bindParamArgs));
 					break;
 			}
+			$mysqlConn->close();
+			break;
+		
+		case 'dl':
+			if (count($param) > 2) {
+				$mysqlConn = connectToDatabase();
+				$secondLevelRequest = $param[1];
+				$guid = $param[2];
+				
+				switch ($secondLevelRequest) {
+					case '3dsx':
+						//Select 3dsx field from current app version
+						$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.3dsx FROM appversions appver
+																			LEFT JOIN apps app ON appver.versionId = app.version
+																			WHERE app.guid = ? LIMIT 1', 's', [$guid]);
+						
+						printAndExitIfTrue(count($matchingApps) != 1, 'Invalid GUID.'); //Check if GUID is valid
+						
+						//Update download count if IP not downloaded app already
+						$ipHash = md5((isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : '') . $_SERVER['REMOTE_ADDR']);
+						$matchingDownloadIPs = getArrayFromSQLQuery($mysqlConn, 'SELECT downloadId FROM downloads WHERE appGuid = ? AND ipHash = ? LIMIT 1', 'ss', [$guid, $ipHash]);
+						if (count($matchingDownloadIPs) == 0) {
+							executePreparedSQLQuery($mysqlConn, 'INSERT INTO downloads (appGuid, ipHash) VALUES (?, ?)', 'ss', [$guid, $ipHash]);
+							executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET downloads = downloads + 1 WHERE guid = ? LIMIT 1', 's', [$guid]);
+						}
+						
+						//Redirect to file
+						header('Location: ' . $matchingApps[0]['3dsx']);
+						break;
+					
+					case 'smdh':
+						//Select smdh field from current app version
+						$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.smdh AS smdh FROM apps app
+																			LEFT JOIN appversions appver ON appver.versionId = app.version
+																			WHERE app.guid = ? LIMIT 1', 's', [$guid]);
+						
+						printAndExitIfTrue(count($matchingApps) != 1, 'Invalid GUID.'); //Check if GUID is valid
+						
+						//Redirect to file
+						header('Location: ' . $matchingApps[0]['smdh']);
+						break;
+						
+					default:
+						echo 'Error: incorrect use of API!';
+						break;
+				}
+				$mysqlConn->close();
+			}
+			else {
+				echo 'Error: incorrect use of API!';
+			}
 			break;
 		
 		case 'rate':
@@ -141,6 +193,7 @@
 				//get the current main banner
 			}
 			break;
+		
 		case 'dmii':
 			if (count($param) > 1) {
 				$secondLevelRequest = $param[1];
@@ -149,19 +202,19 @@
 						echo "0.0.0.0"; //Example, todo: get 'version' from 'DownloadMii'
 						break;
 					case 'data':
-						echo "todo";
+						echo 'todo';
 						break;
-					case 'default':
-						echo "Error: incorrect use of API!";
+					default:
+						echo 'Error: incorrect use of API!';
 						break;
 				}
 			}
-			else{
-				echo "Error: incorrect use of API!";
+			else {
+				echo 'Error: incorrect use of API!';
 			}
 			break;
+		
 		default:
-			echo "Error: incorrect use of API!";
+			echo 'Error: incorrect use of API!';
 	}
-	$mysqlConn->close();
 ?>
