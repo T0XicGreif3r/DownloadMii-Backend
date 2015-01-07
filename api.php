@@ -143,6 +143,7 @@
 			break;
 		case 'dmii':
 			if (count($param) > 1) {
+				$secondLevelRequest = $param[1];
 				switch ($secondLevelRequest) {
 					case 'version':
 						echo "0.0.0.0"; //Example, todo: get 'version' from 'DownloadMii'
