@@ -50,8 +50,6 @@
 	$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId FROM categories WHERE categoryId = ? AND type = 0', 'i', [$_POST['category']]);
 	printAndExitIfTrue(count($categories) != 1, 'Invalid category ID.');
 	
-	$guid = generateGUID();
-	
 	//Upload files to Azure Blob Service
 	$app3dsxBlobName = generateRandomString();
 	$appSmdhBlobName = generateRandomString();
@@ -64,8 +62,8 @@
 	$appSmdhBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_smdh') . '/' . $appSmdhBlobName;
 	
 	//Insert app version
-	$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO appversions (appGuid, number, 3dsx, smdh)
-											VALUES (?, ?, ?, ?)', 'ssss', [$guid, $appVersion, $app3dsxBlobURL, $appSmdhBlobURL], true);
+	$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO appversions (number, 3dsx, smdh)
+											VALUES (?, ?, ?)', 'sss', [$appVersion, $app3dsxBlobURL, $appSmdhBlobURL], true);
 	$versionId = $stmt->insert_id;
 	$stmt->close();
 	
@@ -73,7 +71,7 @@
 	if (!isset($_SESSION['user_app_guid'])) {
 		executePreparedSQLQuery($mysqlConn, 'INSERT INTO apps (guid, name, publisher, version, description, category, publishstate)
 												VALUES (?, ?, ?, ?, ?, ?, ?)',
-												'ssiisii', [$guid, $appName, $_SESSION['user_id'], $versionId, $appDescription, $appCategory, $_SESSION['user_role'] < 2 ? 0 : 1]);
+												'ssiisii', [generateGUID(), $appName, $_SESSION['user_id'], $versionId, $appDescription, $appCategory, $_SESSION['user_role'] < 2 ? 0 : 1]);
 	}
 	
 	echo 'Your application has been submitted and is now waiting approval from our staff.';
