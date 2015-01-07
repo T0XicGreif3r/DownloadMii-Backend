@@ -159,6 +159,7 @@
 			else{
 				echo "Error: incorrect use of API!";
 			}
+			break;
 		default:
 			echo "Error: incorrect use of API!";
 	}
