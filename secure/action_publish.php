@@ -58,7 +58,7 @@
 	$mysqlConn = connectToDatabase();
 	
 	//Check if category exists
-	$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId FROM categories WHERE categoryId = ? AND type = 0', 'i', [$_POST['category']]);
+	$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId FROM categories WHERE categoryId = ? AND parent IS NULL', 'i', [$_POST['category']]);
 	printAndExitIfTrue(count($categories) != 1, 'Invalid category ID.');
 	
 	//Initialize Azure Blob Service if files will be uploaded

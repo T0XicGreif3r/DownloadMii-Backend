@@ -9,8 +9,10 @@ CREATE TABLE users(
 
 CREATE TABLE categories(
 	categoryId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	type TINYINT NOT NULL,
-	name VARCHAR(50) NOT NULL
+	parent INT NULL,
+	name VARCHAR(50) NOT NULL,
+	
+	FOREIGN KEY (parent) REFERENCES categories(categoryId),
 );
 
 CREATE TABLE appversions(

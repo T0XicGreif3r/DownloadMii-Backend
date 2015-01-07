@@ -35,7 +35,7 @@
 		}
 		
 		$editing = isset($appToEdit);
-		$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories WHERE type = 0');
+		$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories WHERE parent IS NULL');
 		$mysqlConn->close();
 ?>
 		<h1 class="text-center"><?php if (isset($appToEdit)) echo 'Updating ' . $appToEdit['name']; else echo 'Add a new application'; ?></h1>
