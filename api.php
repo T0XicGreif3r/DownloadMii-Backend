@@ -141,6 +141,23 @@
 				//get the current main banner
 			}
 			break;
+		case 'dmii':
+			if (count($param) > 1) {
+				switch ($secondLevelRequest) {
+					case 'version':
+						echo "0.0.0.0"; //Example, todo: get 'version' from 'DownloadMii'
+						break;
+					case 'data':
+						echo "todo";
+						break;
+					case 'default':
+						echo "Error: incorrect use of API!";
+						break;
+				}
+			}
+			else{
+				echo "Error: incorrect use of API!";
+			}
 		default:
 			echo "Error: incorrect use of API!";
 	}
