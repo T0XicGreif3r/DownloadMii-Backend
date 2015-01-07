@@ -12,7 +12,7 @@ CREATE TABLE categories(
 	parent INT NULL,
 	name VARCHAR(50) NOT NULL,
 	
-	FOREIGN KEY (parent) REFERENCES categories(categoryId),
+	FOREIGN KEY (parent) REFERENCES categories(categoryId)
 );
 
 CREATE TABLE appversions(
