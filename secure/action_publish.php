@@ -34,7 +34,7 @@
 	$appName = htmlspecialchars($_POST['name']);
 	$appVersion = htmlspecialchars($_POST['version']);
 	$appCategory = $_POST['category'];
-	$appDescription = htmlspecialchars($_POST['description']);
+	$appDescription = str_replace(['\r\n', '\r', '\n'], ' ', htmlspecialchars($_POST['description']);
 	
 	$isDeveloper = $_SESSION['user_role'] > 1;
 	$updatingApp = isset($_SESSION['user_app_guid']);
