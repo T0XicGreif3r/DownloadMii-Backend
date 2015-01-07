@@ -46,7 +46,7 @@
 	
 	//Insert user into database
 	executePreparedSQLQuery($mysqlConn, 'INSERT INTO users (nick, password, role, email, token)
-											VALUES (?, ?, 1, ?, ?)', 'sssss', [$tryRegisterName, $hashedTryRegisterPass, $tryRegisterEmail, sha1($registerToken)]);
+											VALUES (?, ?, 1, ?, ?)', 'ssss', [$tryRegisterName, $hashedTryRegisterPass, $tryRegisterEmail, sha1($registerToken)]);
 	
 	$mysqlConn->close();
 	
