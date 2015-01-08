@@ -17,6 +17,6 @@
 	echo 'Pending apps (showing only oldest 50):<br />';
 	
 	foreach ($pendingApps as $app) {
-		echo '<br />' . '<a href="admin_appview.php?guid=' . $app['guid'] . '&token=' . md5($_SESSION['mod_token']) . '">' . $app['guid'] . '</a> (n: ' . $app['name'] . ', v: ' . $app['version'] . ', p: ' . $app['publisher'] . ')';
+		echo '<br />' . '<a href="mod_appview.php?guid=' . $app['guid'] . '&token=' . md5($_SESSION['mod_token']) . '">' . $app['guid'] . '</a> (name: ' . $app['name'] . ', version: ' . $app['version'] . ', publisher: ' . $app['publisher'] . ')';
 	}
 ?>
