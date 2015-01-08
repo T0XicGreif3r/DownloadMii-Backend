@@ -10,6 +10,8 @@
 	
 	use WindowsAzure\Common\ServicesBuilder;
 	
+	$_SESSION['saved_desc'] = $_POST['description']; //temporary solution
+	
 	sendResponseCodeAndExitIfTrue(!isset($_SESSION['publish_token']), 422); //Check if session publishing token is set
 	$publishToken = $_SESSION['publish_token'];
 	unset($_SESSION['publish_token']);
@@ -133,6 +135,8 @@
 												WHERE guid = ?',
 												'sisiiis', [$appName, $versionId, $appDescription, $appCategory, $appSubCategory, $isDeveloper ? 1 : 0, $guid]);
 	}
+	
+	unset($_SESSION['saved_desc']);
 	
 	if ($isDeveloper) {
 		echo 'Your application has been published.';
