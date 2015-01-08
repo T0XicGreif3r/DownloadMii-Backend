@@ -17,17 +17,17 @@
 	<link rel="shortcut icon" type="image/ico" href="https://www.downloadmii.com/favicon.ico" />
 	
 	<!-- STYLESHEETS -->
-	<link href="css/bootstrap.css" rel="stylesheet"/>
-	<link href="css/widgets.css" rel="stylesheet"/>
-	<link href="css/blog.css" rel="stylesheet"/>
-	<link href="css/social.css" rel="stylesheet"/>
-    <link href="css/mainStruct.css" rel="stylesheet"/>
-	<link href="css/sidebar.css" rel="stylesheet">
+	<link href="/css/bootstrap.css" rel="stylesheet"/>
+	<link href="/css/widgets.css" rel="stylesheet"/>
+	<link href="/css/blog.css" rel="stylesheet"/>
+	<link href="/css/social.css" rel="stylesheet"/>
+    <link href="/css/mainStruct.css" rel="stylesheet"/>
+	<link href="/css/sidebar.css" rel="stylesheet">
 	
 	<!-- SCRIPTS  -->
-	<script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-	<script src="js/jquery.scrollUp.js"></script>
+	<script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+	<script src="/js/jquery.scrollUp.js"></script>
 	
 	<!-- IN CASE OF IE 9 -->
 	<!--[if lt IE 9]> 
@@ -109,6 +109,6 @@
 		</div>
 		<!-- /HOME -->
 <?php
-	require_once('/common/ucpfooter.php');
+	require_once('../common/ucpfooter.php');
 ?>
 
