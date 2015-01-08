@@ -32,7 +32,7 @@ CREATE TABLE apps(
 	version INT NOT NULL,
 	description VARCHAR(300) NULL,
 	category INT NOT NULL,
-	subcategory INT NULL,
+	subcategory INT NOT NULL,
 	rating TINYINT NOT NULL DEFAULT 0,
 	downloads INT NOT NULL DEFAULT 0,
 	publishstate TINYINT NOT NULL DEFAULT 0,
