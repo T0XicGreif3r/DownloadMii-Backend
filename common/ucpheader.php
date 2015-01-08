@@ -18,7 +18,7 @@
 ?>
 <html>
 	<head>
-		<link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+		<link rel="shortcut icon" type="image/ico" href="https://www.downloadmii.com/favicon.ico" />
 		<title>DownloadMii - User CP</title>
 		<link href="/css/bootstrap.css" rel="stylesheet"/>
 		<link href="/css/mainStruct.css" rel="stylesheet"/>
