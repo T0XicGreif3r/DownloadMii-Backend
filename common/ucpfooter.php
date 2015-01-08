@@ -29,10 +29,10 @@
 				<div class="row text-center">
 				  <div class="row">
 					  <div class="col-sm-4 col-xs-12">
-						<p><a class="btn btn-lg btn-flat" href="#" role="button">Latest Release</a></p>
+						<p><a class="btn btn-lg btn-flat" href="/download/#release" role="button">Latest Release</a></p>
 					  </div>
 					  <div class="col-sm-4 col-xs-12">
-						<p><a class="btn btn-lg btn-flat" href="#" role="button">Beta Release</a></p>
+						<p><a class="btn btn-lg btn-flat" href="/download/#beta" role="button">Beta Release</a></p>
 					  </div>
 					  <div class="col-sm-4 col-xs-12">
 						<p><a class="btn btn-lg btn-flat" href="http://build.filfatstudios.com:8080/job/DownloadMii%20(3DS)/" role="button">Nightly Builds</a></p>
