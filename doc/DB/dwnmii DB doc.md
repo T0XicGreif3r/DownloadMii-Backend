@@ -36,7 +36,6 @@ Column|Description|
 `description` | description  of the app, don't accept HTML NOR newline("\n") |
 `category` | id of the category, reference into categories table |
 `subcategory`| id of the category, reference into categories table |
-`othercategory`| id of the category, reference into categories table |
 `rating` | Average app rating |
 `downloads` | Download count |
 `publishstate` | Publish state: 0 - pending approval, 1 - published, 2 - rejected, 3 - hidden |

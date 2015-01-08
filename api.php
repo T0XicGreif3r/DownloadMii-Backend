@@ -53,6 +53,14 @@
 	sendResponseCodeAndExitIfTrue($origKey != $appKey, 403);
 	
 	$topLevelRequest = $param[0];
+			
+	//Base app query
+	$baseAppQuery = 'SELECT app.*, user.nick AS publisher, appver.number AS version, appver.3dsx_md5 AS 3dsx_md5, appver.smdh_md5 AS smdh_md5, maincat.name AS category, subcat.name AS subcategory FROM apps app
+					LEFT JOIN users user ON user.userId = app.publisher
+					LEFT JOIN appversions appver ON appver.versionId = app.version
+					LEFT JOIN categories maincat ON maincat.categoryId = app.category
+					LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
+					WHERE app.publishstate = 1';
 	
 	//TODO: Error check
 	switch ($topLevelRequest) {
@@ -61,14 +69,7 @@
 			$secondLevelRequest = $param[1];
 			
 			$mysqlConn = connectToDatabase();
-			
-			//Base query
-			$mysqlQuery = 'SELECT app.*, user.nick AS publisher, appver.number AS version, appver.3dsx_md5 AS 3dsx_md5, appver.smdh_md5 AS smdh_md5, maincat.name AS category, subcat.name AS subcategory, othercat.name AS othercategory FROM apps app
-							LEFT JOIN users user ON user.userId = app.publisher
-							LEFT JOIN appversions appver ON appver.versionId = app.version
-							LEFT JOIN categories maincat ON maincat.categoryId = app.category
-							LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
-							LEFT JOIN categories othercat ON othercat.categoryId = app.othercategory WHERE app.publishstate = 1';
+			$mysqlQuery = $baseAppQuery;
 			
 			switch ($secondLevelRequest) {
 				case 'ByDev':
@@ -214,11 +215,27 @@
 				$secondLevelRequest = $param[1];
 				switch ($secondLevelRequest) {
 					case 'version':
-						echo "0.0.0.0"; //Example, todo: get 'version' from 'DownloadMii'
+						$mysqlConn = connectToDatabase();
+						$mysqlQuery = 'SELECT appver.number AS version FROM apps app
+										LEFT JOIN appversions appver ON appver.versionId = app.version
+										WHERE app.publishstate = 1 AND app.guid = ? LIMIT 1';
+						
+						$matchingApps = getArrayFromSQLQuery($mysqlConn, $mysqlQuery, 's', [getConfigValue('downloadmii_app_guid')]);
+						printAndExitIfTrue(count($matchingApps) !== 1, 'Invalid DownloadMii app GUID in config.');
+						print($matchingApps[0]['version']);
+						$mysqlConn->close();
+						
 						break;
+					
 					case 'data':
-						echo 'todo';
+						$mysqlConn = connectToDatabase();
+						$mysqlQuery = $baseAppQuery . ' AND app.guid = ? LIMIT 1';
+						
+						print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'DownloadMii', 's', [getConfigValue('downloadmii_app_guid')]));
+						$mysqlConn->close();
+						
 						break;
+					
 					default:
 						echo 'Error: incorrect use of API!';
 						break;

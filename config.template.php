@@ -18,6 +18,9 @@
 		
 		//API keys
 		'apikey_recaptcha_site' => '',
-		'apikey_recaptcha_secret' => ''
+		'apikey_recaptcha_secret' => '',
+		
+		//DownloadMii
+		'downloadmii_app_guid' => ''
 	);
 ?>
