@@ -23,12 +23,7 @@
 	<link href="css/social.css" rel="stylesheet"/>
     <link href="css/mainStruct.css" rel="stylesheet"/>
 	<link href="css/sidebar.css" rel="stylesheet">
-	
-	<!-- SCRIPTS  -->
-	<script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-	<script src="js/jquery.scrollUp.js"></script>
-	
+
 	<!-- IN CASE OF IE 9 -->
 	<!--[if lt IE 9]> 
  		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -39,7 +34,7 @@
 		<!-- MICROSOFT -->
 		<meta name="application-name" content="DownloadMii" />
 		<link rel="dns-prefetch" href="http://filfatstudios.com/"/>
-		<link rel="prerender" href="http://filfatstudios.com" />
+		<link rel="prerender" href="http://filfatstudios.com/" />
 		
 		<!-- IE SITE PIN -->
 		<meta name="msapplication-starturl" content="http://www.downloadmii.com" />
@@ -47,27 +42,28 @@
 		<meta name="msapplication-window" content="width=1024;height=768" />
 		<meta name="msapplication-tooltip" content="Visit DownloadMii" />
         <meta content="name=Home;action-uri=./index.html;icon-uri=./favicon.ico" name="msapplication-task" />
+		<meta content="name=User CP;action-uri=./secure/myapps.php;icon-uri=./favicon.ico" name="msapplication-task" />
 
 
 		<!-- LIVE TILE -->
 		<meta name="msapplication-TileColor" content="#009FFF" />
-		<meta name="msapplication-square70x70logo" content="/LiveTiles/smalltile.png" />
-		<meta name="msapplication-square150x150logo" content="/LiveTiles/mediumtile.png" />
-		<meta name="msapplication-wide310x150logo" content="/LiveTiles/widetile.png" />
-		<meta name="msapplication-square310x310logo" content="/LiveTiles/largetile.png" />
+		<meta name="msapplication-square70x70logo" content="/img/LiveTiles/smalltile.png" />
+		<meta name="msapplication-square150x150logo" content="/img/LiveTiles/mediumtile.png" />
+		<meta name="msapplication-wide310x150logo" content="/img/LiveTiles/widetile.png" />
+		<meta name="msapplication-square310x310logo" content="/img/LiveTiles/largetile.png" />
 		
 		<!-- APPLE -->
 		<link rel="apple-touch-icon" href="/img/Apple/touch-icon-iphone.png" /> 
-        <link rel="apple-touch-icon" sizes="76x76" href="/img/Apple/touch-icon-ipad.png" /> 
-        <link rel="apple-touch-icon" sizes="120x120" href="/img/Apple/touch-icon-iphone-retina.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/img/Apple/touch-icon-ipad-retina.png" />
+        <link rel="apple-touch-icon" size="76x76" href="/img/Apple/touch-icon-ipad.png" /> 
+        <link rel="apple-touch-icon" size="120x120" href="/img/Apple/touch-icon-iphone-retina.png" />
+        <link rel="apple-touch-icon" size="152x152" href="/img/Apple/touch-icon-ipad-retina.png" />
 		<link rel="apple-touch-startup-image" href="/img/Apple/startup.png" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="white" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-title" content="Company Name" />
+		<meta name="apple-mobile-web-app-title" content="DownloadMii"/>
 		
 		<!-- ANDROID -->
-		<link rel="icon" sizes="128x128" href="/img/Apple/touch-icon-iphone-retina.png" />
+		<link rel="icon" size="128x128" href="/img/Apple/touch-icon-iphone-retina.png" />
 
     <title>DownloadMii</title>
 </head>

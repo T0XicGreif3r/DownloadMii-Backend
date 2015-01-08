@@ -62,8 +62,9 @@
 		</footer>
 		<!-- SCRIPTS  -->
 		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="/js/jquery.scrollUp.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-		<script src="js/smooth-scroll.js"></script>
+		<script src="/js/smooth-scroll.js"></script>
 		<script>
 			smoothScroll.init({
 			speed: 500, // Integer. How fast to complete the scroll in milliseconds

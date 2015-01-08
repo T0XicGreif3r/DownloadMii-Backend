@@ -69,7 +69,7 @@
 		<!-- ANDROID -->
 		<link rel="icon" sizes="128x128" href="/img/Apple/touch-icon-iphone-retina.png" />
 
-    <title>DownloadMii</title>
+    <title>DownloadMii - Download</title>
 </head>
 <body>
 	<div class="WayPoint" id="HOMEwp"></div>
@@ -83,7 +83,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			  </button>
-			  <a class="navbar-brand" href="#">DownloadMii - Download</a>
+			  <a class="navbar-brand" href="/">DownloadMii</a>
 			</div>
 			<div class="collapse navbar-collapse" id="navbar-collapse-main">
 			  <ul class="nav navbar-nav navbar-right">

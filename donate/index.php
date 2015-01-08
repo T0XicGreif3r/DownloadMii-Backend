@@ -24,7 +24,7 @@
 				</div>
 				<div class="collapse navbar-collapse" id="navbar-collapse-main">
 				  <ul class="nav navbar-nav navbar-right">
-					<li><a data-scroll href="/">HOME</a></li>
+					<li><a href="/">HOME</a></li>
 					<!--li><a data-scroll href="#ABOUTwp">ABOUT</a></li-->
 					<li><a data-scroll href="/#DOWNLOADwp">DOWNLOAD</a></li>
 					<li><a href="/donate">DONATE</a></li>
