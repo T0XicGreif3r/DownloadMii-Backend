@@ -17,9 +17,12 @@
 	sendResponseCodeAndExitIfTrue(!clientLoggedIn(), 403);
 	printAndExitIfTrue($_SESSION['user_role'] < 1, 'You do not have permission to publish apps.');
 	
-	sendResponseCodeAndExitIfTrue(!(isset($_POST['name'], $_POST['version'], $_POST['category'], $_POST['description'], $_FILES['3dsx'], $_FILES['smdh'], $_POST["g-recaptcha-response"], $_POST['publishtoken'])), 400); //Check if all expected POST vars are set
+	sendResponseCodeAndExitIfTrue(!(isset($_POST['name'], $_POST['version'], $_POST['category'], $_POST['subcategory'], $_POST['description'], $_FILES['3dsx'], $_FILES['smdh'], $_POST["g-recaptcha-response"], $_POST['publishtoken'])), 400); //Check if all expected POST vars are set
+	printAndExitIfTrue(empty($_POST['name']) || empty($_POST['version']), 'Please fill all required fields.'); //Check if fields aren't empty
 	sendResponseCodeAndExitIfTrue(md5($publishToken) !== $_POST['publishtoken'], 422); //Check if POST publishing token is correct
-	sendResponseCodeAndExitIfTrue(!is_numeric($_POST['category']), 422); //Check if category selected
+	
+	$subCategorySelected = $_POST['subcategory'] !== '';
+	sendResponseCodeAndExitIfTrue(!is_numeric($_POST['category']) || ($subCategorySelected && !is_numeric($_POST['subcategory'])), 422); //Check if category selected
 	
 	//Check POST var lengths
 	printAndExitIfTrue(mb_strlen($_POST['name']) > 32, 'App name is too long.');
@@ -34,13 +37,14 @@
 	$appName = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
 	$appVersion = filter_var($_POST['version'], FILTER_SANITIZE_SPECIAL_CHARS);
 	$appCategory = $_POST['category'];
+	$appSubCategory = $subCategorySelected ? $_POST['subcategory'] : null;
 	$appDescription = filter_var(str_replace(['\r\n', '\r', '\n'], ' ', $_POST['description']), FILTER_SANITIZE_SPECIAL_CHARS);
 	
 	$isDeveloper = $_SESSION['user_role'] > 1;
 	$updatingApp = isset($_SESSION['user_app_guid']);
 	
 	if (!$updatingApp) {
-		$guid = generateGUID();
+		$guid = generateGUID(); //Generate GUID if not updating app
 	}
 	else {
 		$guid = $_SESSION['user_app_guid'];
@@ -57,9 +61,16 @@
 	
 	$mysqlConn = connectToDatabase();
 	
-	//Check if category exists
-	$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId FROM categories WHERE categoryId = ? AND parent IS NULL', 'i', [$_POST['category']]);
+	//Check if categories exist and are valid
+	$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId FROM categories WHERE categoryId = ? AND parent IS NULL', 'i', [$appCategory]);
 	printAndExitIfTrue(count($categories) != 1, 'Invalid category ID.');
+	if ($subCategorySelected) {
+		$subCategories = getArrayFromSQLQuery($mysqlConn, 'SELECT cat.categoryId FROM categories cat
+															LEFT JOIN categories parentcat ON cat.parent = parentcat.categoryId
+															WHERE cat.categoryId = ? AND parentcat.parent IS NULL', 'i', [$appSubCategory]);
+		
+		printAndExitIfTrue(count($categories) != 1, 'Invalid subcategory ID.');
+	}
 	
 	//Initialize Azure Blob Service if files will be uploaded
 	if (!$updatingApp || $updating3dsx || $updatingSmdh) {
@@ -112,21 +123,21 @@
 	
 	if (!$updatingApp) {
 		//Insert app
-		executePreparedSQLQuery($mysqlConn, 'INSERT INTO apps (guid, name, publisher, version, description, category, publishstate)
-												VALUES (?, ?, ?, ?, ?, ?, ?)',
-												'ssiisii', [$guid, $appName, $_SESSION['user_id'], $versionId, $appDescription, $appCategory, $isDeveloper ? 1 : 0]);
+		executePreparedSQLQuery($mysqlConn, 'INSERT INTO apps (guid, name, publisher, version, description, category, subcategory, publishstate)
+												VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+												'ssiisiii', [$guid, $appName, $_SESSION['user_id'], $versionId, $appDescription, $appCategory, $appSubCategory, $isDeveloper ? 1 : 0]);
 	}
 	else {
 		//Update app row
-		executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, version = ?, description = ?, category = ?, publishstate = ?
+		executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, version = ?, description = ?, category = ?, subcategory = ?, publishstate = ?
 												WHERE guid = ?',
-												'sisiis', [$appName, $versionId, $appDescription, $appCategory, $isDeveloper ? 1 : 0, $guid]);
+												'sisiiis', [$appName, $versionId, $appDescription, $appCategory, $appSubCategory, $isDeveloper ? 1 : 0, $guid]);
 	}
 	
 	if ($isDeveloper) {
 		echo 'Your application has been published.';
 	}
 	else {
-		echo 'Your application has been submitted and is now waiting approval from our staff.';
+		echo 'Your application has been submitted and is now pending approval from our staff.';
 	}
 ?>

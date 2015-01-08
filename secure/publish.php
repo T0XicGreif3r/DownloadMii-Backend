@@ -35,29 +35,48 @@
 		}
 		
 		$editing = isset($appToEdit);
-		$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories WHERE parent IS NULL');
-		$mysqlConn->close();
 ?>
 		<h1 class="text-center"><?php if (isset($appToEdit)) echo 'Updating ' . $appToEdit['name']; else echo 'Add a new application'; ?></h1>
 		<br />
 		<div class="well">
 			<form role="form" action="action_publish.php" method="post" enctype="multipart/form-data" accept-charset="utf-8">
 				<div class="row">
-					<div class="col-md-4 form-group">
+					<div class="col-md-6 form-group">
 						<label for="name">Name:</label>
 						<input type="text" class="form-control" id="name" name="name" placeholder="e.g. My Application" maxlength="32" value="<?php if ($editing) echo $appToEdit['name']; ?>" required>
 					</div>
-					<div class="col-md-4 form-group">
+					<div class="col-md-6 form-group">
 						<label for="version">Version:</label>
 						<input type="text" class="form-control" id="version" name="version" placeholder="e.g. 1.0.0.0" maxlength="12" value="<?php if ($editing) echo $appToEdit['version']; ?>" required>
 					</div>
-					<div class="col-md-4 form-group">
+				</div>
+				<div class="row">
+					<div class="col-md-6 form-group">
 						<label for="category">Category:</label>
 						<select class="form-control" id="category" name="category" required>
 							<option value="">Select a category...</option>
 							<?php
+								$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories WHERE parent IS NULL');
 								foreach ($categories as $category) {
 									echo '<option value="' . $category['categoryId'] . '">' . $category['name'] . '</option>';
+								}
+?>
+
+						</select>
+					</div>
+					<div class="col-md-6 form-group">
+						<label for="subcategory">Subcategory (optional):</label>
+						<select class="form-control" id="subcategory" name="subcategory">
+							<option value=""></option>
+							<?php
+								if ($editing) {
+									$subCategories = getArrayFromSQLQuery($mysqlConn, 'SELECT cat.categoryId, cat.name FROM categories cat
+																						LEFT JOIN categories parentcat ON cat.parent = parentcat.categoryId
+																						WHERE parentcat.categoryId = ? AND parentcat.parent IS NULL', 'i', [$appToEdit['category']]);
+									
+									foreach ($subCategories as $subCategory) {
+										echo '<option value="' . $subCategory['categoryId'] . '">' . $subCategory['name'] . '</option>';
+									}
 								}
 ?>
 
@@ -89,14 +108,58 @@
 		</div>
 		<script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script>
 		<?php
-			if ($editing) {
+			$mysqlConn->close();
 ?>
 
 		<script type="text/javascript">
-			document.getElementById('category').value = <?php echo $appToEdit['category']; ?>;
-		</script>
-<?php
+		var updateSubCategories = function() {
+			var categorySelectElement = document.getElementById('category');
+			var subCategorySelectElement = document.getElementById('subcategory');
+			
+			while (subCategorySelectElement.options.length > 0) {
+				subCategorySelectElement.remove(0);
 			}
+			
+			if (categorySelectElement.value !== '') {
+				var httpRequest = new XMLHttpRequest();
+				httpRequest.onreadystatechange = function() {
+					if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+						var categoriesObject = JSON.parse(httpRequest.responseText);
+						for (var i = 0; i < categoriesObject.Subcategories.length; i++) {
+							var option = document.createElement('option');
+							option.text = categoriesObject.Subcategories[i].name;
+							option.value = categoriesObject.Subcategories[i].categoryId;
+							document.getElementById('subcategory').add(option);
+						}
+					}
+				}
+				
+				httpRequest.open('GET', '/api/categories/' + categorySelectElement.options[categorySelectElement.selectedIndex].text, false);
+				httpRequest.send();
+			}
+		}
+		
+		document.getElementById('category').onchange = updateSubCategories;
+		<?php
+			if ($editing) {
+?>
+
+			document.getElementById('category').value = <?php echo $appToEdit['category']; ?>;
+			<?php
+				if ($appToEdit['subcategory'] !== null) {
+?>
+
+			document.getElementById('subcategory').value = <?php echo $appToEdit['subcategory']; ?>;
+			<?php
+				}
+?>
+
+		<?php
+			}
+?>
+		</script>
+		
+	<?php
 		}
 	require_once('../common/ucpfooter.php');
 ?>

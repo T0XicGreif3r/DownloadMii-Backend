@@ -10,7 +10,7 @@ CREATE TABLE users(
 CREATE TABLE categories(
 	categoryId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	parent INT NULL,
-	name VARCHAR(50) NOT NULL,
+	name VARCHAR(50) NOT NULL UNIQUE,
 	
 	FOREIGN KEY (parent) REFERENCES categories(categoryId)
 );
@@ -33,7 +33,6 @@ CREATE TABLE apps(
 	description VARCHAR(300) NULL,
 	category INT NOT NULL,
 	subcategory INT NULL,
-	othercategory INT NULL,
 	rating TINYINT NOT NULL DEFAULT 0,
 	downloads INT NOT NULL DEFAULT 0,
 	publishstate TINYINT NOT NULL DEFAULT 0,
@@ -41,8 +40,7 @@ CREATE TABLE apps(
 	FOREIGN KEY (publisher) REFERENCES users(userId),
 	FOREIGN KEY (version) REFERENCES appversions(versionId),
 	FOREIGN KEY (category) REFERENCES categories(categoryId),
-	FOREIGN KEY (subcategory) REFERENCES categories(categoryId),
-	FOREIGN KEY (othercategory) REFERENCES categories(categoryId)
+	FOREIGN KEY (subcategory) REFERENCES categories(categoryId)
 );
 
 CREATE TABLE ratings(

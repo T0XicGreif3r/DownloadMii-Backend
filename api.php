@@ -9,7 +9,7 @@
 		<domain>/api/bydev/[developerId]
 
 		App list by category/sub/other
-		<domain>/api/apps/[category]/[subcategory]/[othercategory]
+		<domain>/api/apps/[category]/[subcategory]
 
 		To rate an APP
 		<domain>/api/rate/[securetoken]/[appguid]/[rating]
@@ -25,9 +25,6 @@
 		
 		To get a list of subcategories
 		<domain>/api/categories/[category_name]
-		
-		To get a list of othercategories
-		<domain>/api/categories/[category_name]/[subcategory_name]
 		
 		To get DownloadMii version string (eg "1.0.0.0")
 		<domain>/api/dmii/version
@@ -112,12 +109,6 @@
 							$bindParamTypes .= 's';
 							array_push($bindParamArgs, $param[3]);
 							$mysqlQueryEnd .= ' AND subcat.name = ?';
-						
-							if (count($param) > 4) {
-								$bindParamTypes .= 's';
-								array_push($bindParamArgs, $param[4]);
-								$mysqlQueryEnd .= ' AND othercat.name = ?';
-							}
 						}
 						
 						$mysqlQuery .= $mysqlQueryEnd;
@@ -177,6 +168,27 @@
 			else {
 				echo 'Error: incorrect use of API!';
 			}
+			break;
+		
+		case 'categories':
+			$mysqlQuery = 'SELECT cat.categoryId, cat.name FROM categories cat';
+			$bindParamTypes = null;
+			$bindParamArgs = null;
+			
+			if (count($param) > 1) {
+				$maincat = $param[1];
+				$bindParamTypes = 's';
+				$bindParamArgs = array($maincat);
+				$mysqlQuery .= ' LEFT JOIN categories parentcat ON cat.parent = parentcat.categoryId WHERE parentcat.name = ?';
+			}
+			else {
+				$mysqlQuery .= ' WHERE cat.parent IS NULL';
+			}
+			
+			$mysqlConn = connectToDatabase();
+			print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, count($param) < 2 ? 'Categories' : 'Subcategories', $bindParamTypes, $bindParamArgs));
+			$mysqlConn->close();
+			
 			break;
 		
 		case 'rate':

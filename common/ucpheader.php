@@ -79,16 +79,6 @@
 					?>
 					<li><a href="/secure/myapps.php">MY APPS</a></li>
 					<li><a href="/secure/publish.php">SUBMIT APP</a></li>
-					<li><a href="/secure/action_signout.php">LOGOUT</a></li>
-					<?php
-						}
-						else {
-					?>
-					<li><a href="/secure/login.php">LOGIN</a></li>
-					<li><a href="/secure/register.php">REGISTER</a></li>
-					<?php
-						}
-					?>
 					<?php
 						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {
 					?>
@@ -100,6 +90,16 @@
 						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 4) {
 					?>
 					<li><a href="/secure/admin.php">ADMIN CP</a></li>
+					<?php
+						}
+					?>
+					<li><a href="/secure/action_signout.php">LOGOUT</a></li>
+					<?php
+						}
+						else {
+					?>
+					<li><a href="/secure/login.php">LOGIN</a></li>
+					<li><a href="/secure/register.php">REGISTER</a></li>
 					<?php
 						}
 					?>
