@@ -26,6 +26,9 @@
 		To get a list of subcategories
 		<domain>/api/categories/[category_name]
 		
+		To get a list of othercategories
+		<domain>/api/categories/[category_name]/[subcategory_name]
+		
 		To get DownloadMii version string (eg "1.0.0.0")
 		<domain>/api/dmii/version
 		
@@ -142,7 +145,7 @@
 						printAndExitIfTrue(count($matchingApps) != 1, 'Invalid GUID.'); //Check if GUID is valid
 						
 						//Update download count if IP not downloaded app already
-						$ipHash = md5((isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : '') . $_SERVER['REMOTE_ADDR']);
+						$ipHash = md5($_SERVER['REMOTE_ADDR']);
 						$matchingDownloadIPs = getArrayFromSQLQuery($mysqlConn, 'SELECT downloadId FROM downloads WHERE appGuid = ? AND ipHash = ? LIMIT 1', 'ss', [$guid, $ipHash]);
 						if (count($matchingDownloadIPs) == 0) {
 							executePreparedSQLQuery($mysqlConn, 'INSERT INTO downloads (appGuid, ipHash) VALUES (?, ?)', 'ss', [$guid, $ipHash]);
