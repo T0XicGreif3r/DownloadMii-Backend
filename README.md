@@ -18,12 +18,12 @@ JSON EXAMPLES: https://github.com/DownloadMii/DownloadMii/tree/master/doc/exampl
 ROADMAP
 ========
 some of the following things are horrebly outdated please take a look at api.php first.
-- [ ] Implament a simple but secure account system and SSL support
-- [ ] Implament roles
+- [x] Implament a simple but secure account system and SSL support
+- [x] Implament roles
 - [x] Add MySQL DB
-- [ ] Implment app publishing for the role "developer" which the data will be saved to the DB and the files to an Azure blob storage. (Containg a appname, developer, category, subcategory, description, unquie app GUID, link to 3dsx & smdh file, link to icon ans publish date).
+- [x] Implment app publishing for the role "developer" which the data will be saved to the DB and the files to an Azure blob storage. (Containg a appname, developer, category, subcategory, description, unquie app GUID, link to 3dsx & smdh file, link to icon ans publish date).
 - [ ] Implament app reviewing by moderators an allow them to change the "allowPublish" to true. (Should be done for new releases and updates)
-- [ ] Allow the "developer" role to publish their application manually at any time they want.
+- [x] Allow the "developer" role to publish their application manually at any time they want.
 - [ ] With more.
 
 
