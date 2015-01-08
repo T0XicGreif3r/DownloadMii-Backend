@@ -89,6 +89,20 @@
 					<?php
 						}
 					?>
+					<?php
+						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {
+					?>
+					<li><a href="/secure/mod.php">MOD CP</a></li>
+					<?php
+						}
+					?>
+					<?php
+						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 4) {
+					?>
+					<li><a href="/secure/admin.php">ADMIN CP</a></li>
+					<?php
+						}
+					?>
 				  </ul>
 				</div>
 			  </div>
