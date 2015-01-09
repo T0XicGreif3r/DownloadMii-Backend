@@ -17,12 +17,13 @@
 		
 		$mysqlConn = connectToDatabase();
 		
-		$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT guid, name FROM apps
+		$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT guid, name, publishstate FROM apps
 															WHERE guid = ? AND publisher = ? LIMIT 1', 'ss', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
 		
 		$mysqlConn->close();
 		
 		printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
+		printAndExitIfTrue($matchingApps[0]['publishstate'] === 2 || $matchingApps[0]['publishstate'] === 3, 'This app is rejected or already hidden.');
 			
 		$appToRemove = $matchingApps[0];
 			

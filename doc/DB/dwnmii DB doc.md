@@ -39,6 +39,7 @@ Column|Description|
 `rating` | Average app rating |
 `downloads` | Download count |
 `publishstate` | Publish state: 0 - pending approval, 1 - published, 2 - rejected, 3 - hidden |
+`failpublishmessage` | If app rejected, reason why |
 
 ##Ratings
 Column|Description|

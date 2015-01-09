@@ -36,6 +36,7 @@ CREATE TABLE apps(
 	rating TINYINT NOT NULL DEFAULT 0,
 	downloads INT NOT NULL DEFAULT 0,
 	publishstate TINYINT NOT NULL DEFAULT 0,
+	failpublishmessage VARCHAR(32) NULL
 
 	FOREIGN KEY (publisher) REFERENCES users(userId),
 	FOREIGN KEY (version) REFERENCES appversions(versionId),

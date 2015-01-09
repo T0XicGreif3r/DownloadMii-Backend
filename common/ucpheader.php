@@ -82,7 +82,7 @@
 					<?php
 						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {
 					?>
-					<li><a href="/secure/mod.php">MOD CP</a></li>
+					<li><a href="/secure/mod_apps.php">MOD CP</a></li>
 					<?php
 						}
 					?>

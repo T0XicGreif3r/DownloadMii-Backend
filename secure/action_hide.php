@@ -26,7 +26,7 @@
 	
 	//Check if app not hidden already
 	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT publishstate FROM apps WHERE guid = ?', 's', [$_SESSION['user_app_guid']]);
-	printAndExitIfTrue($matchingApps[0]['publishstate'] === 3, 'This app is already hidden.');
+	printAndExitIfTrue($matchingApps[0]['publishstate'] === 2 || $matchingApps[0]['publishstate'] === 3, 'This app is rejected or already hidden.');
 	
 	executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET publishstate = 3 WHERE guid = ? LIMIT 1', 's', [$_SESSION['user_app_guid']]); //Update publish state in database
 	$mysqlConn->close();
