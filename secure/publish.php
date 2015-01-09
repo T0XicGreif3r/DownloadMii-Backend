@@ -158,9 +158,11 @@
 						
 						removeAllOptions(subCategorySelectElement);
 						
-						addOption(subCategorySelectElement, 'Select a category...', '');
-						for (var i = 0; i < categoriesObject.Subcategories.length; i++) {
-							addOption(document.getElementById('subcategory'), categoriesObject.Subcategories[i].name, categoriesObject.Subcategories[i].categoryId);
+						if (categoriesObject.Subcategories.length > 0) {
+							addOption(subCategorySelectElement, 'Select a category...', '');
+							for (var i = 0; i < categoriesObject.Subcategories.length; i++) {
+								addOption(document.getElementById('subcategory'), categoriesObject.Subcategories[i].name, categoriesObject.Subcategories[i].categoryId);
+							}
 						}
 					}
 				}
