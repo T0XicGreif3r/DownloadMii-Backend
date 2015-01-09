@@ -145,8 +145,7 @@
 						}
 						
 						//Redirect to file
-						header("HTTP/1.1 301 Moved Permanently");
-						header('Location: ' . $matchingApps[0]['3dsx']);
+						echo $matchingApps[0]['3dsx'];
 						break;
 					
 					case 'smdh':
@@ -158,8 +157,7 @@
 						printAndExitIfTrue(count($matchingApps) != 1, 'Invalid GUID.'); //Check if GUID is valid
 						
 						//Redirect to file
-						header("HTTP/1.1 301 Moved Permanently");
-						header('Location: ' . $matchingApps[0]['smdh']);
+						echo $matchingApps[0]['smdh'];
 						break;
 						
 					default:
