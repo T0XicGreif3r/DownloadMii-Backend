@@ -2,9 +2,9 @@
 	require_once('../common/user.php');
 	require_once('../common/functions.php');
 	
-	if (isset($_SESSION['appset_token'])) {
-		$appsetToken = $_SESSION['appset_token'];
-		unset($_SESSION['appset_token']);
+	if (isset($_SESSION['mod_appview_token'])) {
+		$appsetToken = $_SESSION['mod_appview_token'];
+		unset($_SESSION['mod_appview_token']);
 	}
 	
 	printAndExitIfTrue(!clientLoggedIn() || $_SESSION['user_role'] < 3, 'You do not have permission to access this page.');

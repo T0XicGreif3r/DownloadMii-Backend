@@ -2,17 +2,17 @@
 	require_once('../common/user.php');
 	require_once('../common/functions.php');
 	
-	if (isset($_SESSION['appview_token'])) {
-		$appviewToken = $_SESSION['appview_token'];
-		unset($_SESSION['appview_token']);
+	if (isset($_SESSION['mod_apps_token'])) {
+		$appsToken = $_SESSION['mod_apps_token'];
+		unset($_SESSION['mod_apps_token']);
 	}
 	
 	printAndExitIfTrue(!clientLoggedIn() || $_SESSION['user_role'] < 3, 'You do not have permission to access this page.');
 	
-	$_SESSION['appset_token'] = uniqid(mt_rand(), true); //Generate token for moderator action
+	$_SESSION['mod_appview_token'] = uniqid(mt_rand(), true); //Generate token for moderator action
 	
 	sendResponseCodeAndExitIfTrue(!(isset($_GET['guid'], $_GET['token'])), 400);
-	sendResponseCodeAndExitIfTrue(!isset($appviewToken) || md5($appviewToken) !== $_GET['token'], 422);
+	sendResponseCodeAndExitIfTrue(!isset($appsToken) || md5($appsToken) !== $_GET['token'], 422);
 	
 	$mysqlConn = connectToDatabase();
 	
@@ -47,7 +47,7 @@ Message if "not approved" is selected (short, tell submitter why):
 <br />
 <input type="text" name="failpublishmessage" size="50" maxlength="32">
 <input type="hidden" name="guid" value="<?php echo $currentApp['guid']; ?>">
-<input type="hidden" name="token" value="<?php echo md5($_SESSION['appset_token']); ?>">
+<input type="hidden" name="token" value="<?php echo md5($_SESSION['mod_appview_token']); ?>">
 <br />
 <input type="submit" value="Set">
 </form>
