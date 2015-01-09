@@ -62,7 +62,7 @@
 						<select class="form-control" id="category" name="category" required>
 							<option value="">Select a category...</option>
 							<?php
-								$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories WHERE parent IS NULL');
+								$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories WHERE parent IS NULL ORDER BY name ASC');
 								foreach ($categories as $category) {
 									echo '<option value="' . $category['categoryId'] . '">' . $category['name'] . '</option>';
 								}
@@ -78,7 +78,7 @@
 								if ($editing) {
 									$subCategories = getArrayFromSQLQuery($mysqlConn, 'SELECT cat.categoryId, cat.name FROM categories cat
 																						LEFT JOIN categories parentcat ON cat.parent = parentcat.categoryId
-																						WHERE parentcat.categoryId = ? AND parentcat.parent IS NULL', 'i', [$appToEdit['category']]);
+																						WHERE parentcat.categoryId = ? AND parentcat.parent IS NULL ORDER BY cat.name ASC', 'i', [$appToEdit['category']]);
 									
 									foreach ($subCategories as $subCategory) {
 										echo '<option value="' . $subCategory['categoryId'] . '">' . $subCategory['name'] . '</option>';
@@ -118,28 +118,54 @@
 ?>
 
 		<script type="text/javascript">
+		var addOption = function(selectElement, text, value) {
+			var option = document.createElement('option');
+			option.text = text;
+			option.value = value;
+			selectElement.add(option);
+		}
+		
+		var removeAllOptions = function(selectElement) {
+			while (selectElement.options.length > 0) {
+				selectElement.remove(0);
+			}
+		}
+		
 		var updateSubCategories = function() {
 			var categorySelectElement = document.getElementById('category');
 			var subCategorySelectElement = document.getElementById('subcategory');
 			
-			while (subCategorySelectElement.options.length > 0) {
-				subCategorySelectElement.remove(0);
-			}
+			removeAllOptions(subCategorySelectElement);
 			
 			if (categorySelectElement.value !== '') {
 				var httpRequest = new XMLHttpRequest();
 				httpRequest.onreadystatechange = function() {
 					if (httpRequest.readyState == 4 && httpRequest.status == 200) {
 						var categoriesObject = JSON.parse(httpRequest.responseText);
+						
+						categoriesObject.Subcategories.sort(function(a, b) {
+							var nameA = a.name.toLowerCase();
+							var nameB = b.name.toLowerCase();
+							
+							if (nameA > nameB) {
+								return 1;
+							}
+							if (nameA < nameB) {
+								return -1;
+							}
+							return 0;
+						});
+						
+						removeAllOptions(subCategorySelectElement);
+						
+						addOption(subCategorySelectElement, 'Select a category...', '');
 						for (var i = 0; i < categoriesObject.Subcategories.length; i++) {
-							var option = document.createElement('option');
-							option.text = categoriesObject.Subcategories[i].name;
-							option.value = categoriesObject.Subcategories[i].categoryId;
-							document.getElementById('subcategory').add(option);
+							addOption(document.getElementById('subcategory'), categoriesObject.Subcategories[i].name, categoriesObject.Subcategories[i].categoryId);
 						}
 					}
 				}
 				
+				addOption(subCategorySelectElement, 'Loading subcategories...', '');
 				httpRequest.open('GET', '/api/categories/' + categorySelectElement.options[categorySelectElement.selectedIndex].text, false);
 				httpRequest.send();
 			}
