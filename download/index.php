@@ -18,16 +18,7 @@
 	
 	<!-- STYLESHEETS -->
 	<link href="/css/bootstrap.css" rel="stylesheet"/>
-	<link href="/css/widgets.css" rel="stylesheet"/>
-	<link href="/css/blog.css" rel="stylesheet"/>
-	<link href="/css/social.css" rel="stylesheet"/>
-    <link href="/css/mainStruct.css" rel="stylesheet"/>
-	<link href="/css/sidebar.css" rel="stylesheet">
-	
-	<!-- SCRIPTS  -->
-	<script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.js"></script>
-	<script src="/js/jquery.scrollUp.js"></script>
+    	<link href="/css/mainStruct.css" rel="stylesheet"/>
 	
 	<!-- IN CASE OF IE 9 -->
 	<!--[if lt IE 9]> 
@@ -101,8 +92,10 @@
 		  <div class="container">
 			<div class="row">
 			  <div class="col-sm-12 text-center">
-			    todo
-				</p>
+			  	<h1 class="text-center">Download</h1>
+			  	<div class="well clearfix">
+			  		todo
+			  	</div>
 			  </div>
 			</div>
 		  </div>
