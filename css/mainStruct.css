@@ -53,6 +53,16 @@ h1{
 	font-weight: 300 !important;
 	font-style: none;
 }
+h2{
+	font-size: 48px;
+	color: #25A4D6;
+	font-weight: 300 !important;
+	font-style: none;
+}
+
+.font-white{
+	color: white;
+}
 
 #FULLSCREEN {
   background: #e5e5e5; 
