@@ -23,7 +23,7 @@ CREATE TABLE appversions(
 	smdh VARCHAR(255) NOT NULL,
 	largeIcon VARCHAR(255) NOT NULL,
 	3dsx_md5 VARCHAR(32) NOT NULL,
-	smdh_md5 VARCHAR(32) NOT NULL,
+	smdh_md5 VARCHAR(32) NOT NULL
 );
 
 CREATE TABLE apps(
