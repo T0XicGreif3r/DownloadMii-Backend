@@ -1,6 +1,5 @@
 User-agent: *
-Disallow: /
-Allow: /index.php
+Allow: /
 Allow: /donate/
 Allow: /secure/login.php
 Allow: /secure/register.php
