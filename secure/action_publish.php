@@ -5,6 +5,7 @@
 	
 	require_once('../common/user.php');
 	require_once('../common/functions.php');
+	require_once('../common/smdh.php');
 	require_once('../common/recaptchalib.php');
 	require_once('../vendor/autoload.php');
 	
@@ -60,6 +61,7 @@
 	}
 	
 	//TODO: Check if files are valid 3dsx/smdh
+	printAndExitIfTrue(filesize($_FILES['smdh']['tmp_name']) != 0x36c0, 'Invalid SMDH file size.');
 	
 	$mysqlConn = connectToDatabase();
 	
@@ -83,14 +85,32 @@
 		$app3dsxMD5 = md5_file($_FILES['3dsx']['tmp_name']); //Get file hash
 		$app3dsxBlobName = generateRandomString(); //Generate file blob name
 		$app3dsxBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_3dsx') . '/' . $app3dsxBlobName; //Get Azure blob URL
-		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_3dsx'), $app3dsxBlobName, fopen($_FILES['3dsx']['tmp_name'], 'r')); //Upload blob to Azure Blob Service
+		
+		$app3dsxFile = fopen($_FILES['3dsx']['tmp_name'], 'r');
+		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_3dsx'), $app3dsxBlobName, $app3dsxFile); //Upload blob to Azure Blob Service
+		fclose($app3dsxFile);
 	}
 	
 	if (!$updatingApp || $updatingSmdh) {
 		$appSmdhMD5 = md5_file($_FILES['smdh']['tmp_name']);
 		$appSmdhBlobName = generateRandomString();
 		$appSmdhBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_smdh') . '/' . $appSmdhBlobName;
-		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_smdh'), $appSmdhBlobName, fopen($_FILES['smdh']['tmp_name'], 'r'));
+		
+		$appSmdhFile = fopen($_FILES['smdh']['tmp_name'], 'r');
+		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_smdh'), $appSmdhBlobName, $appSmdhFile);
+		
+		//Upload PNG icon
+		$smdhData = new smdh($appSmdhFile);
+		$tempPNG = tmpfile(); //Create temporary file to save PNG
+		imagepng($smdhData->getLargeIcon(), stream_get_meta_data($tempPNG)['uri']);
+		
+		$tempPNGBlobName = generateRandomString();
+		$tempPNGBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_largeicon') . '/' . $tempPNGBlobName;
+		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_largeicon'), $tempPNGBlobName, $tempPNG);
+		
+		fclose($tempPNG);
+		fclose($appSmdhFile);
+		$smdhData = null;
 	}
 	
 	if ($updatingApp) {
@@ -111,16 +131,16 @@
 	
 	if (!$updatingApp || $updating3dsx) {
 		//Insert app version
-		$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO appversions (appGuid, number, 3dsx, smdh, 3dsx_md5, smdh_md5)
-												VALUES (?, ?, ?, ?, ?, ?)', 'ssssss', [$guid, $appVersion, $app3dsxBlobURL, $appSmdhBlobURL, $app3dsxMD5, $appSmdhMD5], true);
+		$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO appversions (appGuid, number, 3dsx, smdh, largeIcon, 3dsx_md5, smdh_md5)
+												VALUES (?, ?, ?, ?, ?, ?, ?)', 'sssssss', [$guid, $appVersion, $app3dsxBlobURL, $appSmdhBlobURL, $tempPNGBlobURL, $app3dsxMD5, $appSmdhMD5], true);
 		$versionId = $stmt->insert_id;
 		$stmt->close();
 	}
 	else if ($updatingSmdh) {
 		//Update current app version with smdh URL and MD5
 		$stmt = executePreparedSQLQuery($mysqlConn, 'UPDATE appversions appver INNER JOIN apps app ON appver.versionId = app.version
-														SET versionId = app.version, smdh = ?, smdh_md5 = ?
-														WHERE app.guid = ? AND appver.versionId = app.version', 'sss', [$guid, $appSmdhBlobURL, $appSmdhMD5], true);
+														SET versionId = app.version, smdh = ?, largeIcon = ?, smdh_md5 = ?
+														WHERE app.guid = ? AND appver.versionId = app.version', 'ssss', [$guid, $appSmdhBlobURL, $tempPNGBlobURL, $appSmdhMD5], true);
 	}
 	
 	if (!$updatingApp) {

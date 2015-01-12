@@ -160,6 +160,18 @@
 						//Redirect to file
 						echo $matchingApps[0]['smdh'];
 						break;
+					
+					case 'largeicon':
+						//Select largeicon field from current app version
+						$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.largeicon AS largeicon FROM apps app
+																			LEFT JOIN appversions appver ON appver.versionId = app.version
+																			WHERE app.guid = ? LIMIT 1', 's', [$guid]);
+						
+						printAndExitIfTrue(count($matchingApps) != 1, 'Invalid GUID.'); //Check if GUID is valid
+						
+						//Redirect to file
+						echo $matchingApps[0]['largeicon'];
+						break;
 						
 					default:
 						echo 'Error: incorrect use of API!';
