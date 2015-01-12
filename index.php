@@ -7,7 +7,7 @@
     <meta name="keywords" content="Nintendo 3DS Homebrew, Homebrew Browser, 3ds, filfat, Wii U Homebrew" />
 	<meta name="AUTHOR" CONTENT="DownloadMii Team">
 	<meta name="COPYRIGHT" CONTENT="&copy; 2013-2015 Filiph Sandström && DownloadMii Team">
-	<meta name="google-site-verification" content="-" />
+	<meta name="google-site-verification" content="oUzBcLbkKoA1gb5G8ZWgzzLR_LmIMFa0F8gsCH39LRc" />
 	<meta name="msvalidate.01" content="-" />
     <meta charset="utf-8" />
 	
