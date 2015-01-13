@@ -38,9 +38,6 @@
 		To get smdh download URL for app
 		<domain>/api/dl/smdh/[appguid]
 		
-		To get large icon download URL for app
-		<domain>/api/dl/largeicon/[appguid]
-		
 		To get DownloadMii version string (eg "1.0.0.0")
 		<domain>/api/dmii/version
 		
@@ -71,7 +68,7 @@
 			
 	//Base app query
 	$baseAppQuery = 'SELECT app.guid, app.name, app.publisher, app.version, app.description, app.category, app.subcategory, app.rating, app.downloads, user.nick AS publisher,
-					appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.3dsx_md5 AS 3dsx_md5, appver.smdh_md5 AS smdh_md5 FROM apps app
+					appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.largeIcon AS largeicon, appver.3dsx_md5 AS 3dsx_md5, appver.smdh_md5 AS smdh_md5 AS smdh_md5 FROM apps app
 					LEFT JOIN users user ON user.userId = app.publisher
 					LEFT JOIN appversions appver ON appver.versionId = app.version
 					LEFT JOIN categories maincat ON maincat.categoryId = app.category
@@ -176,18 +173,6 @@
 						echo $matchingApps[0]['smdh'];
 						break;
 					
-					case 'largeicon':
-						//Select largeicon field from current app version
-						$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.largeIcon AS largeIcon FROM apps app
-																			LEFT JOIN appversions appver ON appver.versionId = app.version
-																			WHERE app.guid = ? LIMIT 1', 's', [$guid]);
-						
-						printAndExitIfTrue(count($matchingApps) != 1, 'Invalid GUID.'); //Check if GUID is valid
-						
-						//Redirect to file
-						echo $matchingApps[0]['largeIcon'];
-						break;
-						
 					default:
 						echo 'Error: incorrect use of API!';
 						break;
