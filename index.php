@@ -12,7 +12,7 @@
 	
 	<!-- METADATA -->
     	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=edge,safari=edge">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<link rel="shortcut icon" type="image/ico" href="https://www.downloadmii.com/favicon.ico" />
 	
 	<!-- STYLESHEETS -->
@@ -36,7 +36,7 @@
 		<meta name="msapplication-navbutton-color" content="#1009FFF" />
 		<meta name="msapplication-window" content="width=1024;height=768" />
 		<meta name="msapplication-tooltip" content="Visit DownloadMii" />
-        <meta content="name=Home;action-uri=./index.html;icon-uri=./favicon.ico" name="msapplication-task" />
+        	<meta content="name=Home;action-uri=./index.html;icon-uri=./favicon.ico" name="msapplication-task" />
 		<meta content="name=User CP;action-uri=./secure/myapps.php;icon-uri=./favicon.ico" name="msapplication-task" />
 
 
@@ -59,7 +59,7 @@
 		<link rel="apple-touch-startup-image" href="/img/Apple/startup.png">
 		
 		<!-- ANDROID -->
-		<link rel="icon" size="128x128" href="/img/Apple/touch-icon-iphone-retina.png" />
+		<link rel="icon" sizes="128x128" href="/img/Apple/touch-icon-iphone-retina.png" />
 
     <title>DownloadMii</title>
 </head>
