@@ -96,11 +96,11 @@
 				<div class="row">
 					<div class="col-md-6 form-group">
 						<label for="3dsx">3dsx file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
-						<input type="file" class="form-control" id="3dsx" name="3dsx" accept=".3dsx"<?php if (!$editing) echo ' required'; ?>>
+						<input type="file" class="form-control filestyle" id="3dsx" name="3dsx" accept=".3dsx"<?php if (!$editing) echo ' required'; ?>>
 					</div>
 					<div class="col-md-6 form-group">
 						<label for="smdh">smdh file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
-						<input type="file" class="form-control" id="smdh" name="smdh" accept=".smdh"<?php if (!$editing) echo ' required'; ?>>
+						<input type="file" class="form-control filestyle" id="smdh" name="smdh" accept=".smdh"<?php if (!$editing) echo ' required'; ?>>
 					</div>
 				</div>
 				<div class="form-group">
