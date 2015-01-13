@@ -1,4 +1,5 @@
-DownloadMii-Website
+![DownloadMii-Website](https://raw.githubusercontent.com/DownloadMii/DownloadMii/master/logo.PNG "Logo")
+[![Donation Status](https://img.shields.io/gratipay/filfat.svg)](https://gratipay.com/filfat/)
 ===================
 
 DownloadMii is an online store for homebrew applications.
