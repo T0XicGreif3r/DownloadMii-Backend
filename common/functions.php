@@ -24,29 +24,47 @@
 	}
 
 	/**
-	* Evaluate a condition and, if it is true, exit with a HTTP response code
+	* Print a string and exit
 	*
 	* @param bool $condition The condition to be evaluated
-	* @param bool $responseCode The response code to return to the client
+	* @param string $str The string to return to the client
 	*/
-	function sendResponseCodeAndExitIfTrue($condition, $responseCode) {
-		if ($condition) {
-			http_response_code($responseCode);
-			print($responseCode);
-			exit();
-		}
+	function printAndExit($str) {
+		print($str);
+		exit();
 	}
 
 	/**
 	* Evaluate a condition and, if it is true, print a string and exit
 	*
 	* @param bool $condition The condition to be evaluated
-	* @param bool $responseCode The string to return to the client
+	* @param string $str The string to return to the client
 	*/
 	function printAndExitIfTrue($condition, $str) {
 		if ($condition) {
-			print($str);
-			exit();
+			printAndExit($str);
+		}
+	}
+
+	/**
+	* Exit with a HTTP response code
+	*
+	* @param int $responseCode The response code to return to the client
+	*/
+	function sendResponseCodeAndExit($responseCode) {
+		http_response_code($responseCode);
+		printAndExit($responseCode);
+	}
+
+	/**
+	* Evaluate a condition and, if it is true, exit with a HTTP response code
+	*
+	* @param bool $condition The condition to be evaluated
+	* @param int $responseCode The response code to return to the client
+	*/
+	function sendResponseCodeAndExitIfTrue($condition, $responseCode) {
+		if ($condition) {
+			sendResponseCodeAndExit($responseCode);
 		}
 	}
 	

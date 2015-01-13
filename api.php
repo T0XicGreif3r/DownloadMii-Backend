@@ -6,18 +6,24 @@
 		The URL request will be formated like this:
 		To retrieve JSON
 		App list by developer
-		<domain>/api/bydev/[developerId]
+		<domain>/api/apps/ByDev/[developerId]
+
+		Top 10 non-game app list
+		<domain>/api/apps/TopDownloadedApps
+
+		Top 10 game list
+		<domain>/api/apps/TopDownloadedGames
 
 		App list by category/sub/other
-		<domain>/api/apps/[category]/[subcategory]
+		<domain>/api/apps/Applications/[category]/[subcategory]
 
-		To rate an APP
+		To rate an APP (not implemented, won't work like this)
 		<domain>/api/rate/[securetoken]/[appguid]/[rating]
 		
-		To get main banner
+		To get main banner (not implemented)
 		<domain>/api/banner
 		
-		To get APP banner
+		To get APP banner (not implemented)
 		<domain>/api/banner/[appguid]
 		
 		To get a list of all the categories
@@ -25,6 +31,15 @@
 		
 		To get a list of subcategories
 		<domain>/api/categories/[category_name]
+		
+		To get 3dsx download URL for app
+		<domain>/api/dl/3dsx/[appguid]
+		
+		To get smdh download URL for app
+		<domain>/api/dl/smdh/[appguid]
+		
+		To get large icon download URL for app
+		<domain>/api/dl/largeicon/[appguid]
 		
 		To get DownloadMii version string (eg "1.0.0.0")
 		<domain>/api/dmii/version
@@ -163,14 +178,14 @@
 					
 					case 'largeicon':
 						//Select largeicon field from current app version
-						$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.largeicon AS largeicon FROM apps app
+						$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.largeIcon AS largeIcon FROM apps app
 																			LEFT JOIN appversions appver ON appver.versionId = app.version
 																			WHERE app.guid = ? LIMIT 1', 's', [$guid]);
 						
 						printAndExitIfTrue(count($matchingApps) != 1, 'Invalid GUID.'); //Check if GUID is valid
 						
 						//Redirect to file
-						echo $matchingApps[0]['largeicon'];
+						echo $matchingApps[0]['largeIcon'];
 						break;
 						
 					default:
@@ -257,6 +272,10 @@
 			else {
 				echo 'Error: incorrect use of API!';
 			}
+			break;
+		
+		case 'version':
+			echo '0.0.0.0';
 			break;
 		
 		default:

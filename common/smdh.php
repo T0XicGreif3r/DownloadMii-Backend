@@ -54,6 +54,11 @@
 				throw new Exception('Invalid SMDH file size.');
 			}
 			
+			fseek($fileHandle, 0);
+			if (fread($fileHandle, 4) !== 'SMDH') {
+				throw new Exception('Invalid SMDH file header.');
+			}
+			
 			$this->fileHandle = $fileHandle;
 		}
 		

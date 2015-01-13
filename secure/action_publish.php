@@ -20,11 +20,11 @@
 	sendResponseCodeAndExitIfTrue(!clientLoggedIn(), 403);
 	printAndExitIfTrue($_SESSION['user_role'] < 1, 'You do not have permission to publish apps.');
 	
-	sendResponseCodeAndExitIfTrue(!(isset($_POST['name'], $_POST['version'], $_POST['category'], $_POST['subcategory'], $_POST['description'], $_FILES['3dsx'], $_FILES['smdh'], $_POST["g-recaptcha-response"], $_POST['publishtoken'])), 400); //Check if all expected POST vars are set
+	sendResponseCodeAndExitIfTrue(!(isset($_POST['name'], $_POST['version'], $_POST['category'], $_POST['description'], $_FILES['3dsx'], $_FILES['smdh'], $_POST["g-recaptcha-response"], $_POST['publishtoken'])), 400); //Check if all expected POST vars are set
 	printAndExitIfTrue(empty($_POST['name']) || empty($_POST['version']), 'Please fill all required fields.'); //Check if fields aren't empty
 	sendResponseCodeAndExitIfTrue(md5($publishToken) !== $_POST['publishtoken'], 422); //Check if POST publishing token is correct
 	
-	$subCategorySelected = $_POST['subcategory'] !== '';
+	$subCategorySelected = isset($_POST['subcategory']) && $_POST['subcategory'] !== '';
 	sendResponseCodeAndExitIfTrue(!is_numeric($_POST['category']) || ($subCategorySelected && !is_numeric($_POST['subcategory'])), 422); //Check if category selected
 	
 	//Check POST var lengths
@@ -43,25 +43,26 @@
 	$appSubCategory = $subCategorySelected ? $_POST['subcategory'] : null;
 	$appDescription = filter_var(str_replace(['\r\n', '\r', '\n'], ' ', $_POST['description']), FILTER_SANITIZE_SPECIAL_CHARS);
 	
+	$app3dsxPath = $_FILES['3dsx']['tmp_name'];
+	$appSmdhPath = $_FILES['smdh']['tmp_name'];
+	
 	$isDeveloper = $_SESSION['user_role'] > 1;
 	$updatingApp = isset($_SESSION['user_app_guid']);
 	
 	if (!$updatingApp) {
 		$guid = generateGUID(); //Generate GUID if not updating app
+		printAndExitIfTrue(!is_uploaded_file($app3dsxPath) || !is_uploaded_file($appSmdhPath), 'Please upload the required files.');
 	}
 	else {
 		$guid = $_SESSION['user_app_guid'];
-		$updating3dsx = is_uploaded_file($_FILES['3dsx']['tmp_name']);
-		$updatingSmdh = is_uploaded_file($_FILES['smdh']['tmp_name']);
+		$updating3dsx = is_uploaded_file($app3dsxPath);
+		$updatingSmdh = is_uploaded_file($appSmdhPath);
 		
 		//Check that if one of 3dsx, version is changed, the other also is
 		if ($_SESSION['user_app_version'] !== $_POST['version'] || $updating3dsx) {
 			printAndExitIfTrue($_SESSION['user_app_version'] === $_POST['version'] || !$updating3dsx, 'Please update both the version number and 3dsx file at the same time.');
 		}
 	}
-	
-	//TODO: Check if files are valid 3dsx/smdh
-	printAndExitIfTrue(filesize($_FILES['smdh']['tmp_name']) != 0x36c0, 'Invalid SMDH file size.');
 	
 	$mysqlConn = connectToDatabase();
 	
@@ -82,25 +83,31 @@
 	}
 	
 	if (!$updatingApp || $updating3dsx) {
-		$app3dsxMD5 = md5_file($_FILES['3dsx']['tmp_name']); //Get file hash
+		$app3dsxMD5 = md5_file($app3dsxPath); //Get file hash
 		$app3dsxBlobName = generateRandomString(); //Generate file blob name
 		$app3dsxBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_3dsx') . '/' . $app3dsxBlobName; //Get Azure blob URL
 		
-		$app3dsxFile = fopen($_FILES['3dsx']['tmp_name'], 'r');
+		$app3dsxFile = fopen($app3dsxPath, 'r');
 		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_3dsx'), $app3dsxBlobName, $app3dsxFile); //Upload blob to Azure Blob Service
 		fclose($app3dsxFile);
 	}
 	
 	if (!$updatingApp || $updatingSmdh) {
-		$appSmdhMD5 = md5_file($_FILES['smdh']['tmp_name']);
+		$appSmdhMD5 = md5_file($appSmdhPath);
 		$appSmdhBlobName = generateRandomString();
 		$appSmdhBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_smdh') . '/' . $appSmdhBlobName;
 		
-		$appSmdhFile = fopen($_FILES['smdh']['tmp_name'], 'r');
+		$appSmdhFile = fopen($appSmdhPath, 'r');
 		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_smdh'), $appSmdhBlobName, $appSmdhFile);
 		
 		//Upload PNG icon
-		$smdhData = new smdh($appSmdhFile);
+		try {
+			$smdhData = new smdh($appSmdhFile);
+		}
+		catch (Exception $e) {
+			printAndExit($e->getMessage());
+		}
+		
 		$tempPNG = tmpfile(); //Create temporary file to save PNG
 		imagepng($smdhData->getLargeIcon(), stream_get_meta_data($tempPNG)['uri']);
 		
