@@ -4,16 +4,15 @@
 <head runat="server">
 	<!-- SEO -->
 	<meta name="description" content="DownloadMii is an online marketplace for Homebrew applications. Its also 100% free fo charge!" />
-    <meta name="keywords" content="Nintendo 3DS Homebrew, Homebrew Browser, 3ds, filfat, Wii U Homebrew" />
-	<meta name="AUTHOR" CONTENT="DownloadMii Team">
-	<meta name="COPYRIGHT" CONTENT="&copy; 2013-2015 Filiph Sandström && DownloadMii Team">
+    	<meta name="keywords" content="Nintendo 3DS Homebrew, Homebrew Browser, 3ds, filfat, Wii U Homebrew, DownloadMii" />
+	<meta name="author" CONTENT="DownloadMii Team">
 	<meta name="google-site-verification" content="oUzBcLbkKoA1gb5G8ZWgzzLR_LmIMFa0F8gsCH39LRc" />
 	<meta name="msvalidate.01" content="-" />
-    <meta charset="utf-8" />
+    	<meta charset="utf-8" />
 	
 	<!-- METADATA -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta http-equiv="X-UA-Compatible" content="IE=1,chrome=edge,safari=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=edge,safari=edge">
 	<link rel="shortcut icon" type="image/ico" href="https://www.downloadmii.com/favicon.ico" />
 	
 	<!-- STYLESHEETS -->
@@ -50,13 +49,14 @@
 		
 		<!-- APPLE -->
 		<link rel="apple-touch-icon" href="/img/Apple/touch-icon-iphone.png" /> 
-        <link rel="apple-touch-icon" size="76x76" href="/img/Apple/touch-icon-ipad.png" /> 
-        <link rel="apple-touch-icon" size="120x120" href="/img/Apple/touch-icon-iphone-retina.png" />
-        <link rel="apple-touch-icon" size="152x152" href="/img/Apple/touch-icon-ipad-retina.png" />
+        	<link rel="apple-touch-icon" sizes="76x76" href="/img/Apple/touch-icon-ipad.png" /> 
+        	<link rel="apple-touch-icon" sizes="120x120" href="/img/Apple/touch-icon-iphone-retina.png" />
+        	<link rel="apple-touch-icon" sizes="152x152" href="/img/Apple/touch-icon-ipad-retina.png" />
 		<link rel="apple-touch-startup-image" href="/img/Apple/startup.png" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="white" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-title" content="DownloadMii"/>
+		<link rel="apple-touch-startup-image" href="/img/Apple/startup.png">
 		
 		<!-- ANDROID -->
 		<link rel="icon" size="128x128" href="/img/Apple/touch-icon-iphone-retina.png" />
