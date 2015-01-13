@@ -100,7 +100,7 @@
 					</div>
 					<div class="col-md-6 form-group">
 						<label for="smdh">smdh file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
-						<input type="file" class="filestyle" id="smdh" name="smdh" accept=".smdh"<?php if (!$editing) echo ' required'; ?>>
+						<input type="file" class="filestyle" id="smdh" name="smdh" accept=".smdh,.bin,.icn"<?php if (!$editing) echo ' required'; ?>>
 					</div>
 				</div>
 				<div class="form-group">
