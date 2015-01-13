@@ -61,19 +61,22 @@
 			</div>
 		</footer>
 		<!-- SCRIPTS  -->
-		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-		<script src="/js/smooth-scroll.js"></script>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="https://raw.githubusercontent.com/markusslima/bootstrap-filestyle/master/src/bootstrap-filestyle.js"> </script>
+		<script type="text/javascript" src="/js/smooth-scroll.js"></script>
 		<script>
 			smoothScroll.init({
-			speed: 500, // Integer. How fast to complete the scroll in milliseconds
-			easing: 'easeInOutQuint', // Easing pattern to use
-			updateURL: false
-		});
-		$(function () {
-		  $('[data-toggle="tooltip"]').tooltip();
-		})
-		$("[rel=tooltip]").tooltip({html:true});
+				speed: 500, // Integer. How fast to complete the scroll in milliseconds
+				easing: 'easeInOutQuint', // Easing pattern to use
+				updateURL: false
+			});
+			$(":file").filestyle();
+			
+			$(function () {
+			  $('[data-toggle="tooltip"]').tooltip();
+			})
+			$("[rel=tooltip]").tooltip({html:true});
 		</script>
 	</body>
 </html>
