@@ -101,7 +101,9 @@
 					}
 					
 					$mysqlQuery .= ' ORDER BY app.downloads DESC LIMIT 10'; //Select top 10 downloaded apps/games
-					print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps'));
+					$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps');
+					header('Content-Length: '.strlen($data));
+					print($data);
 					break;
 					
 				case 'StaffPicks':
@@ -127,8 +129,9 @@
 						
 						$mysqlQuery .= $mysqlQueryEnd;
 					}
-					
-					print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps', $bindParamTypes, $bindParamArgs));
+					$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps', $bindParamTypes, $bindParamArgs);
+					header('Content-Length: '.strlen($data));
+					print($data);
 					break;
 			}
 			$mysqlConn->close();
@@ -158,6 +161,7 @@
 						}
 						
 						//Redirect to file
+						header('Content-Length: '.strlen($matchingApps[0]['3dsx']));
 						echo $matchingApps[0]['3dsx'];
 						break;
 					
@@ -170,6 +174,7 @@
 						printAndExitIfTrue(count($matchingApps) != 1, 'Invalid GUID.'); //Check if GUID is valid
 						
 						//Redirect to file
+						header('Content-Length: '.strlen($matchingApps[0]['smdh']));
 						echo $matchingApps[0]['smdh'];
 						break;
 					
@@ -200,7 +205,9 @@
 			}
 			
 			$mysqlConn = connectToDatabase();
-			print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, count($param) < 2 ? 'Categories' : 'Subcategories', $bindParamTypes, $bindParamArgs));
+			$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, count($param) < 2 ? 'Categories' : 'Subcategories', $bindParamTypes, $bindParamArgs);
+			header('Content-Length: '.strlen($data));
+			print($data);
 			$mysqlConn->close();
 			
 			break;
@@ -235,6 +242,7 @@
 						
 						$matchingApps = getArrayFromSQLQuery($mysqlConn, $mysqlQuery, 's', [getConfigValue('downloadmii_app_guid')]);
 						printAndExitIfTrue(count($matchingApps) !== 1, 'Invalid DownloadMii app GUID in config.');
+						header('Content-Length: '.strlen($matchingApps[0]['version']));
 						print($matchingApps[0]['version']);
 						$mysqlConn->close();
 						
@@ -244,7 +252,9 @@
 						$mysqlConn = connectToDatabase();
 						$mysqlQuery = $baseAppQuery . ' AND app.guid = ? LIMIT 1';
 						
-						print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'DownloadMii', 's', [getConfigValue('downloadmii_app_guid')]));
+						$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'DownloadMii', 's', [getConfigValue('downloadmii_app_guid')]);
+						header('Content-Length: '.strlen($data));
+						print($data);
 						$mysqlConn->close();
 						
 						break;
