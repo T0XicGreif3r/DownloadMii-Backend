@@ -46,7 +46,7 @@
 			<div class="row text-center">
 			  <div class="row">
 				  <div class="col-sm-5 col-xs-12 well clearfix" style="background: #25A4D6;box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);border:0;">
-					<h2 class="font-white">Girtpay</h2>
+					<h2 class="font-white">Gratipay</h2>
 					<h4 class="font-white">(recommended)<h4>
 					<script data-gratipay-username="filfat" src="//grtp.co/v1.js"></script>
 				  </div>
