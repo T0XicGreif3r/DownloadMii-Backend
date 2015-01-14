@@ -9,7 +9,7 @@
 	* @param int $len The desired length of the string to be returned
 	* @return string The generated string
 	*/
-	function generateRandomString($len = 48) {
+	function generateRandomString($len = 24) {
 		$str = implode(range(0, 9)) . implode(range('A', 'Z')) . implode(range('a', 'z'));
 		return substr(str_shuffle(str_repeat($str, ceil($len / strlen($str)))), 0, $len);
 	}
