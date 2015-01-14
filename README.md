@@ -1,4 +1,5 @@
-DownloadMii-Website
+![DownloadMii-Website](https://raw.githubusercontent.com/DownloadMii/DownloadMii/master/logo.PNG "Logo")
+[![Donation Status](https://img.shields.io/gratipay/filfat.svg)](https://gratipay.com/filfat/)
 ===================
 
 DownloadMii is an online store for homebrew applications.
@@ -15,7 +16,7 @@ JSON EXAMPLES: https://github.com/DownloadMii/DownloadMii/tree/master/doc/exampl
 - Server Platform: 64bit
 - Connection String Variable: mysqlstring
 
-ROADMAP
+ROADMAP 
 ========
 some of the following things are horrebly outdated please take a look at api.php first.
 - [x] Implament a simple but secure account system and SSL support
