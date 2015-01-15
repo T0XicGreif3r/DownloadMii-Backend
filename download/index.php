@@ -44,7 +44,7 @@
 					  <div class="col-sm-5 col-xs-12 well clearfix" style="background: #25A4D6;box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);border:0;">
 					  	<h2 class="font-white">Latest Release</h2>
 						<h4 class="font-white">1.0.0.0</h4>
-						<p><a class="btn btn-lg btn-flat" href="/releases/1000.zip" role="button">Download</a></p>
+						<p><a class="btn btn-lg btn-flat" href="https://github.com/DownloadMii/DownloadMii-Website/releases/download/1.0.0.0/1000.zip" role="button">Download</a></p>
 					  </div>
 					  <div class="col-sm-2 col-xs-0"></div>
 					  <div class="col-sm-5 col-xs-12 well clearfix" style="background: #25A4D6;box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);border:0;">
