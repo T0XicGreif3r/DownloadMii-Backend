@@ -49,6 +49,7 @@
 
 			</h4>
 			<div class="btn-toolbar pull-right">
+				<!--<a role="button" class="btn btn-primary disabled" href="#">DwnNumberHere</a>-->
 				<a role="button" class="btn btn-primary<?php if ($app['publishstate'] === 0) echo ' disabled'; ?>" href="publish.php?guid=<?php echo $app['guid']; ?>&token=<?php echo md5($_SESSION['myapps_token']); ?>">Update</a>
 				<a role="button" class="btn btn-danger<?php if ($app['publishstate'] === 2 || $app['publishstate'] === 3) echo ' disabled'; ?>" href="hide.php?guid=<?php print($app['guid']); ?>&token=<?php echo md5($_SESSION['myapps_token']); ?>">Hide</a>
 			</div>
