@@ -5,6 +5,7 @@
 	<?php
 		require_once('/common/meta.php');
 	?>
+    <meta name="globalsign-domain-verification" content="pJFFTw_-QIHCLoGnS4jrSw-0Qj_Lb9ewB6Wp1k31g6" />
     <title>DownloadMii</title>
 </head>
 <body>
