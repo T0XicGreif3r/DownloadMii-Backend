@@ -108,14 +108,14 @@
 			printAndExit($e->getMessage());
 		}
 		
-		$tempPNG = tmpfile(); //Create temporary file to save PNG
-		imagepng($smdhData->getLargeIcon(), stream_get_meta_data($tempPNG)['uri']);
+		$appPNG = tmpfile(); //Create temporary file to save PNG
+		imagepng($smdhData->getLargeIcon(), stream_get_meta_data($appPNG)['uri']);
 		
-		$tempPNGBlobName = generateRandomString();
-		$tempPNGBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_largeicon') . '/' . $tempPNGBlobName;
-		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_largeicon'), $tempPNGBlobName, $tempPNG);
+		$appPNGBlobName = generateRandomString();
+		$appPNGBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_largeicon') . '/' . $appPNGBlobName;
+		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_largeicon'), $appPNGBlobName, $appPNG);
 		
-		fclose($tempPNG);
+		fclose($appPNG);
 		fclose($appSmdhFile);
 		$smdhData = null;
 	}
@@ -128,6 +128,7 @@
 		if ($updating3dsx && !$updatingSmdh) {
 			//Get current smdh URL and MD5
 			$appSmdhBlobURL = $currentVersion['smdh'];
+			$appPNGBlobURL = $currentVersion['largeIcon'];
 			$appSmdhMD5 = $currentVersion['smdh_md5'];
 		}
 		else if (!$updating3dsx) {
@@ -139,7 +140,7 @@
 	if (!$updatingApp || $updating3dsx) {
 		//Insert app version
 		$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO appversions (appGuid, number, 3dsx, smdh, largeIcon, 3dsx_md5, smdh_md5)
-												VALUES (?, ?, ?, ?, ?, ?, ?)', 'sssssss', [$guid, $appVersion, $app3dsxBlobURL, $appSmdhBlobURL, $tempPNGBlobURL, $app3dsxMD5, $appSmdhMD5], true);
+												VALUES (?, ?, ?, ?, ?, ?, ?)', 'sssssss', [$guid, $appVersion, $app3dsxBlobURL, $appSmdhBlobURL, $appPNGBlobURL, $app3dsxMD5, $appSmdhMD5], true);
 		$versionId = $stmt->insert_id;
 		$stmt->close();
 	}
@@ -147,7 +148,7 @@
 		//Update current app version with smdh URL and MD5
 		$stmt = executePreparedSQLQuery($mysqlConn, 'UPDATE appversions appver INNER JOIN apps app ON appver.versionId = app.version
 														SET versionId = app.version, smdh = ?, largeIcon = ?, smdh_md5 = ?
-														WHERE app.guid = ? AND appver.versionId = app.version', 'ssss', [$guid, $appSmdhBlobURL, $tempPNGBlobURL, $appSmdhMD5], true);
+														WHERE app.guid = ? AND appver.versionId = app.version', 'ssss', [$guid, $appSmdhBlobURL, $appPNGBlobURL, $appSmdhMD5], true);
 	}
 	
 	if (!$updatingApp) {
