@@ -51,6 +51,8 @@
 	require_once('common/user.php');
 	require_once('common/functions.php');
 	
+	header("Content-Transfer-Encoding: binary\n");
+	
 	sendResponseCodeAndExitIfTrue(strpos(getenv('REQUEST_URI'), '/api/') != 0, 400);
 	
 	$origKey = ''; //Key to verify if the app that is accessing the API is valid
