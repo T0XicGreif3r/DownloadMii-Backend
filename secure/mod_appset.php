@@ -14,7 +14,7 @@
 	
 	$appGuid = $_POST['guid'];
 	$appPublishState = $_POST['publishstate'];
-	$appFailPublishMessage = $_POST['publishstate'] == 2 ? filter_var($_POST['failpublishmessage'], FILTER_SANITIZE_SPECIAL_CHARS) : '';
+	$appFailPublishMessage = $_POST['publishstate'] == 2 ? escapeHTMLChars($_POST['failpublishmessage']) : '';
 	
 	$mysqlConn = connectToDatabase();
 	executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET publishstate = ?, failpublishmessage = ? WHERE guid = ? LIMIT 1', 'iss', [$appPublishState, $appFailPublishMessage, $appGuid]); //Update publish state in database

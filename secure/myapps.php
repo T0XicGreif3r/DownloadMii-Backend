@@ -22,7 +22,7 @@
 		<div class="well clearfix">
 			<h4 class="pull-left">
 <?php
-			echo $app['name'] . ' ' . $app['version'];
+			echo escapeHTMLChars($app['name'] . ' ' . $app['version']);
 			switch ($app['publishstate']) {
 				case 0:
 					echo ' (pending approval)';
@@ -34,7 +34,7 @@
 					
 				case 2:
 					if (!empty($app['failpublishmessage'])) {
-						echo ' (rejected, ' . $app['failpublishmessage'] . ')';
+						echo ' (rejected, ' . escapeHTMLChars($app['failpublishmessage']) . ')';
 					}
 					else {
 						echo ' (rejected)';

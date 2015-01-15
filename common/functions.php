@@ -4,6 +4,16 @@
 	*/
 	
 	/**
+	* Filter and sanitize a string to prevent attacks.
+	*
+	* @param string $str The string to escape
+	* @return string The sanitized string
+	*/
+	function escapeHTMLChars($str) {
+		return filter_var($str, FILTER_SANITIZE_SPECIAL_CHARS);
+	}
+	
+	/**
 	* Generate a random alphanumreric string
 	*
 	* @param int $len The desired length of the string to be returned

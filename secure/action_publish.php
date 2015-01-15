@@ -37,11 +37,11 @@
 	$resp = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
 	printAndExitIfTrue($resp == null || !$resp->success, 'Invalid or no captcha response.');
 	
-	$appName = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
-	$appVersion = filter_var($_POST['version'], FILTER_SANITIZE_SPECIAL_CHARS);
+	$appName = escapeHTMLChars($_POST['name']);
+	$appVersion = escapeHTMLChars($_POST['version']);
 	$appCategory = $_POST['category'];
 	$appSubCategory = $subCategorySelected ? $_POST['subcategory'] : null;
-	$appDescription = filter_var(str_replace(['\r\n', '\r', '\n'], ' ', $_POST['description']), FILTER_SANITIZE_SPECIAL_CHARS);
+	$appDescription = escapeHTMLChars(str_replace(['\r\n', '\r', '\n'], ' ', $_POST['description']));
 	
 	$app3dsxPath = $_FILES['3dsx']['tmp_name'];
 	$appSmdhPath = $_FILES['smdh']['tmp_name'];

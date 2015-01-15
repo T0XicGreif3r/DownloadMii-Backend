@@ -42,18 +42,18 @@
 		
 		$editing = isset($appToEdit);
 ?>
-		<h1 class="text-center"><?php if (isset($appToEdit)) echo 'Updating ' . $appToEdit['name']; else echo 'Add a new application'; ?></h1>
+		<h1 class="text-center"><?php if (isset($appToEdit)) echo 'Updating ' . escapeHTMLChars($appToEdit['name']); else echo 'Add a new application'; ?></h1>
 		<br />
 		<div class="well">
 			<form role="form" action="action_publish.php" method="post" enctype="multipart/form-data" accept-charset="utf-8">
 				<div class="row">
 					<div class="col-md-6 form-group">
 						<label for="name">Name:</label>
-						<input type="text" class="form-control" id="name" name="name" placeholder="e.g. My Application" maxlength="32" value="<?php if ($editing) echo $appToEdit['name']; ?>" required>
+						<input type="text" class="form-control" id="name" name="name" placeholder="e.g. My Application" maxlength="32" value="<?php if ($editing) echo escapeHTMLChars($appToEdit['name']); ?>" required>
 					</div>
 					<div class="col-md-6 form-group">
 						<label for="version">Version:</label>
-						<input type="text" class="form-control" id="version" name="version" placeholder="e.g. 1.0.0.0" maxlength="12" value="<?php if ($editing) echo $appToEdit['version']; ?>" required>
+						<input type="text" class="form-control" id="version" name="version" placeholder="e.g. 1.0.0.0" maxlength="12" value="<?php if ($editing) echo escapeHTMLChars($appToEdit['version']); ?>" required>
 					</div>
 				</div>
 				<div class="row">
@@ -91,7 +91,7 @@
 				</div>
 				<div class="form-group">
 					<label for="description">Description (300 character limit):</label>
-					<textarea class="form-control" id="description" name="description" rows="6" maxlength="300"><?php if (isset($savedDesc)) echo $savedDesc; else if ($editing) echo $appToEdit['description']; ?></textarea>
+					<textarea class="form-control" id="description" name="description" rows="6" maxlength="300"><?php if (isset($savedDesc)) echo $savedDesc; else if ($editing) echo escapeHTMLChars($appToEdit['description']); ?></textarea>
 				</div>
 				<div class="row">
 					<div class="col-md-6 form-group">
