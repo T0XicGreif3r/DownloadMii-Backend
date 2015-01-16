@@ -72,8 +72,6 @@
 				</div>
 				<div class="collapse navbar-collapse" id="navbar-collapse-main">
 				  <ul class="nav navbar-nav navbar-right">
-					<li><a href="/#HOMEwp">HOME</a></li>
-					<li><a href="/donate">DONATE</a></li>
 					<?php
 						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
 					?>
