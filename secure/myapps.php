@@ -11,7 +11,7 @@
 		$mysqlConn = connectToDatabase();
 		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.downloads, app.publishstate, app.failpublishmessage, appver.number AS version, appver.largeIcon AS largeIcon FROM apps app
 														LEFT JOIN appversions appver ON appver.versionId = app.version
-														WHERE app.publisher = ? ORDER BY app.version DESC', 'i', [$_SESSION['user_id']]);
+														WHERE app.publisher = ? ORDER BY app.name ASC', 'i', [$_SESSION['user_id']]);
 ?>
 
 		<h1 class="text-center">My apps</h1>
@@ -21,7 +21,7 @@
 ?>
 		<div class="well clearfix">
 			<div class="myapps-app-vertical-center-outer pull-left">
-				<img class="myapps-app-icon" src="<?php echo $app['largeIcon']; ?>" />
+				<img class="myapps-app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
 				<div class="pull-right">
 					<h4 class="myapps-app-vertical-center-inner">
 <?php
