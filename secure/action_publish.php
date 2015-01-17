@@ -100,7 +100,7 @@
 		$appSmdhFile = fopen($appSmdhPath, 'r');
 		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_smdh'), $appSmdhBlobName, $appSmdhFile);
 		
-		//Upload PNG icon
+		//Upload large PNG icon (we don't include the small one because it's often improperly encoded(?))
 		try {
 			$smdhData = new smdh($appSmdhFile);
 		}
@@ -126,7 +126,7 @@
 															WHERE app.guid = ? LIMIT 1', 's', [$guid])[0];
 		
 		if ($updating3dsx && !$updatingSmdh) {
-			//Get current smdh URL and MD5
+			//Get current smdh URL and MD5, plus icon URL
 			$appSmdhBlobURL = $currentVersion['smdh'];
 			$appPNGBlobURL = $currentVersion['largeIcon'];
 			$appSmdhMD5 = $currentVersion['smdh_md5'];

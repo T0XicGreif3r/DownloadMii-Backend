@@ -44,6 +44,27 @@
 				margin-right: auto;
 			}
 			
+			.small-text {
+				font-size: 10pt;
+			}
+			
+			.myapps-app-icon {
+				width: 48px;
+				height: 48px;
+				margin-right: 12px;
+			}
+			
+			.myapps-app-vertical-center-outer {
+				height: auto;
+				display: table;
+			}
+			
+			.myapps-app-vertical-center-inner {
+				height: 48px;
+				display: table-cell;
+				vertical-align: middle;
+			}
+			
 			.no-border-radius {
 				border-radius: 0;
 			}
