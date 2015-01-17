@@ -6,7 +6,8 @@
 	require_once('../common/uiheader.php');
 	
 	$mysqlConn = connectToDatabase();
-	$allApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.downloads, app.publishstate, app.failpublishmessage, appver.number AS version, appver.largeIcon AS largeIcon FROM apps app
+	$allApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.publisher, app.description, app.downloads, app.publishstate, app.failpublishmessage, user.nick AS publisher, appver.number AS version, appver.largeIcon AS largeIcon FROM apps app
+													LEFT JOIN users user ON user.userId = app.publisher
 													LEFT JOIN appversions appver ON appver.versionId = app.version
 													WHERE app.publishstate = 1 ORDER BY appver.versionId DESC');
 ?>
@@ -22,7 +23,7 @@
 			<div class="pull-right">
 				<h4 class="app-vertical-center-inner">
 <?php
-		echo escapeHTMLChars($app['name'] . ' ' . $app['version']);
+		echo escapeHTMLChars($app['name'] . ' ' . $app['version']) . ' by <span style="font-style: italic;">' . $app['publisher'] . '</span>';
 ?>
 
 				</h4>
