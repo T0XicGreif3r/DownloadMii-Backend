@@ -4,7 +4,6 @@
 	*/
 	
 	require_once('../common/user.php');
-	require_once('../common/functions.php');
 	require_once('../common/recaptchalib.php');
 	
 	sendResponseCodeAndExitIfTrue(!isset($_SESSION['register_token']), 422); //Check if session register token is set

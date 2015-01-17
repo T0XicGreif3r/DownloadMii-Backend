@@ -4,7 +4,6 @@
 	*/
 	
 	require_once('../common/user.php');
-	require_once('../common/functions.php');
 	
 	sendResponseCodeAndExitIfTrue(!isset($_SESSION['remove_token']), 422); //Check if session app remove token is set
 	$removeToken = $_SESSION['remove_token'];

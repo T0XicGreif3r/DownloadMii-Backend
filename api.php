@@ -49,7 +49,6 @@
 	*/
 	
 	require_once('common/user.php');
-	require_once('common/functions.php');
 	
 	if(ini_get('zlib.output_compression')){ 
 	        ini_set('zlib.output_compression', 'Off'); //disable gzip

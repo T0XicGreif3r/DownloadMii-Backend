@@ -1,6 +1,5 @@
 <?php
 	require_once('../common/user.php');
-	require_once('../common/functions.php');
 	
 	if (isset($_SESSION['mod_apps_token'])) {
 		$appsToken = $_SESSION['mod_apps_token'];
