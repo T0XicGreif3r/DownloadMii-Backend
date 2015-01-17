@@ -22,7 +22,7 @@
 		</form>
 		<div class="text-center"><a href="register.php">Create a DownloadMii account</a></div>
 		<br />
-		<div class="text-center" style="font-weight: bold;">If you already are logged in somewhere else, you will be logged out there.</div>
+		<div class="text-center" style="font-weight: bold;">If you already are logged in on another device so will you automatically get logged out there.</div>
 <?php
 	require_once('../common/ucpfooter.php');
 ?>
