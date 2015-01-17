@@ -79,7 +79,7 @@
 	
 	//Initialize Azure Blob Service if files will be uploaded
 	if (!$updatingApp || $updating3dsx || $updatingSmdh) {
-		$blobRestProxy = ServicesBuilder::getInstance()->createBlobService(getConfigValue('azure_connection_string'));
+		#$blobRestProxy = ServicesBuilder::getInstance()->createBlobService(getConfigValue('azure_connection_string'));
 	}
 	
 	if (!$updatingApp || $updating3dsx) {
@@ -88,7 +88,7 @@
 		$app3dsxBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_3dsx') . '/' . $app3dsxBlobName; //Get Azure blob URL
 		
 		$app3dsxFile = fopen($app3dsxPath, 'r');
-		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_3dsx'), $app3dsxBlobName, $app3dsxFile); //Upload blob to Azure Blob Service
+		#$blobRestProxy->createBlockBlob(getConfigValue('azure_container_3dsx'), $app3dsxBlobName, $app3dsxFile); //Upload blob to Azure Blob Service
 		fclose($app3dsxFile);
 	}
 	
@@ -98,7 +98,7 @@
 		$appSmdhBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_smdh') . '/' . $appSmdhBlobName;
 		
 		$appSmdhFile = fopen($appSmdhPath, 'r');
-		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_smdh'), $appSmdhBlobName, $appSmdhFile);
+		#$blobRestProxy->createBlockBlob(getConfigValue('azure_container_smdh'), $appSmdhBlobName, $appSmdhFile);
 		
 		//Upload PNG icon
 		try {
@@ -113,7 +113,7 @@
 		
 		$appPNGBlobName = generateRandomString();
 		$appPNGBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_largeicon') . '/' . $appPNGBlobName;
-		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_largeicon'), $appPNGBlobName, $appPNG);
+		#$blobRestProxy->createBlockBlob(getConfigValue('azure_container_largeicon'), $appPNGBlobName, $appPNG);
 		
 		fclose($appPNG);
 		fclose($appSmdhFile);
@@ -121,7 +121,7 @@
 	}
 	
 	if ($updatingApp) {
-		$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.smdh, appver.smdh_md5 FROM appversions appver
+		$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.smdh, appver.largeIcon, appver.smdh_md5 FROM appversions appver
 															LEFT JOIN apps app ON appver.versionId = app.version
 															WHERE app.guid = ? LIMIT 1', 's', [$guid])[0];
 		
