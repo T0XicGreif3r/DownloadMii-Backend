@@ -1,6 +1,7 @@
 <?php
 	/*
 		DownloadMii User Handler
+		This file automatically includes functions.php
 	*/
 	
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\functions.php');

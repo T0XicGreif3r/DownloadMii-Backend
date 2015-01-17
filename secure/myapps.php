@@ -9,7 +9,7 @@
 		$_SESSION['myapps_token'] = uniqid(mt_rand(), true);
 		
 		$mysqlConn = connectToDatabase();
-		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.downloads, app.publishstate, app.failpublishmessage, appver.number AS version, appver.largeIcon AS largeIcon FROM apps app
+		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.downloads, app.publishstate, app.failpublishmessage, appver.number AS version, appver.largeIcon AS largeIcon FROM apps app
 														LEFT JOIN appversions appver ON appver.versionId = app.version
 														WHERE app.publisher = ? ORDER BY app.name ASC', 'i', [$_SESSION['user_id']]);
 ?>
@@ -20,10 +20,10 @@
 		foreach ($userApps as $app) {
 ?>
 		<div class="well clearfix">
-			<div class="myapps-app-vertical-center-outer pull-left">
-				<img class="myapps-app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
+			<div class="app-vertical-center-outer pull-left">
+				<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
 				<div class="pull-right">
-					<h4 class="myapps-app-vertical-center-inner">
+					<h4 class="app-vertical-center-inner">
 <?php
 			echo escapeHTMLChars($app['name'] . ' ' . $app['version']);
 ?>
@@ -31,8 +31,8 @@
 					</h4>
 				</div>
 			</div>
-			<div class="myapps-app-vertical-center-outer pull-right btn-toolbar">
-				<div class="btn-toolbar myapps-app-vertical-center-inner">
+			<div class="app-vertical-center-outer pull-right btn-toolbar">
+				<div class="btn-toolbar app-vertical-center-inner">
 					<a role="button" class="btn btn-primary<?php if ($app['publishstate'] === 0) echo ' disabled'; ?>" href="publish.php?guid=<?php echo $app['guid']; ?>&token=<?php echo md5($_SESSION['myapps_token']); ?>">Update</a>
 					<div class="pull-right" style="margin-left: 5px;">
 						<div class="btn-group"> <!-- this shouldn't be like this -->
@@ -52,7 +52,7 @@
 					
 				case 2:
 					if (!empty($app['failpublishmessage'])) {
-						echo '<button class="btn btn-danger disabled"><span class="glyphicon glyphicon-ban-circle"></span> ' . $app['failpublishmessage'] . '</button>';
+						echo '<button class="btn btn-danger disabled"><span class="glyphicon glyphicon-ban-circle"></span> ' . escapeHTMLChars($app['failpublishmessage']) . '</button>';
 					}
 					else {
 						echo '<button class="btn btn-danger disabled"><span class="glyphicon glyphicon-ban-circle"></span> Rejected</button>';
@@ -71,6 +71,11 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="clear-float" style="padding-top: 8px">
+<?php
+			echo escapeHTMLChars($app['description']);
+?>
 			</div>
 		</div>
 <?php
