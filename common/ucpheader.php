@@ -5,7 +5,6 @@
 	*/
 	
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\user.php');
-	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\functions.php');
 	
 	if (!(isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']))) {
 		if (strcasecmp($_SERVER['REQUEST_URI'], '/secure/login.php') && strcasecmp($_SERVER['REQUEST_URI'], '/secure/register.php')) {

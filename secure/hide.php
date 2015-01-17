@@ -41,10 +41,7 @@
 		</form>
 <?php
 		if ($_SESSION['user_role'] < 2) {
-?>
-
-		<div class="text-center" style="color: red; font-weight: bold;">WARNING: You'll have to republish the app to unhide it.</div>
-<?php
+			echo '<div class="text-center" style="color: red; font-weight: bold;">WARNING: You\'ll have to republish the app to unhide it.</div>';
 		}
 	}
 	

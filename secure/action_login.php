@@ -4,7 +4,6 @@
 	*/
 	
 	require_once('../common/user.php');
-	require_once('../common/functions.php');
 	
 	sendResponseCodeAndExitIfTrue(!isset($_SESSION['login_token']), 422); //Check if session login token is set
 	$userToken = $_SESSION['login_token'];
