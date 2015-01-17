@@ -16,7 +16,7 @@
 	
 	$mysqlConn = connectToDatabase();
 	
-	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, user.nick AS publisher, appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.3dsx_md5 AS 3dsx_md5, appver.smdh_md5 AS smdh_md5, appver.largeIcon as largeIcon FROM apps app
+	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, user.nick AS publisher, appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.3dsx AS 3dsx, appver.smdh AS smdh, appver.3dsx_md5 AS 3dsx_md5, appver.smdh_md5 AS smdh_md5, appver.largeIcon as largeIcon FROM apps app
 														LEFT JOIN users user ON user.userId = app.publisher
 														LEFT JOIN appversions appver ON appver.versionId = app.version
 														LEFT JOIN categories maincat ON maincat.categoryId = app.category
