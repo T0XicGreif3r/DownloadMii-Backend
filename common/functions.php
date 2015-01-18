@@ -10,7 +10,7 @@
 	* @return string The sanitized string
 	*/
 	function escapeHTMLChars($str) {
-		return filter_var($str, FILTER_SANITIZE_SPECIAL_CHARS);
+		return htmlspecialchars(html_entity_decode(filter_var($str, FILTER_SANITIZE_STRING, array('flags' => FILTER_FLAG_STRIP_LOW)), ENT_QUOTES));
 	}
 	
 	/**
