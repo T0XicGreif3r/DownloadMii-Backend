@@ -38,6 +38,7 @@
 <?php
 		echo escapeHTMLChars($app['description']);
 ?>
+
 		</div>
 	</div>
 <?php

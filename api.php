@@ -77,7 +77,7 @@
 					LEFT JOIN appversions appver ON appver.versionId = app.version
 					LEFT JOIN categories maincat ON maincat.categoryId = app.category
 					LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
-					WHERE app.publishstate = 1';
+					WHERE app.publishstate = 1 ORDER BY appver.versionId DESC';
 	
 	//TODO: Error check
 	switch ($topLevelRequest) {

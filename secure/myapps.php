@@ -11,7 +11,7 @@
 		$mysqlConn = connectToDatabase();
 		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.downloads, app.publishstate, app.failpublishmessage, appver.number AS version, appver.largeIcon AS largeIcon FROM apps app
 														LEFT JOIN appversions appver ON appver.versionId = app.version
-														WHERE app.publisher = ? ORDER BY app.name ASC', 'i', [$_SESSION['user_id']]);
+														WHERE app.publisher = ? ORDER BY appver.versionId DESC', 'i', [$_SESSION['user_id']]);
 ?>
 
 		<h1 class="text-center">My apps</h1>
