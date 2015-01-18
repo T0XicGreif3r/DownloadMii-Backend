@@ -12,6 +12,10 @@
 	<div class="WayPoint" id="HOMEwp"></div>
 	<header>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="alert alert-success role="alert">
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		  <strong>Hi There!</strong> Subscribe to us on <a href="https://youtube.com/c/minefilfat" target="_blank">YouTube</a>
+		</div>
 		  <div class="container-fluid">
 			<div class="navbar-header">
 			  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-main">

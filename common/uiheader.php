@@ -9,7 +9,7 @@
 <html>
 	<head>
 		<link rel="shortcut icon" type="image/ico" href="https://www.downloadmii.com/favicon.ico" />
-		<title>DownloadMii - User CP</title>
+		<title>DownloadMii</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 		<link href="/css/mainStruct.css" rel="stylesheet"/>
 		<style>

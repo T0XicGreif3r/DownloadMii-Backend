@@ -14,11 +14,19 @@
 
 	<h1 class="text-center">All Apps</h1>
 	<br />
+		<div class="input-group">
+		  <input type="text" class="form-control" placeholder="App name...">
+		  <span class="input-group-btn">
+			<button class="btn btn-default" type="button">Search</button>
+		  </span>
+		</div>
+	<br />
+	
 <?php
-	foreach ($allApps as $app) {
+	foreach ($allApps as $app) { //ToDo: update based on search via Ajax
 ?>
 	<div class="well clearfix">
-			<div class="app-vertical-center-outer pull-left">
+		<div class="app-vertical-center-outer pull-left">
 			<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
 			<div class="pull-right">
 				<h4 class="app-vertical-center-inner">
