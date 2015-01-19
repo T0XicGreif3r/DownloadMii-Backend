@@ -189,6 +189,7 @@
 	
 	unset($_SESSION['myapps_token' . $guid]);
 	unset($_SESSION['publish_token' . $guid]);
+	unset($_SESSION['publish_app_guid' . $_POST['guidid']]);
 	
 	if ($isDeveloper) {
 		echo 'Your application has been published.';

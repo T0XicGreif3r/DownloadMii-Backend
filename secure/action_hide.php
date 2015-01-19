@@ -34,6 +34,7 @@
 	
 	unset($_SESSION['myapps_token' . $guid]);
 	unset($_SESSION['remove_token' . $guid]);
+	unset($_SESSION['hide_app_guid' . $_POST['guidid']]);
 	
 	//TODO: Actually remove the apps in the future?
 	
