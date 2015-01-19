@@ -32,15 +32,14 @@
 	function generateGUID() {
 		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 	}
-
+	
 	/**
 	* Print a string and exit
 	*
-	* @param bool $condition The condition to be evaluated
 	* @param string $str The string to return to the client
 	*/
 	function printAndExit($str) {
-		print($str);
+		echo $str;
 		exit();
 	}
 
@@ -136,6 +135,7 @@
 			
 			call_user_func_array(array($stmt, 'bind_param'), $callUserArgsRefs); //Safe SQL binding
 		}
+		
 		printAndExitIfTrue(!$stmt->execute(), 'Error executing database query.'); //Perform query
 		
 		if ($returnStmt) {

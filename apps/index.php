@@ -6,7 +6,7 @@
 	require_once('../common/uiheader.php');
 	
 	$mysqlConn = connectToDatabase();
-	$allApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.publisher, app.description, app.downloads, app.publishstate, app.failpublishmessage, user.nick AS publisher, appver.number AS version, appver.largeIcon AS largeIcon FROM apps app
+	$allApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.publisher, app.description, app.downloads, app.publishstate, app.failpublishmessage, user.nick AS publisher, appver.number AS version, appver.largeIcon FROM apps app
 													LEFT JOIN users user ON user.userId = app.publisher
 													LEFT JOIN appversions appver ON appver.versionId = app.version
 													WHERE app.publishstate = 1 ORDER BY appver.versionId DESC');
