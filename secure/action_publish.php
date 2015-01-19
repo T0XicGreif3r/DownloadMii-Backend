@@ -137,11 +137,11 @@
 															LEFT JOIN apps app ON appver.versionId = app.version
 															WHERE app.guid = ? LIMIT 1', 's', [$guid])[0];
 		
-		if ($updatingSmdh && !$updating3dsx && !$updatingAppData) {
+		if (!$updating3dsx && !$updatingAppData) {
 			//Get current version ID
 			$versionId = $currentVersion['versionId'];
 		}
-		else if (!$updatingSmdh) {
+		if (!$updatingSmdh) {
 			//Get current smdh URL and MD5, plus icon URL
 			$appSmdhBlobURL = $currentVersion['smdh'];
 			$appSmdhMD5 = $currentVersion['smdh_md5'];
