@@ -27,11 +27,16 @@
 	
 	//Print all app attributes
 	foreach ($currentApp as $attributeName => $attributeValue) {
-		echo $attributeName . ': ' . $attributeValue . '<br />';
+		if ($attributeName == '3dsx' || $attributeName == 'smdh' || $attributeName == 'appdata' || $attributeName == 'largeIcon') {
+			echo $attributeName . ': <a href="' . $attributeValue . '">' . $attributeValue . '</a><br />';
+		}
+		else {
+			echo $attributeName . ': ' . $attributeValue . '<br />';
+		}
 	}
 	
 	//Print icon
-	echo 'Icon: <img src="' . $currentApp['largeIcon'] . '" /><br />';
+	echo '<img src="' . $currentApp['largeIcon'] . '" /><br />';
 ?>
 <br />
 <form action="mod_appset.php" method="post">
