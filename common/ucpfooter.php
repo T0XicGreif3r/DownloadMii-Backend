@@ -1,6 +1,6 @@
 <?php
 	/*
-		TEST/TEMPORARY
+		DownloadMii UCP Footer
 		This file automatically includes uifooter.php
 	*/
 	

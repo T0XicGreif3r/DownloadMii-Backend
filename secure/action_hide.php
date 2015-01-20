@@ -1,6 +1,6 @@
 <?php
 	/*
-		DownloadMii App Remove Handler
+		DownloadMii App Hiding Handler
 	*/
 	
 	require_once('../common/user.php');

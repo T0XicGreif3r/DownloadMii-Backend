@@ -1,8 +1,9 @@
 <?php
 	/*
-		TEST/TEMPORARY
+		DownloadMii App List Page (by current user)
 	*/
 	
+	$title = 'My Apps';
 	require_once('../common/ucpheader.php');
 	
 	if (clientLoggedIn()) {

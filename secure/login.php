@@ -1,8 +1,9 @@
 <?php
 	/*
-		TEST/TEMPORARY
+		DownloadMii Login Page
 	*/
 	
+	$title = 'Log In';
 	require_once('../common/ucpheader.php');
 	
 	$_SESSION['login_token'] = uniqid(mt_rand(), true);

@@ -1,6 +1,6 @@
 <?php
 	/*
-		TEST/TEMPORARY
+		DownloadMii Signout Handler
 	*/
 	
 	session_start();

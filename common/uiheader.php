@@ -1,6 +1,6 @@
 <?php
 	/*
-		TEST/TEMPORARY
+		DownloadMii Page Header
 		This file automatically includes functions.php and user.php, which includes functions.php
 	*/
 	
@@ -9,7 +9,7 @@
 <html>
 	<head>
 		<link rel="shortcut icon" type="image/ico" href="https://www.downloadmii.com/favicon.ico" />
-		<title>DownloadMii</title>
+		<title><?php if (isset($title)) echo $title . ' - '; ?> DownloadMii</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 		<link href="/css/mainStruct.css" rel="stylesheet"/>
 		<style>
