@@ -72,7 +72,7 @@
 			
 	//Base app query
 	$baseAppQuery = 'SELECT app.guid, app.name, app.publisher, app.version, app.description, app.category, app.subcategory, app.rating, app.downloads, user.nick AS publisher,
-					appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.largeIcon AS largeicon, appver.3dsx_md5 AS 3dsx_md5, appver.smdh_md5 AS smdh_md5 FROM apps app
+					appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.largeIcon AS largeicon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM apps app
 					LEFT JOIN users user ON user.userId = app.publisher
 					LEFT JOIN appversions appver ON appver.versionId = app.version
 					LEFT JOIN categories maincat ON maincat.categoryId = app.category
@@ -147,15 +147,14 @@
 				$secondLevelRequest = $param[1];
 				$guid = $param[2];
 				
-				switch ($secondLevelRequest) {
+				$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.3dsx, appver.smdh, appver.appdata FROM appversions appver
+																	LEFT JOIN apps app ON appver.versionId = app.version
+																	WHERE app.guid = ? LIMIT 1', 's', [$guid]);
+				
+				printAndExitIfTrue(count($matchingApps) != 1, 'Invalid GUID.'); //Check if GUID is valid
+				
+				switch ($secondLevelRequest) { //TODO: More efficient code
 					case '3dsx':
-						//Select 3dsx field from current app version
-						$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.3dsx FROM appversions appver
-																			LEFT JOIN apps app ON appver.versionId = app.version
-																			WHERE app.guid = ? LIMIT 1', 's', [$guid]);
-						
-						printAndExitIfTrue(count($matchingApps) != 1, 'Invalid GUID.'); //Check if GUID is valid
-						
 						//Update download count if IP not downloaded app already
 						$ipHash = md5($_SERVER['REMOTE_ADDR']);
 						$matchingDownloadIPs = getArrayFromSQLQuery($mysqlConn, 'SELECT downloadId FROM downloads WHERE appGuid = ? AND ipHash = ? LIMIT 1', 'ss', [$guid, $ipHash]);
@@ -165,21 +164,22 @@
 						}
 						
 						//Redirect to file
-						header('Content-Length: '.strlen($matchingApps[0]['3dsx']));
+						header('Content-Length: ' . strlen($matchingApps[0]['3dsx']));
 						echo $matchingApps[0]['3dsx'];
 						break;
 					
 					case 'smdh':
-						//Select smdh field from current app version
-						$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.smdh AS smdh FROM apps app
-																			LEFT JOIN appversions appver ON appver.versionId = app.version
-																			WHERE app.guid = ? LIMIT 1', 's', [$guid]);
-						
-						printAndExitIfTrue(count($matchingApps) != 1, 'Invalid GUID.'); //Check if GUID is valid
+						//Redirect to file
+						header('Content-Length: ' . strlen($matchingApps[0]['smdh']));
+						echo $matchingApps[0]['smdh'];
+						break;
+					
+					case 'appdata':
+						sendResponseCodeAndExitIfTrue($matchingApps[0]['appdata'] === null, 404); //Check if appdata exists
 						
 						//Redirect to file
-						header('Content-Length: '.strlen($matchingApps[0]['smdh']));
-						echo $matchingApps[0]['smdh'];
+						header('Content-Length: ' . strlen($matchingApps[0]['appdata']));
+						echo $matchingApps[0]['appdata'];
 						break;
 					
 					default:
@@ -274,7 +274,7 @@
 			break;
 		
 		case 'version':
-			echo '0.0.0.0';
+			echo '1.1.0.0';
 			break;
 		
 		default:

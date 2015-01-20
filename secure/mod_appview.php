@@ -15,7 +15,7 @@
 	
 	$mysqlConn = connectToDatabase();
 	
-	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, user.nick AS publisher, appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.3dsx AS 3dsx, appver.smdh AS smdh, appver.3dsx_md5 AS 3dsx_md5, appver.smdh_md5 AS smdh_md5, appver.largeIcon as largeIcon FROM apps app
+	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, user.nick AS publisher, appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.3dsx, appver.smdh, appver.appdata, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5, appver.largeIcon FROM apps app
 														LEFT JOIN users user ON user.userId = app.publisher
 														LEFT JOIN appversions appver ON appver.versionId = app.version
 														LEFT JOIN categories maincat ON maincat.categoryId = app.category
@@ -27,11 +27,16 @@
 	
 	//Print all app attributes
 	foreach ($currentApp as $attributeName => $attributeValue) {
-		echo $attributeName . ': ' . $attributeValue . '<br />';
+		if ($attributeName == '3dsx' || $attributeName == 'smdh' || $attributeName == 'appdata' || $attributeName == 'largeIcon') {
+			echo $attributeName . ': <a href="' . $attributeValue . '">' . $attributeValue . '</a><br />';
+		}
+		else {
+			echo $attributeName . ': ' . $attributeValue . '<br />';
+		}
 	}
 	
 	//Print icon
-	echo 'Icon: <img src="' . $currentApp['largeIcon'] . '" /><br />';
+	echo '<img src="' . $currentApp['largeIcon'] . '" /><br />';
 ?>
 <br />
 <form action="mod_appset.php" method="post">
@@ -47,7 +52,7 @@ Set publish state:
 <br />
 Message if "not approved" is selected (short, tell submitter why):
 <br />
-<input type="text" name="failpublishmessage" size="50" maxlength="32">
+<input type="text" name="failpublishmessage" size="50" maxlength="24">
 <input type="hidden" name="guid" value="<?php echo $currentApp['guid']; ?>">
 <input type="hidden" name="token" value="<?php echo md5($_SESSION['mod_appview_token']); ?>">
 <br />

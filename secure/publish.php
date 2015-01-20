@@ -5,25 +5,15 @@
 	
 	require_once('../common/ucpheader.php');
 	
-	if (isset($_SESSION['myapps_token'])) {
-		$myappsToken = $_SESSION['myapps_token'];
-		unset($_SESSION['myapps_token']);
+	if (isset($_GET['guid']) && isset($_SESSION['myapps_token' . $_GET['guid']])) {
+		$myappsToken = $_SESSION['myapps_token' . $_GET['guid']];
 	}
-	
-	if (isset($_SESSION['saved_desc'])) {
-		$savedDesc = $_SESSION['saved_desc'];
-		unset($_SESSION['saved_desc']);
-	}
-	
-	unset($_SESSION['user_app_guid']); //Unset GUID setting
 	
 	if (clientLoggedIn()) {
 		printAndExitIfTrue($_SESSION['user_role'] < 1, 'You do not have permission to publish apps.');
 		
-		$_SESSION['publish_token'] = uniqid(mt_rand(), true);
-		
+		$guidId = uniqid(mt_rand(), true);
 		$mysqlConn = connectToDatabase();
-		
 		
 		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && md5($myappsToken) === $_GET['token']) {
 			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.publisher, app.version, app.description, app.category, app.subcategory, app.rating, app.downloads, app.publishstate,
@@ -34,10 +24,16 @@
 			printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
 			
 			$appToEdit = $matchingApps[0];
-			printAndExitIfTrue($matchingApps[0]['publishstate'] === 0, 'This app is pending approval and can not be updated at this time.'); //Check if app not pending approval
 			
-			$_SESSION['user_app_guid'] = $appToEdit['guid'];
+			$_SESSION['publish_app_guid' . $guidId] = $appToEdit['guid'];
 			$_SESSION['user_app_version'] = $appToEdit['version'];
+		}
+		else {
+			$_SESSION['publish_app_guid' . $guidId] = generateGUID();
+		}
+		
+		if (!isset($_SESSION['publish_token' . $_SESSION['publish_app_guid' . $guidId]])) {
+			$_SESSION['publish_token' . $_SESSION['publish_app_guid' . $guidId]] = uniqid(mt_rand(), true);
 		}
 		
 		$editing = isset($appToEdit);
@@ -94,13 +90,17 @@
 					<textarea class="form-control" id="description" name="description" rows="6" maxlength="300"><?php if (isset($savedDesc)) echo $savedDesc; else if ($editing) echo escapeHTMLChars($appToEdit['description']); ?></textarea>
 				</div>
 				<div class="row">
-					<div class="col-md-6 form-group">
+					<div class="col-md-4 form-group">
 						<label for="3dsx">3dsx file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
 						<input type="file" class="filestyle" id="3dsx" name="3dsx" accept=".3dsx"<?php if (!$editing) echo ' required'; ?>>
 					</div>
-					<div class="col-md-6 form-group">
-						<label for="smdh">smdh file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
+					<div class="col-md-4 form-group">
+						<label for="smdh">smdh/icon file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
 						<input type="file" class="filestyle" id="smdh" name="smdh" accept=".smdh,.bin,.icn"<?php if (!$editing) echo ' required'; ?>>
+					</div>
+					<div class="col-md-4 form-group">
+						<label for="appdata">Additional data ZIP file (optional<?php if ($editing) echo ', only upload if you want to update'; ?> not implemented in the client yet):</label> <!-- TODO: delete app data checkbox -->
+						<input type="file" class="filestyle" id="appdata" name="appdata" accept=".zip">
 					</div>
 				</div>
 				<div class="form-group">
@@ -109,7 +109,8 @@
 				<div class="form-group">
 					<button type="submit" name="submit" class="btn btn-primary">Submit</button>
 				</div>
-				<input type="hidden" name="publishtoken" value="<?php echo md5($_SESSION['publish_token']); ?>">
+				<input type="hidden" name="publishtoken" value="<?php echo md5($_SESSION['publish_token' . $_SESSION['publish_app_guid' . $guidId]]); ?>">
+				<input type="hidden" name="guidid" value="<?php echo $guidId; ?>">
 			</form>
 		</div>
 		<script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script>

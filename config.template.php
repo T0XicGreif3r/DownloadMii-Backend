@@ -9,6 +9,7 @@
 		'azure_storage_account' => '',
 		'azure_container_3dsx' => '',
 		'azure_container_smdh' => '',
+		'azure_container_appdata' => '',
 		'azure_container_largeicon' => '',
 		
 		//MySQL

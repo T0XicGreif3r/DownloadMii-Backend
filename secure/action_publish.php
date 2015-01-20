@@ -10,11 +10,11 @@
 	
 	use WindowsAzure\Common\ServicesBuilder;
 	
-	$_SESSION['saved_desc'] = $_POST['description']; //temporary solution
-	
-	sendResponseCodeAndExitIfTrue(!isset($_SESSION['publish_token']), 422); //Check if session publishing token is set
-	$publishToken = $_SESSION['publish_token'];
-	unset($_SESSION['publish_token']);
+	sendResponseCodeAndExitIfTrue(!isset($_POST['guidid']), 400);
+	sendResponseCodeAndExitIfTrue(!isset($_SESSION['publish_app_guid' . $_POST['guidid']]), 422); //Check if GUID of app to remove is set
+	$guid = $_SESSION['publish_app_guid' . $_POST['guidid']]; //Get GUID
+	sendResponseCodeAndExitIfTrue(!isset($_SESSION['publish_token' . $guid]), 422); //Check if session publishing token is set
+	$publishToken = $_SESSION['publish_token' . $guid];
 	
 	sendResponseCodeAndExitIfTrue(!clientLoggedIn(), 403);
 	printAndExitIfTrue($_SESSION['user_role'] < 1, 'You do not have permission to publish apps.');
@@ -44,23 +44,21 @@
 	
 	$app3dsxPath = $_FILES['3dsx']['tmp_name'];
 	$appSmdhPath = $_FILES['smdh']['tmp_name'];
+	$appDataPath = $_FILES['appdata']['tmp_name'];
 	
 	$isDeveloper = $_SESSION['user_role'] > 1;
-	$updatingApp = isset($_SESSION['user_app_guid']);
+	$updatingApp = isset($_SESSION['user_app_version']);
 	
 	if (!$updatingApp) {
-		$guid = generateGUID(); //Generate GUID if not updating app
 		printAndExitIfTrue(!is_uploaded_file($app3dsxPath) || !is_uploaded_file($appSmdhPath), 'Please upload the required files.');
 	}
 	else {
-		$guid = $_SESSION['user_app_guid'];
 		$updating3dsx = is_uploaded_file($app3dsxPath);
 		$updatingSmdh = is_uploaded_file($appSmdhPath);
+		$updatingAppData = is_uploaded_file($appDataPath);
 		
-		//Check that if one of 3dsx, version is changed, the other also is
-		if ($_SESSION['user_app_version'] !== $_POST['version'] || $updating3dsx) {
-			printAndExitIfTrue($_SESSION['user_app_version'] === $_POST['version'] || !$updating3dsx, 'Please update both the version number and 3dsx file at the same time.');
-		}
+		//Check that if 3dsx/appdata is changed, the version also is
+		printAndExitIfTrue($_SESSION['user_app_version'] === $_POST['version'] && ($updating3dsx || $updatingAppData), 'Please also update the version number when uploading a new 3dsx/appdata file.');
 	}
 	
 	$mysqlConn = connectToDatabase();
@@ -77,7 +75,7 @@
 	}
 	
 	//Initialize Azure Blob Service if files will be uploaded
-	if (!$updatingApp || $updating3dsx || $updatingSmdh) {
+	if (!$updatingApp || $updating3dsx || $updatingSmdh || $updatingAppData) {
 		$blobRestProxy = ServicesBuilder::getInstance()->createBlobService(getConfigValue('azure_connection_string'));
 	}
 	
@@ -119,27 +117,52 @@
 		$smdhData = null;
 	}
 	
+	if (is_uploaded_file($appDataPath)) {
+		$appDataMD5 = md5_file($appDataPath);
+		$appDataBlobName = generateRandomString();
+		$appDataBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_appdata') . '/' . $appDataBlobName;
+		
+		$appDataFile = fopen($appDataPath, 'r');
+		$blobRestProxy->createBlockBlob(getConfigValue('azure_container_appdata'), $appDataBlobName, $appDataFile);
+		fclose($appDataFile);
+	}
+	else if (!$updatingApp) {
+		$appDataBlobURL = null;
+		$appDataMD5 = null;
+	}
+	
 	if ($updatingApp) {
-		$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.smdh, appver.largeIcon, appver.smdh_md5 FROM appversions appver
+		$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.3dsx, appver.smdh, appver.appdata, appver.largeIcon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM appversions appver
 															LEFT JOIN apps app ON appver.versionId = app.version
 															WHERE app.guid = ? LIMIT 1', 's', [$guid])[0];
 		
-		if ($updating3dsx && !$updatingSmdh) {
+		if (!$updating3dsx && !$updatingAppData) {
+			//Get current version ID
+			$versionId = $currentVersion['versionId'];
+		}
+		if (!$updatingSmdh) {
 			//Get current smdh URL and MD5, plus icon URL
 			$appSmdhBlobURL = $currentVersion['smdh'];
-			$appPNGBlobURL = $currentVersion['largeIcon'];
 			$appSmdhMD5 = $currentVersion['smdh_md5'];
+			$appPNGBlobURL = $currentVersion['largeIcon'];
 		}
-		else if (!$updating3dsx) {
-			//Get version ID
-			$versionId = $currentVersion['versionId'];
+		
+		if (!$updating3dsx && $updatingAppData) {
+			//Get current 3dsx URL and MD5
+			$app3dsxBlobURL = $currentVersion['3dsx'];
+			$app3dsxMD5 = $currentVersion['3dsx_md5'];
+		}
+		else if (!$updatingAppData && $updating3dsx) {
+			//Get current appdata URL and MD5
+			$appDataBlobURL = $currentVersion['appdata'];
+			$appDataMD5 = $currentVersion['appdata_md5'];
 		}
 	}
 	
-	if (!$updatingApp || $updating3dsx) {
+	if (!$updatingApp || $updating3dsx || $updatingAppData) {
 		//Insert app version
-		$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO appversions (appGuid, number, 3dsx, smdh, largeIcon, 3dsx_md5, smdh_md5)
-												VALUES (?, ?, ?, ?, ?, ?, ?)', 'sssssss', [$guid, $appVersion, $app3dsxBlobURL, $appSmdhBlobURL, $appPNGBlobURL, $app3dsxMD5, $appSmdhMD5], true);
+		$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO appversions (appGuid, number, 3dsx, smdh, appdata, largeIcon, 3dsx_md5, smdh_md5, appdata_md5)
+												VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 'sssssssss', [$guid, $appVersion, $app3dsxBlobURL, $appSmdhBlobURL, $appDataBlobURL, $appPNGBlobURL, $app3dsxMD5, $appSmdhMD5, $appDataMD5], true);
 		$versionId = $stmt->insert_id;
 		$stmt->close();
 	}
@@ -147,7 +170,7 @@
 		//Update current app version with smdh URL and MD5
 		$stmt = executePreparedSQLQuery($mysqlConn, 'UPDATE appversions appver INNER JOIN apps app ON appver.versionId = app.version
 														SET versionId = app.version, smdh = ?, largeIcon = ?, smdh_md5 = ?
-														WHERE app.guid = ? AND appver.versionId = app.version', 'ssss', [$guid, $appSmdhBlobURL, $appPNGBlobURL, $appSmdhMD5], true);
+														WHERE app.guid = ? AND appver.versionId = app.version', 'ssss', [$guid, $appSmdhBlobURL, $appPNGBlobURL, $appSmdhMD5]);
 	}
 	
 	if (!$updatingApp) {
@@ -163,7 +186,9 @@
 												'sisiiis', [$appName, $versionId, $appDescription, $appCategory, $appSubCategory, $isDeveloper ? 1 : 0, $guid]);
 	}
 	
-	unset($_SESSION['saved_desc']);
+	unset($_SESSION['myapps_token' . $guid]);
+	unset($_SESSION['publish_token' . $guid]);
+	unset($_SESSION['publish_app_guid' . $_POST['guidid']]);
 	
 	if ($isDeveloper) {
 		echo 'Your application has been published.';

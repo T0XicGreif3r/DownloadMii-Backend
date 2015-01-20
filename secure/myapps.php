@@ -6,18 +6,19 @@
 	require_once('../common/ucpheader.php');
 	
 	if (clientLoggedIn()) {
-		$_SESSION['myapps_token'] = uniqid(mt_rand(), true);
-		
 		$mysqlConn = connectToDatabase();
-		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.downloads, app.publishstate, app.failpublishmessage, appver.number AS version, appver.largeIcon AS largeIcon FROM apps app
+		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.downloads, app.publishstate, app.failpublishmessage, appver.number AS version, appver.largeIcon FROM apps app
 														LEFT JOIN appversions appver ON appver.versionId = app.version
 														WHERE app.publisher = ? ORDER BY appver.versionId DESC', 'i', [$_SESSION['user_id']]);
 ?>
 
-		<h1 class="text-center">My apps</h1>
+		<h1 class="text-center">My Apps</h1>
 		<br />
 <?php
 		foreach ($userApps as $app) {
+			if (!isset($_SESSION['myapps_token' . $app['guid']])) {
+				$_SESSION['myapps_token' . $app['guid']] = uniqid(mt_rand(), true);
+			}
 ?>
 		<div class="well clearfix">
 			<div class="app-vertical-center-outer pull-left">
@@ -33,12 +34,12 @@
 			</div>
 			<div class="app-vertical-center-outer pull-right btn-toolbar">
 				<div class="btn-toolbar app-vertical-center-inner">
-					<a role="button" class="btn btn-primary<?php if ($app['publishstate'] === 0) echo ' disabled'; ?>" href="publish.php?guid=<?php echo $app['guid']; ?>&token=<?php echo md5($_SESSION['myapps_token']); ?>">Update</a>
-					<div class="pull-right" style="margin-left: 5px;">
-						<div class="btn-group"> <!-- this shouldn't be like this -->
+					<a role="button" class="btn btn-primary" href="publish.php?guid=<?php echo $app['guid']; ?>&token=<?php echo md5($_SESSION['myapps_token' . $app['guid']]); ?>">Update</a>
+					<div class="pull-right" style="margin-left: 5px;"> <!-- this shouldn't be like this -->
+						<div class="btn-group">
 <?php
 			if ($app['publishstate'] !== 2 && $app['publishstate'] !== 3) {
-				echo '<a role="button" class="btn btn-danger" href="hide.php?guid=' . $app['guid'] . '&token=' . md5($_SESSION['myapps_token']) . '">Hide</a>';
+				echo '<a role="button" class="btn btn-danger" href="hide.php?guid=' . $app['guid'] . '&token=' . md5($_SESSION['myapps_token' . $app['guid']]) . '">Hide</a>';
 			}
 			
 			switch ($app['publishstate']) {

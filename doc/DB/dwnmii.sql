@@ -21,9 +21,11 @@ CREATE TABLE appversions(
 	number VARCHAR(12) NOT NULL,
 	3dsx VARCHAR(255) NOT NULL,
 	smdh VARCHAR(255) NOT NULL,
+	appdata VARCHAR(255) NULL,
 	largeIcon VARCHAR(255) NOT NULL,
 	3dsx_md5 VARCHAR(32) NOT NULL,
-	smdh_md5 VARCHAR(32) NOT NULL
+	smdh_md5 VARCHAR(32) NOT NULL,
+	appdata_md5 VARCHAR(32) NULL
 );
 
 CREATE TABLE apps(
@@ -37,7 +39,7 @@ CREATE TABLE apps(
 	rating TINYINT NOT NULL DEFAULT 0,
 	downloads INT NOT NULL DEFAULT 0,
 	publishstate TINYINT NOT NULL DEFAULT 0,
-	failpublishmessage VARCHAR(32) NULL
+	failpublishmessage VARCHAR(24) NULL
 
 	FOREIGN KEY (publisher) REFERENCES users(userId),
 	FOREIGN KEY (version) REFERENCES appversions(versionId),
