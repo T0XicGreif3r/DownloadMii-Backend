@@ -77,10 +77,10 @@
 					LEFT JOIN appversions appver ON appver.versionId = app.version
 					LEFT JOIN categories maincat ON maincat.categoryId = app.category
 					LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
-					WHERE app.publishstate = 1 ORDER BY appver.versionId DESC';
+					WHERE app.publishstate = 1';
 	
 	//TODO: Error check
-	switch ($topLevelRequest) {
+	switch (strtolower($topLevelRequest)) {
 		case 'apps':
 			sendResponseCodeAndExitIfTrue(count($param) < 2, 400);
 			$secondLevelRequest = $param[1];
@@ -88,14 +88,16 @@
 			$mysqlConn = connectToDatabase();
 			$mysqlQuery = $baseAppQuery;
 			
-			switch ($secondLevelRequest) {
-				case 'ByDev':
-					$mysqlQuery .= ' AND user.nick = ?';
-					print(getJSONFromSQLQuery($mysqlConn, $mysqlQuery, $param[2], 's', [$param[2]]));
+			switch (strtolower($secondLevelRequest)) {
+				case 'bydev':
+					$mysqlQuery .= ' AND user.nick = ? ORDER BY appver.versionId DESC';
+					$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, $param[2], 's', [$param[2]]);
+					header('Content-Length: ' . strlen($data));
+					print($data);
 					break;
 				
-				case 'TopDownloadedApps':
-				case 'TopDownloadedGames':
+				case 'topdownloadedapps':
+				case 'topdownloadedgames':
 					//Ask for only apps/games depending on request
 					if ($secondLevelRequest == 'TopDownloadedApps') {
 						$mysqlQuery .= ' AND maincat.name != "Games"';
@@ -106,16 +108,16 @@
 					
 					$mysqlQuery .= ' ORDER BY app.downloads DESC LIMIT 10'; //Select top 10 downloaded apps/games
 					$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps');
-					header('Content-Length: '.strlen($data));
+					header('Content-Length: ' . strlen($data));
 					print($data);
 					break;
 					
-				case 'StaffPicks':
+				case 'staffpicks':
 					# code...
 					echo "Error: Not implemented!";
 					break;
 				
-				case 'Applications':
+				case 'applications':
 					$bindParamTypes = null;
 					$bindParamArgs = null;
 					
@@ -131,10 +133,10 @@
 							$mysqlQueryEnd .= ' AND subcat.name = ?';
 						}
 						
-						$mysqlQuery .= $mysqlQueryEnd;
+						$mysqlQuery .= $mysqlQueryEnd . ' ORDER BY appver.versionId DESC';
 					}
 					$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps', $bindParamTypes, $bindParamArgs);
-					header('Content-Length: '.strlen($data));
+					header('Content-Length: ' . strlen($data));
 					print($data);
 					break;
 			}
