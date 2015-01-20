@@ -50,7 +50,6 @@
 	$updatingApp = isset($_SESSION['user_app_version']);
 	
 	if (!$updatingApp) {
-		$guid = generateGUID(); //Generate GUID if not updating app
 		printAndExitIfTrue(!is_uploaded_file($app3dsxPath) || !is_uploaded_file($appSmdhPath), 'Please upload the required files.');
 	}
 	else {
