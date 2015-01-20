@@ -99,7 +99,7 @@
 						<input type="file" class="filestyle" id="smdh" name="smdh" accept=".smdh,.bin,.icn"<?php if (!$editing) echo ' required'; ?>>
 					</div>
 					<div class="col-md-4 form-group">
-						<label for="appdata">Additional data ZIP file (optional<?php if ($editing) echo ', only upload if you want to update'; ?> not implemented in the client yet):</label> <!-- TODO: delete app data checkbox -->
+						<label for="appdata">Additional data ZIP file (optional<?php if ($editing) echo ', only upload if you want to update'; ?>. not implemented in the client yet):</label> <!-- TODO: delete app data checkbox -->
 						<input type="file" class="filestyle" id="appdata" name="appdata" accept=".zip">
 					</div>
 				</div>
