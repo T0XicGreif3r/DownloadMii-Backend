@@ -1,8 +1,9 @@
 <?php
 	/*
-		TEST/TEMPORARY
+		DownloadMii App List Page (all published apps)
 	*/
 	
+	$title = 'Browse Apps';
 	require_once('../common/uiheader.php');
 	
 	$mysqlConn = connectToDatabase();
@@ -12,7 +13,7 @@
 													WHERE app.publishstate = 1 ORDER BY appver.versionId DESC');
 ?>
 
-	<h1 class="text-center">All Apps</h1>
+	<h1 class="text-center">Browse Apps</h1>
 	<br />
 		<div class="input-group">
 		  <input type="text" class="form-control" placeholder="App name...">

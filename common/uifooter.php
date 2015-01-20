@@ -1,6 +1,6 @@
 <?php
 	/*
-		TEST/TEMPORARY
+		DownloadMii Page Footer
 	*/
 ?>
 			</div>

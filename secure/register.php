@@ -1,8 +1,9 @@
 <?php
 	/*
-		TEST/TEMPORARY
+		DownloadMii Registration Page
 	*/
 	
+	$title = 'Sign Up';
 	require_once('../common/ucpheader.php');
 	
 	$_SESSION['register_token'] = uniqid(mt_rand(), true);

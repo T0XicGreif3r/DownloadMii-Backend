@@ -1,6 +1,6 @@
 <?php
 	/*
-		TEST/TEMPORARY
+		DownloadMii UCP Header
 		This file automatically includes uiheader.php, which includes user.php and functions.php
 	*/
 	

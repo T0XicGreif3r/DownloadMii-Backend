@@ -1,8 +1,9 @@
 <?php
 	/*
-		TEST/TEMPORARY
+		DownloadMii App Publishing Page
 	*/
 	
+	$title = 'Publish App';
 	require_once('../common/ucpheader.php');
 	
 	if (isset($_GET['guid']) && isset($_SESSION['myapps_token' . $_GET['guid']])) {
