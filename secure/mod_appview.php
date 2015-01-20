@@ -27,11 +27,12 @@
 	
 	//Print all app attributes
 	foreach ($currentApp as $attributeName => $attributeValue) {
+		$safeValue = escapeHTMLChars($attributeValue);
 		if ($attributeName == '3dsx' || $attributeName == 'smdh' || $attributeName == 'appdata' || $attributeName == 'largeIcon') {
-			echo $attributeName . ': <a href="' . $attributeValue . '">' . $attributeValue . '</a><br />';
+			echo $attributeName . ': <a href="' . $safeValue . '">' . $safeValue . '</a><br />';
 		}
 		else {
-			echo $attributeName . ': ' . $attributeValue . '<br />';
+			echo $attributeName . ': ' . $safeValue . '<br />';
 		}
 	}
 	

@@ -17,7 +17,7 @@
 	
 	$md5Token = md5($_SESSION['mod_apps_token']);
 	foreach ($pendingApps as $app) {
-		echo '<br />' . '<a href="mod_appview.php?guid=' . $app['guid'] . '&token=' . $md5Token . '">' . $app['guid'] . '</a> (name: ' . $app['name'] . ', version: ' . $app['version'] . ', publisher: ' . $app['publisher'] . ')';
+		echo '<br />' . '<a href="mod_appview.php?guid=' . $app['guid'] . '&token=' . $md5Token . '">' . $app['guid'] . '</a> (name: ' . escapeHTMLChars($app['name']) . ', version: ' . escapeHTMLChars($app['version']) . ', publisher: ' . escapeHTMLChars($app['publisher']) . ')';
 	}
 ?>
 <br />
