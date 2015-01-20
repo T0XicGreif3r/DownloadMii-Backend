@@ -274,7 +274,7 @@
 			break;
 		
 		case 'version':
-			echo '0.0.0.0';
+			echo '1.1.0.0';
 			break;
 		
 		default:
