@@ -40,7 +40,7 @@
 		</div>
 		<div class="app-vertical-center-outer pull-right btn-toolbar">
 			<div class="btn-toolbar app-vertical-center-inner">
-				<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> <?php echo $app['downloads']; ?> downloads</button>
+				<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> <?php echo $app['downloads']; ?> unique downloads</button>
 			</div>
 		</div>
 		<div class="clear-float" style="padding-top: 8px">
