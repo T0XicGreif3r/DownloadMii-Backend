@@ -47,7 +47,7 @@
 		<?php if (isset($errorMessage)) {
 ?>
 		<div class="alert alert-danger">
-			<a href="#" class="close" data-dismiss="alert"><span class="glyphicon glyphicon-remove"></span></a>
+			<a class="close" href="#" data-dismiss="alert">&times;</a>
 			<strong>Error!</strong> <?php echo $errorMessage; ?>
 		</div>
 		
