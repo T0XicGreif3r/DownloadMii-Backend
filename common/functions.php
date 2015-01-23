@@ -47,7 +47,7 @@
 	* Evaluate a condition and, if it is true, print a string and exit
 	*
 	* @param bool $condition The condition to be evaluated
-	* @param string $str The string to return to the client
+	* @param string $str The string to return to the client if the condition is true
 	*/
 	function printAndExitIfTrue($condition, $str) {
 		if ($condition) {
@@ -69,11 +69,76 @@
 	* Evaluate a condition and, if it is true, exit with a HTTP response code
 	*
 	* @param bool $condition The condition to be evaluated
-	* @param int $responseCode The response code to return to the client
+	* @param int $responseCode The response code to return to the client if the condition is true
 	*/
 	function sendResponseCodeAndExitIfTrue($condition, $responseCode) {
 		if ($condition) {
 			sendResponseCodeAndExit($responseCode);
+		}
+	}
+
+	/**
+	* Evaluate a condition and, if it is true, throw an exception
+	*
+	* @param bool $condition The condition to be evaluated
+	* @param string $str The exception message to generate if the condition is true
+	*/
+	function throwExceptionIfTrue($condition, $str) {
+		if ($condition) {
+			throw new Exception($str);
+		}
+	}
+	
+	/**
+	* Get the first set option of a set of two choices
+	*
+	* @param mixed $firstChoice The first option to choose from
+	* @param mixed $secondChoice The second option to choose from
+	* @return mixed The first set option, or false if no option is set
+	*/
+	function getValueFromChoices($firstChoice, $secondChoice) {
+		if (isset($firstChoice)) {
+			return $firstChoice;
+		}
+		else if (isset($secondChoice)) {
+			return $secondChoice;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	/**
+	* Print the first set option of a set of two choices, with a (removable) "value" HTML attribute
+	*
+	* @param mixed $firstChoice The first option to choose from
+	* @param mixed $secondChoice The second option to choose from
+	* @param bool $printValueAttribute Whether to print the "value" HTML attribute, defaults to true
+	*/
+	function printAttributeValueFromChoices($firstChoice, $secondChoice, $printValueAttribute = true) {
+		$doPrint = true;
+		if ($printValueAttribute) {
+			$printStr = ' value="';
+		}
+		else {
+			$printStr = '';
+		}
+		
+		$fieldValue = getValueFromChoices($firstChoice, $secondChoice);
+		if (isset($fieldValue)) {
+			$printStr .= $fieldValue;
+		}
+		else {
+			$doPrint = false;
+		}
+		
+		if ($doPrint) {
+			if ($printValueAttribute) {
+				echo $printStr . '"';
+			}
+			else {
+				echo $printStr;
+			}
 		}
 	}
 	

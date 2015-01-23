@@ -48,8 +48,7 @@
 				<img class="Product" src="img/Logo.png" alt="" />
 				<p class="lead" style="margin-top:75px;">
 					DownloadMii is an Online marketplace for Nintendo 3DS homebrew applications and its 100% free of charge for the end-user. It is currently under development, and the Github project can be found <a href="https://github.com/DownloadMii/DownloadMii">here</a>!<br />
-					We expect to deliver the first consumer release of DownloadMii late January or early February 2015.<br />
-					We will also in the future add an blog so you can stay up-to-date with the latest store news and such, stay tuned!
+					We will in the near future add a blog so you can stay up-to-date with the latest store news and such, stay tuned!
 				</p>
 			  </div>
 			</div>

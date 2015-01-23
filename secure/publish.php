@@ -5,6 +5,7 @@
 	
 	$title = 'Publish App';
 	require_once('../common/ucpheader.php');
+	require_once('action_publish.php');
 	
 	if (isset($_GET['guid']) && isset($_SESSION['myapps_token' . $_GET['guid']])) {
 		$myappsToken = $_SESSION['myapps_token' . $_GET['guid']];
@@ -16,6 +17,7 @@
 		$guidId = uniqid(mt_rand(), true);
 		$mysqlConn = connectToDatabase();
 		
+		$appToEdit = null;
 		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && md5($myappsToken) === $_GET['token']) {
 			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.publisher, app.version, app.description, app.category, app.subcategory, app.rating, app.downloads, app.publishstate,
 																appver.number AS version FROM apps app
@@ -27,7 +29,7 @@
 			$appToEdit = $matchingApps[0];
 			
 			$_SESSION['publish_app_guid' . $guidId] = $appToEdit['guid'];
-			$_SESSION['user_app_version'] = $appToEdit['version'];
+			$_SESSION['user_app_version' . $guid] = $appToEdit['version'];
 		}
 		else {
 			$_SESSION['publish_app_guid' . $guidId] = generateGUID();
@@ -41,16 +43,28 @@
 ?>
 		<h1 class="text-center"><?php if (isset($appToEdit)) echo 'Updating ' . escapeHTMLChars($appToEdit['name']); else echo 'Add a new application'; ?></h1>
 		<br />
+		
+		<?php if (isset($errorMessage)) {
+?>
+		<div class="alert alert-danger">
+			<a href="#" class="close" data-dismiss="alert"><span class="glyphicon glyphicon-remove"></span></a>
+			<strong>Error!</strong> <?php echo $errorMessage; ?>
+		</div>
+		
+		<?php
+		}
+?>
+
 		<div class="well">
-			<form role="form" action="action_publish.php" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+			<form role="form" action="publish.php" method="post" enctype="multipart/form-data" accept-charset="utf-8">
 				<div class="row">
 					<div class="col-md-6 form-group">
 						<label for="name">Name:</label>
-						<input type="text" class="form-control" id="name" name="name" placeholder="e.g. My Application" maxlength="32" value="<?php if ($editing) echo escapeHTMLChars($appToEdit['name']); ?>" required>
+						<input type="text" class="form-control" id="name" name="name" placeholder="e.g. My Application" maxlength="32"<?php printAttributeValueFromChoices(@$_POST['name'], $appToEdit['name']); ?> required>
 					</div>
 					<div class="col-md-6 form-group">
 						<label for="version">Version:</label>
-						<input type="text" class="form-control" id="version" name="version" placeholder="e.g. 1.0.0.0" maxlength="12" value="<?php if ($editing) echo escapeHTMLChars($appToEdit['version']); ?>" required>
+						<input type="text" class="form-control" id="version" name="version" placeholder="e.g. 1.0.0.0" maxlength="12"<?php printAttributeValueFromChoices(@$_POST['version'], $appToEdit['version']); ?> required>
 					</div>
 				</div>
 				<div class="row">
@@ -72,10 +86,11 @@
 						<select class="form-control" id="subcategory" name="subcategory">
 							<option value=""></option>
 							<?php
-								if ($editing) {
+								if (isset($_POST['category']) || $editing) {
+									echo 'yes';
 									$subCategories = getArrayFromSQLQuery($mysqlConn, 'SELECT cat.categoryId, cat.name FROM categories cat
 																						LEFT JOIN categories parentcat ON cat.parent = parentcat.categoryId
-																						WHERE parentcat.categoryId = ? AND parentcat.parent IS NULL ORDER BY cat.name ASC', 'i', [$appToEdit['category']]);
+																						WHERE parentcat.categoryId = ? AND parentcat.parent IS NULL ORDER BY cat.name ASC', 'i', [getValueFromChoices(@$_POST['category'], $appToEdit['category'])]);
 									
 									foreach ($subCategories as $subCategory) {
 										echo '<option value="' . $subCategory['categoryId'] . '">' . $subCategory['name'] . '</option>';
@@ -88,7 +103,7 @@
 				</div>
 				<div class="form-group">
 					<label for="description">Description (300 character limit):</label>
-					<textarea class="form-control" id="description" name="description" rows="6" maxlength="300"><?php if (isset($savedDesc)) echo $savedDesc; else if ($editing) echo escapeHTMLChars($appToEdit['description']); ?></textarea>
+					<textarea class="form-control" id="description" name="description" rows="6" maxlength="300"><?php printAttributeValueFromChoices(@$_POST['description'], $appToEdit['description'], false); ?></textarea>
 				</div>
 				<div class="row">
 					<div class="col-md-4 form-group">
@@ -100,7 +115,7 @@
 						<input type="file" class="filestyle" id="smdh" name="smdh" accept=".smdh,.bin,.icn"<?php if (!$editing) echo ' required'; ?>>
 					</div>
 					<div class="col-md-4 form-group">
-						<label for="appdata">Additional data ZIP file (optional<?php if ($editing) echo ', only upload if you want to update'; ?>. not implemented in the client yet):</label> <!-- TODO: delete app data checkbox -->
+						<label for="appdata">Additional data ZIP file (optional<?php if ($editing) echo ', only upload if you want to update'; ?>):</label> <!-- TODO: add checkbox for deleting app data -->
 						<input type="file" class="filestyle" id="appdata" name="appdata" accept=".zip">
 					</div>
 				</div>
@@ -177,15 +192,17 @@
 		
 		document.getElementById('category').onchange = updateSubCategories;
 		<?php
-			if ($editing) {
+			$categoryValue = getValueFromChoices(@$_POST['category'], $appToEdit['category']);
+			if ($categoryValue) {
 ?>
 
-			document.getElementById('category').value = <?php echo $appToEdit['category']; ?>;
+			document.getElementById('category').value = <?php echo $categoryValue; ?>;
 			<?php
-				if ($appToEdit['subcategory'] !== null) {
+				$subCategoryValue = getValueFromChoices(@$_POST['subcategory'], $appToEdit['subcategory']);
+				if ($subCategoryValue) {
 ?>
 
-			document.getElementById('subcategory').value = <?php echo $appToEdit['subcategory']; ?>;
+			document.getElementById('subcategory').value = <?php echo $subCategoryValue; ?>;
 			<?php
 				}
 ?>
