@@ -101,7 +101,8 @@
 						$mysqlQuery .= ' AND (MATCH(app.name) AGAINST(? WITH QUERY EXPANSION)
 											OR MATCH(app.description) AGAINST(? WITH QUERY EXPANSION)
 											OR MATCH(user.nick) AGAINST(? WITH QUERY EXPANSION))';
-						$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps', 'sss', [$param[2], $param[2], $param[2]]);
+						
+						$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Search', 'sss', [$param[2], $param[2], $param[2]]);
 						header('Content-Length: ' . strlen($data));
 						print($data);
 					}

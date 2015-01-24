@@ -60,8 +60,27 @@
 	<script type="text/javascript">
 	$('#searchbutton').on('click', function() {
 		$.getJSON('/api/apps/find/' + $('#searchtext').val(), function(data) {
-			$("#appcontainer").empty();
-			//Todo: Populate #appcontainer
+			$('#appcontainer').empty();
+			data.Search.forEach(function(element) {
+				$('#appcontainer').append('<div class="well clearfix">' +
+											'<div class="app-vertical-center-outer pull-left">' +
+												'<img class="app-icon" src="' + (element.largeicon !== '' ? element.largeicon : '/img/noicon.png') + '" />' +
+												'<div class="pull-right">' +
+													'<h4 class="app-vertical-center-inner">' +
+														element.name + ' ' + element.version + ' by <span style="font-style: italic;">' + element.publisher + '</span>' +
+													'</h4>' +
+												'</div>' +
+											'</div>' +
+											'<div class="app-vertical-center-outer pull-right btn-toolbar">' +
+												'<div class="btn-toolbar app-vertical-center-inner">' +
+													'<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> ' + element.downloads + ' unique downloads</button>' +
+												'</div>' +
+											'</div>' +
+											'<div class="clear-float" style="padding-top: 8px">' +
+												element.description +
+											'</div>' +
+										'</div>');
+			});
 		});
 	});
 	</script>
