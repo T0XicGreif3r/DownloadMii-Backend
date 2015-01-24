@@ -1,24 +1,13 @@
 <?php
 	//DownloadMii (API) v0.1-///
 	/*Documentation
-		This api.php is for parse the request URL and get the data from the db
+		This api.php is for parse the request URL and get the data from the DB
 
 		The URL request will be formated like this:
-		To retrieve JSON
-		App list by developer
-		<domain>/api/apps/ByDev/[developerId]
-
-		Search apps
-		<domain>/api/apps/Find/[query]/[category (optional)]/[subcategory (optional)]
-
-		Top 10 non-game app list
-		<domain>/api/apps/TopDownloadedApps
-
-		Top 10 game list
-		<domain>/api/apps/TopDownloadedGames
-
-		App list, all or by category/subcategory
-		<domain>/api/apps/Applications/[category (optional)]/[subcategory (optional)]
+		
+		App list, with optional query string parameters
+		<domain>/api/apps?find=[searchstring]&publisher=[username]&category=[category]&subcategory=[subcategory]&sort=[sortmethod]
+		(Valid sort methods are "name", "downloads". Default sort method is by app version ID, which equals publishing date order.)
 
 		To rate an APP (not implemented, won't work like this)
 		<domain>/api/rate/[securetoken]/[appguid]/[rating]
@@ -82,16 +71,74 @@
 					LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
 					WHERE app.publishstate = 1';
 	
-	//TODO: Error check
 	switch (strtolower($topLevelRequest)) {
 		case 'apps':
-			sendResponseCodeAndExitIfTrue(count($param) < 2, 400);
-			$secondLevelRequest = $param[1];
+			//sendResponseCodeAndExitIfTrue(count($param) < 2, 400);
+			//$secondLevelRequest = $param[1];
+			
+			$queryStringParts = array_change_key_case($_GET, CASE_LOWER);
 			
 			$mysqlConn = connectToDatabase();
 			$mysqlQuery = $baseAppQuery;
 			
-			switch (strtolower($secondLevelRequest)) {
+			$bindParamTypes = '';
+			$bindParamArgs = array();
+			
+			if (isset($queryStringParts['find'])) {
+				$bindParamTypes .= 'sss';
+				array_push($bindParamArgs, $queryStringParts['find']);
+				array_push($bindParamArgs, $queryStringParts['find']);
+				array_push($bindParamArgs, $queryStringParts['find']);
+				
+				$mysqlQuery .= ' AND (MATCH(app.name) AGAINST(? WITH QUERY EXPANSION)
+									OR MATCH(app.description) AGAINST(? WITH QUERY EXPANSION)
+									OR user.nick LIKE ?)';
+			}
+			
+			if (isset($queryStringParts['publisher'])) {
+				$bindParamTypes .= 's';
+				array_push($bindParamArgs, $queryStringParts['publisher']);
+				
+				$mysqlQuery .= ' AND user.nick = ?';
+			}
+			
+			if (isset($queryStringParts['category'])) {
+				$bindParamTypes .= 's';
+				array_push($bindParamArgs, $queryStringParts['category']);
+				
+				$mysqlQuery .= ' AND maincat.name = ?';
+			}
+			
+			if (isset($queryStringParts['subcategory'])) {
+				$bindParamTypes .= 's';
+				array_push($bindParamArgs, $queryStringParts['subcategory']);
+				
+				$mysqlQuery .= ' AND subcat.name = ?';
+			}
+			
+			if (isset($queryStringParts['sort'])) {
+				switch ($queryStringParts['sort']) {
+					case 'name':
+						$mysqlQuery .= ' ORDER BY app.name ASC';
+						break;
+					
+					case 'downloads':
+						$mysqlQuery .= ' ORDER BY app.downloads DESC';
+						break;
+					
+					default:
+						$mysqlQuery .= ' ORDER BY appver.versionId DESC';
+				}
+			}
+			else {
+				$mysqlQuery .= ' ORDER BY appver.versionId DESC';
+			}
+			
+			$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps', $bindParamTypes, $bindParamArgs);
+			header('Content-Length: ' . strlen($data));
+			print($data);
+			
+			/*switch (strtolower($secondLevelRequest)) {
 				case 'bydev':
 					$mysqlQuery .= ' AND user.nick = ? ORDER BY appver.versionId DESC';
 					$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, $param[2], 's', [$param[2]]);
@@ -173,7 +220,7 @@
 					header('Content-Length: ' . strlen($data));
 					print($data);
 					break;
-			}
+			}*/
 			$mysqlConn->close();
 			break;
 		
@@ -310,7 +357,7 @@
 			break;
 		
 		case 'version':
-			echo '1.1.0.0';
+			echo '1.2.0.0';
 			break;
 		
 		default:

@@ -188,7 +188,7 @@
 	*/
 	function executePreparedSQLQuery($conn, $sql, $bindParamTypes = null, $bindParamVarsArr = null, $returnStmt = false) {
 		$stmt = $conn->prepare($sql);
-		if (isset($bindParamTypes, $bindParamVarsArr)) {
+		if (isset($bindParamTypes, $bindParamVarsArr) && !empty($bindParamTypes)) {
 			$callUserArgs = $bindParamVarsArr;
 			array_unshift($callUserArgs, $bindParamTypes);
 			
