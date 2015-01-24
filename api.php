@@ -7,7 +7,7 @@
 		
 		App list, with optional query string parameters
 		<domain>/api/apps?find=[searchstring]&publisher=[username]&category=[category]&subcategory=[subcategory]&sort=[sortmethod]
-		(Valid sort methods are "name", "downloads". Default sort method is by app version ID, which equals publishing date order.)
+		(Valid sort methods are "name", "downloads", "version". Default sort method is by version, which equals publishing date order.)
 
 		To rate an APP (not implemented, won't work like this)
 		<domain>/api/rate/[securetoken]/[appguid]/[rating]
@@ -126,6 +126,7 @@
 						$mysqlQuery .= ' ORDER BY app.downloads DESC';
 						break;
 					
+					case 'version':
 					default:
 						$mysqlQuery .= ' ORDER BY appver.versionId DESC';
 				}
