@@ -8,14 +8,17 @@
 		App list by developer
 		<domain>/api/apps/ByDev/[developerId]
 
+		Search apps
+		<domain>/api/apps/Find/[query]/[category (optional)]/[subcategory (optional)]
+
 		Top 10 non-game app list
 		<domain>/api/apps/TopDownloadedApps
 
 		Top 10 game list
 		<domain>/api/apps/TopDownloadedGames
 
-		App list by category/sub/other
-		<domain>/api/apps/Applications/[category]/[subcategory]
+		App list, all or by category/subcategory
+		<domain>/api/apps/Applications/[category (optional)]/[subcategory (optional)]
 
 		To rate an APP (not implemented, won't work like this)
 		<domain>/api/rate/[securetoken]/[appguid]/[rating]
@@ -98,13 +101,32 @@
 				
 				case 'find':
 					if (count($param) > 2) {
+						
+						$bindParamTypes = 'sss';
+						$bindParamArgs = array($param[2], $param[2], $param[2]);
+						
 						$mysqlQuery .= ' AND (MATCH(app.name) AGAINST(? WITH QUERY EXPANSION)
 											OR MATCH(app.description) AGAINST(? WITH QUERY EXPANSION)
 											OR MATCH(user.nick) AGAINST(? WITH QUERY EXPANSION))';
 						
-						$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Search', 'sss', [$param[2], $param[2], $param[2]]);
+						if (count($param) > 3) {
+							$bindParamTypes .= 's';
+							array_push($bindParamArgs, $param[3]);
+							$mysqlQuery .= ' AND maincat.name = ?';
+							
+							if (count($param) > 4) {
+								$bindParamTypes .= 's';
+								array_push($bindParamArgs, $param[4]);
+								$mysqlQuery .= ' AND subcat.name = ?';
+							}
+						}
+						
+						$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Search', $bindParamTypes, $bindParamArgs);
 						header('Content-Length: ' . strlen($data));
 						print($data);
+					}
+					else {
+						echo 'Error: incorrect use of API!';
 					}
 					break;
 				
@@ -137,18 +159,16 @@
 					if (count($param) > 2) {
 						$bindParamTypes = 's';
 						$bindParamArgs = array($param[2]);
-						$mysqlQueryEnd = ' AND maincat.name = ?';
+						$mysqlQuery .= ' AND maincat.name = ?';
 						
 						if (count($param) > 3) {
 							$bindParamTypes .= 's';
 							array_push($bindParamArgs, $param[3]);
-							$mysqlQueryEnd .= ' AND subcat.name = ?';
+							$mysqlQuery .= ' AND subcat.name = ?';
 						}
-						$mysqlQuery .= $mysqlQueryEnd . ' ORDER BY appver.versionId DESC';
 					}
 					
 					$mysqlQuery .= ' ORDER BY appver.versionId DESC';
-					
 					$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps', $bindParamTypes, $bindParamArgs);
 					header('Content-Length: ' . strlen($data));
 					print($data);
