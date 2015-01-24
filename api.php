@@ -98,8 +98,8 @@
 				
 				case 'find':
 					if (count($param) > 2) {
-						$mysqlQuery .= ' AND MATCH(app.name) AGAINST(? IN BOOLEAN MODE)';
-						$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps', 's', [$param[2]]);
+						$mysqlQuery .= ' AND (MATCH(app.name) AGAINST(? WITH QUERY EXPANSION) OR MATCH(app.description) AGAINST(? WITH QUERY EXPANSION))';
+						$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps', 'ss', [$param[2], $param[2]]);
 						header('Content-Length: ' . strlen($data));
 						print($data);
 					}
