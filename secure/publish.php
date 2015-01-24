@@ -29,7 +29,7 @@
 			$appToEdit = $matchingApps[0];
 			
 			$_SESSION['publish_app_guid' . $guidId] = $appToEdit['guid'];
-			$_SESSION['user_app_version' . $guid] = $appToEdit['version'];
+			$_SESSION['user_app_version' . $appToEdit['guid']] = $appToEdit['version'];
 		}
 		else {
 			$_SESSION['publish_app_guid' . $guidId] = generateGUID();
