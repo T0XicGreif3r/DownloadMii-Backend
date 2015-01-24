@@ -144,9 +144,11 @@
 							array_push($bindParamArgs, $param[3]);
 							$mysqlQueryEnd .= ' AND subcat.name = ?';
 						}
-						
 						$mysqlQuery .= $mysqlQueryEnd . ' ORDER BY appver.versionId DESC';
 					}
+					
+					$mysqlQuery .= ' ORDER BY appver.versionId DESC';
+					
 					$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps', $bindParamTypes, $bindParamArgs);
 					header('Content-Length: ' . strlen($data));
 					print($data);
