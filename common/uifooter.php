@@ -70,7 +70,7 @@
 				easing: 'easeInOutQuint', // Easing pattern to use
 				updateURL: false
 			});
-			$(":file").filestyle({buttonName: "btn-primary"}});
+			$(":file").filestyle({buttonName: "btn-primary"});
 			
 			$(function () {
 			  $('[data-toggle="tooltip"]').tooltip();
