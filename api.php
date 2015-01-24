@@ -107,7 +107,7 @@
 						
 						$mysqlQuery .= ' AND (MATCH(app.name) AGAINST(? WITH QUERY EXPANSION)
 											OR MATCH(app.description) AGAINST(? WITH QUERY EXPANSION)
-											OR MATCH(user.nick) AGAINST(? WITH QUERY EXPANSION))';
+											OR user.nick LIKE ?)';
 						
 						if (count($param) > 3) {
 							$bindParamTypes .= 's';
