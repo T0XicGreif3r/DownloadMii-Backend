@@ -81,11 +81,11 @@
 	* Evaluate a condition and, if it is true, throw an exception
 	*
 	* @param bool $condition The condition to be evaluated
-	* @param string $str The exception message to generate if the condition is true
+	* @param string $msg The exception message to generate if the condition is true
 	*/
-	function throwExceptionIfTrue($condition, $str) {
+	function throwExceptionIfTrue($condition, $msg) {
 		if ($condition) {
-			throw new Exception($str);
+			throw new Exception($msg);
 		}
 	}
 	

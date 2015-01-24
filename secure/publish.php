@@ -194,20 +194,12 @@
 		<?php
 			$categoryValue = getValueFromChoices(@$_POST['category'], $appToEdit['category']);
 			if ($categoryValue) {
-?>
-
-			document.getElementById('category').value = <?php echo $categoryValue; ?>;
-			<?php
+				echo "document.getElementById('category').value = " . $categoryValue . ";";
+				
 				$subCategoryValue = getValueFromChoices(@$_POST['subcategory'], $appToEdit['subcategory']);
 				if ($subCategoryValue) {
-?>
-
-			document.getElementById('subcategory').value = <?php echo $subCategoryValue; ?>;
-			<?php
+					echo "document.getElementById('subcategory').value = " . $subCategoryValue . ";";
 				}
-?>
-
-		<?php
 			}
 ?>
 		</script>
