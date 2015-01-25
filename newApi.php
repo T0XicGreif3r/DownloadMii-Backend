@@ -47,11 +47,11 @@
 	}
 	header("Content-Transfer-Encoding: binary\n");
 	
-	sendResponseCodeAndExitIfTrue(strpos(getenv('REQUEST_URI'), '/api/') != 0, 400);
+	sendResponseCodeAndExitIfTrue(strpos(getenv('REQUEST_URI'), '/newApi/') != 0, 400);
 	
 	$origKey = ''; //Key to verify if the app that is accessing the API is valid
 	$requestUri = strtok(getenv('REQUEST_URI'), '?');
-	$param = explode('/', rtrim(substr($requestUri, strlen('/api/')), '/')); //All URL "directories" after /api/ -> array
+	$param = explode('/', rtrim(substr($requestUri, strlen('/newApi/')), '/')); //All URL "directories" after /api/ -> array
 
 	//get POST parameters
 	$appKey = !empty($_POST['appKey']) ? $_POST['appKey'] : null;
