@@ -103,17 +103,31 @@
 			}
 			
 			if (isset($queryStringParts['category'])) {
-				$bindParamTypes .= 's';
-				array_push($bindParamArgs, $queryStringParts['category']);
+				$category = ltrim($queryStringParts['category'], '!'); 
 				
-				$mysqlQuery .= ' AND maincat.name = ?';
+				$bindParamTypes .= 's';
+				array_push($bindParamArgs, $category);
+				
+				if ($queryStringParts['category'][0] !== '!') {
+					$mysqlQuery .= ' AND maincat.name = ?';
+				}
+				else {
+					$mysqlQuery .= ' AND maincat.name <> ?';
+				}
 			}
 			
 			if (isset($queryStringParts['subcategory'])) {
-				$bindParamTypes .= 's';
-				array_push($bindParamArgs, $queryStringParts['subcategory']);
+				$subCategory = ltrim($queryStringParts['subcategory'], '!'); 
 				
-				$mysqlQuery .= ' AND subcat.name = ?';
+				$bindParamTypes .= 's';
+				array_push($bindParamArgs, $subCategory);
+				
+				if ($queryStringParts['subcategory'][0] !== '!') {
+					$mysqlQuery .= ' AND subcat.name = ?';
+				}
+				else {
+					$mysqlQuery .= ' AND subcat.name <> ?';
+				}
 			}
 			
 			if (isset($queryStringParts['sort'])) {
