@@ -4,6 +4,8 @@
 <meta name="author" CONTENT="DownloadMii Team">
 <meta name="google-site-verification" content="oUzBcLbkKoA1gb5G8ZWgzzLR_LmIMFa0F8gsCH39LRc" />
 <meta name="msvalidate.01" content="-" />
+<link rel="alternate" href="downloadmii.com" hreflang="en-us">
+<link rel="alternate" href="downloadmii.com" hreflang="en">
 <meta charset="utf-8" />
 
 <!-- METADATA -->
