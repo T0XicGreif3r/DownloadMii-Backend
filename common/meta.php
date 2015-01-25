@@ -39,7 +39,7 @@
 
 
 <!-- LIVE TILE -->
-<meta name="msapplication-TileColor" content="#009FFF" />
+<meta name="msapplication-TileColor" content="#25A4D6" />
 <meta name="msapplication-square70x70logo" content="/img/LiveTiles/smalltile.png" />
 <meta name="msapplication-square150x150logo" content="/img/LiveTiles/mediumtile.png" />
 <meta name="msapplication-wide310x150logo" content="/img/LiveTiles/widetile.png" />
