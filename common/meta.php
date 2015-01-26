@@ -30,11 +30,11 @@
 <link rel="prerender" href="https://www.downloadmii.com/apps/" />
 
 <!-- IE SITE PIN -->
-<meta name="msapplication-starturl" content="http://www.downloadmii.com" />
-<meta name="msapplication-navbutton-color" content="#1009FFF" />
+<meta name="msapplication-starturl" content="https://www.downloadmii.com" />
+<meta name="msapplication-navbutton-color" content="#25A4D6" />
 <meta name="msapplication-window" content="width=1024;height=768" />
 <meta name="msapplication-tooltip" content="Visit DownloadMii" />
-<meta content="name=Home;action-uri=./index.html;icon-uri=./favicon.ico" name="msapplication-task" />
+<meta content="name=Home;action-uri=./;icon-uri=./favicon.ico" name="msapplication-task" />
 <meta content="name=User CP;action-uri=./secure/myapps.php;icon-uri=./favicon.ico" name="msapplication-task" />
 
 
