@@ -1,6 +1,6 @@
 <!-- SEO -->
 <meta name="description" content="DownloadMii is an online marketplace for Homebrew applications. Its also 100% free fo charge!" />
-<meta name="keywords" content="Nintendo 3DS Homebrew, Homebrew Browser, 3ds, filfat, Wii U Homebrew, DownloadMii" />
+<meta name="keywords" content="DownloadMii, Nintendo 3DS Homebrew, Homebrew Browser, 3ds, filfat, Wii U Homebrew" />
 <meta name="author" CONTENT="DownloadMii Team">
 <meta name="google-site-verification" content="oUzBcLbkKoA1gb5G8ZWgzzLR_LmIMFa0F8gsCH39LRc" />
 <meta name="msvalidate.01" content="-" />
@@ -26,8 +26,8 @@
 <!-- PLATFORM SPECIFIC -->
 <!-- MICROSOFT -->
 <meta name="application-name" content="DownloadMii" />
-<link rel="dns-prefetch" href="http://filfatstudios.com/"/>
-<link rel="prerender" href="http://filfatstudios.com/" />
+<link rel="dns-prefetch" href="http://filfatstudios.com"/>
+<link rel="prerender" href="https://www.downloadmii.com/apps/" />
 
 <!-- IE SITE PIN -->
 <meta name="msapplication-starturl" content="http://www.downloadmii.com" />
@@ -56,8 +56,9 @@
 <meta name="apple-mobile-web-app-title" content="DownloadMii"/>
 <link rel="apple-touch-startup-image" href="/img/Apple/startup.png">
 
-<!-- ANDROID -->
+<!-- GOOGLE -->
 <link rel="icon" sizes="128x128" href="/img/Apple/touch-icon-iphone-retina.png" />
+<link rel="prerender" href="http://example.org/index.html">
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
