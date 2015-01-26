@@ -58,7 +58,7 @@
 
 <!-- GOOGLE -->
 <link rel="icon" sizes="128x128" href="/img/Apple/touch-icon-iphone-retina.png" />
-<link rel="prerender" href="http://example.org/index.html">
+<link rel="prerender" href="https://www.downloadmii.com/apps/">
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
