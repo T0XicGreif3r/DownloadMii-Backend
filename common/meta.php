@@ -58,7 +58,16 @@
 
 <!-- GOOGLE -->
 <link rel="icon" sizes="128x128" href="/img/Apple/touch-icon-iphone-retina.png" />
+<meta name="theme-color" content="#25A4D6">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="prerender" href="https://www.downloadmii.com/apps/">
+
+<!-- SOCIAL MEDIA -->
+<meta property="og:title" content="DownloadMii - Download homebrew directly to your 3DS"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="http://www.downloadmii.com/img/livetiles/largetile.png"/>
+<meta property="og:url" content="https://www.downloadmii.com"/>
+<meta name="twitter:title" content="DownloadMii">
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
