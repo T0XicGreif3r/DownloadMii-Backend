@@ -49,14 +49,14 @@
 		}
 		
 		var printDefaultApps = function() {
-			$.getJSON('/api/apps', function(data) {
+			$.getJSON('/newapi/apps', function(data) {
 				populateAppContainer(data.Apps);
 			});
 		}
 		
 		$('#searchbutton').on('click', function() {
 			if ($('#searchtext').val() !== '') {
-				$.getJSON('/api/apps?find=' + $('#searchtext').val(), function(data) {
+				$.getJSON('/newapi/apps?find=' + $('#searchtext').val(), function(data) {
 					populateAppContainer(data.Apps);
 				});
 			}

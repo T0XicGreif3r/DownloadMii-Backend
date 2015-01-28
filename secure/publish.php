@@ -185,7 +185,7 @@
 				}
 				
 				addOption(subCategorySelectElement, 'Loading subcategories...', '');
-				httpRequest.open('GET', '/api/categories/' + categorySelectElement.options[categorySelectElement.selectedIndex].text, false);
+				httpRequest.open('GET', '/newapi/categories/' + categorySelectElement.options[categorySelectElement.selectedIndex].text, false);
 				httpRequest.send();
 			}
 		}
