@@ -73,9 +73,6 @@
 	
 	switch (strtolower($topLevelRequest)) {
 		case 'apps':
-			//sendResponseCodeAndExitIfTrue(count($param) < 2, 400);
-			//$secondLevelRequest = $param[1];
-			
 			$queryStringParts = array_change_key_case($_GET, CASE_LOWER);
 			
 			$mysqlConn = connectToDatabase();
@@ -88,7 +85,7 @@
 				$bindParamTypes .= 'sss';
 				array_push($bindParamArgs, $queryStringParts['find']);
 				array_push($bindParamArgs, $queryStringParts['find']);
-				array_push($bindParamArgs, $queryStringParts['find']);
+				array_push($bindParamArgs, '%' . $queryStringParts['find'] . '%');
 				
 				$mysqlQuery .= ' AND (MATCH(app.name) AGAINST(? WITH QUERY EXPANSION)
 									OR MATCH(app.description) AGAINST(? WITH QUERY EXPANSION)
@@ -153,89 +150,6 @@
 			header('Content-Length: ' . strlen($data));
 			print($data);
 			
-			/*switch (strtolower($secondLevelRequest)) {
-				case 'bydev':
-					$mysqlQuery .= ' AND user.nick = ? ORDER BY appver.versionId DESC';
-					$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, $param[2], 's', [$param[2]]);
-					header('Content-Length: ' . strlen($data));
-					print($data);
-					break;
-				
-				case 'find':
-					if (count($param) > 2) {
-						
-						$bindParamTypes = 'sss';
-						$bindParamArgs = array($param[2], $param[2], $param[2]);
-						
-						$mysqlQuery .= ' AND (MATCH(app.name) AGAINST(? WITH QUERY EXPANSION)
-											OR MATCH(app.description) AGAINST(? WITH QUERY EXPANSION)
-											OR user.nick LIKE ?)';
-						
-						if (count($param) > 3) {
-							$bindParamTypes .= 's';
-							array_push($bindParamArgs, $param[3]);
-							$mysqlQuery .= ' AND maincat.name = ?';
-							
-							if (count($param) > 4) {
-								$bindParamTypes .= 's';
-								array_push($bindParamArgs, $param[4]);
-								$mysqlQuery .= ' AND subcat.name = ?';
-							}
-						}
-						
-						$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Search', $bindParamTypes, $bindParamArgs);
-						header('Content-Length: ' . strlen($data));
-						print($data);
-					}
-					else {
-						echo 'Error: incorrect use of API!';
-					}
-					break;
-				
-				case 'topdownloadedapps':
-				case 'topdownloadedgames':
-					//Ask for only apps/games depending on request
-					if ($secondLevelRequest == 'TopDownloadedApps') {
-						$mysqlQuery .= ' AND maincat.name != "Games"';
-					}
-					else {
-						$mysqlQuery .= ' AND maincat.name = "Games"';
-					}
-					
-					$mysqlQuery .= ' ORDER BY app.downloads DESC LIMIT 10'; //Select top 10 downloaded apps/games
-					$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps');
-					header('Content-Length: ' . strlen($data));
-					print($data);
-					break;
-					
-				case 'staffpicks':
-					# code...
-					echo "Error: Not implemented!";
-					break;
-				
-				case 'applications':
-					$bindParamTypes = null;
-					$bindParamArgs = null;
-					
-					//Category query appending
-					if (count($param) > 2) {
-						$bindParamTypes = 's';
-						$bindParamArgs = array($param[2]);
-						$mysqlQuery .= ' AND maincat.name = ?';
-						
-						if (count($param) > 3) {
-							$bindParamTypes .= 's';
-							array_push($bindParamArgs, $param[3]);
-							$mysqlQuery .= ' AND subcat.name = ?';
-						}
-					}
-					
-					$mysqlQuery .= ' ORDER BY appver.versionId DESC';
-					$data = getJSONFromSQLQuery($mysqlConn, $mysqlQuery, 'Apps', $bindParamTypes, $bindParamArgs);
-					header('Content-Length: ' . strlen($data));
-					print($data);
-					break;
-			}*/
 			$mysqlConn->close();
 			break;
 		
