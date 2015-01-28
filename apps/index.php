@@ -48,6 +48,12 @@
 			});
 		}
 		
+		var searchAndPrintApps = function(searchString) {
+			$.getJSON('/newapi/apps?find=' + searchString, function(data) {
+				populateAppContainer(data.Apps);
+			});
+		}
+		
 		var printDefaultApps = function() {
 			$.getJSON('/newapi/apps', function(data) {
 				populateAppContainer(data.Apps);
@@ -56,9 +62,7 @@
 		
 		$('#searchbutton').on('click', function() {
 			if ($('#searchtext').val() !== '') {
-				$.getJSON('/newapi/apps?find=' + $('#searchtext').val(), function(data) {
-					populateAppContainer(data.Apps);
-				});
+				searchAndPrintApps($('#searchtext').val());
 			}
 			else {
 				printDefaultApps();
@@ -71,7 +75,14 @@
 			$('#searchtext').val('');
 		});
 		
-		printDefaultApps();
+		var params = getURLParams();
+		if ('find' in params) {
+			$('#searchtext').val(params['find']);
+			searchAndPrintApps(params['find']);
+		}
+		else {
+			printDefaultApps();
+		}
 	}
 	</script>
 <?php		

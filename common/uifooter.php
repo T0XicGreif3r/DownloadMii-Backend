@@ -65,6 +65,7 @@
 		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/js/bootstrap-filestyle.min.js"> </script>
 		<script type="text/javascript" src="/js/smooth-scroll.js"></script>
+		<script type="text/javascript" src="/js/common.js"></script>
 		<script>
 			smoothScroll.init({
 				speed: 500, // Integer. How fast to complete the scroll in milliseconds
