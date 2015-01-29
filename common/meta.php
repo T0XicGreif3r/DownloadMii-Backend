@@ -14,7 +14,7 @@
 	  "url": "https://www.downloadmii.com/",
 	  "potentialAction": {
 		"@type": "SearchAction",
-		"target": "https://downloadmii.com/apps?find={search_term_string}",
+		"target": "https://www.downloadmii.com/apps?find={search_term_string}",
 		"query-input": "required name=search_term_string"
 	  }
 	}
