@@ -3,7 +3,7 @@
 <meta name="keywords" content="DownloadMii, Nintendo 3DS Homebrew, Homebrew Browser, 3ds, filfat, Wii U Homebrew" />
 <meta name="author" CONTENT="DownloadMii Team">
 <meta name="google-site-verification" content="oUzBcLbkKoA1gb5G8ZWgzzLR_LmIMFa0F8gsCH39LRc" />
-<meta name="msvalidate.01" content="-" />
+<meta name="msvalidate.01" content="5F5165B227A54717CAF54D2E5DB6DE79" />
 <link rel="alternate" href="downloadmii.com" hreflang="en-us">
 <link rel="alternate" href="downloadmii.com" hreflang="en">
 <meta charset="utf-8" />
