@@ -41,7 +41,8 @@ CREATE TABLE apps(
 	publishstate TINYINT NOT NULL DEFAULT 0,
 	failpublishmessage VARCHAR(24) NULL,
 	
-	FULLTEXT(name, description),
+	FULLTEXT(name),
+	FULLTEXT(description),
 
 	FOREIGN KEY (publisher) REFERENCES users(userId),
 	FOREIGN KEY (version) REFERENCES appversions(versionId),
