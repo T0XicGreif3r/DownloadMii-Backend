@@ -9,10 +9,11 @@
 ?>
 <html>
 	<head>
-		<link rel="shortcut icon" type="image/ico" href="https://www.downloadmii.com/favicon.ico" />
+		<?php
+			require_once('/common/meta.php');
+		?>
 		<title><?php if (isset($title)) echo $title . ' - '; ?> DownloadMii</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-		<link href="/css/mainStruct.css" rel="stylesheet"/>
 		<style>
 			header {
 				margin-bottom: 75px;
