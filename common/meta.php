@@ -7,6 +7,18 @@
 <link rel="alternate" href="downloadmii.com" hreflang="en-us">
 <link rel="alternate" href="downloadmii.com" hreflang="en">
 <meta charset="utf-8" />
+<script type="application/ld+json">
+	{
+	  "@context": "http://schema.org",
+	  "@type": "WebSite",
+	  "url": "https://www.downloadmii.com/",
+	  "potentialAction": {
+		"@type": "SearchAction",
+		"target": "https://downloadmii.com/apps?find={search_term_string}",
+		"query-input": "required name=search_term_string"
+	  }
+	}
+</script>
 
 <!-- METADATA -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
