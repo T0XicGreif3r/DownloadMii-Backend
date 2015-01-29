@@ -57,18 +57,7 @@
 		<!-- /HOME -->
 		
 		<!-- SEO -->
-		<script type="application/ld+json">
-		{
-		  "@context": "http://schema.org",
-		  "@type": "WebSite",
-		  "url": "http://downloadmii.com/",
-		  "potentialAction": {
-			"@type": "SearchAction",
-			"target": "https://downloadmii.com/apps?find={search_term_string}",
-			"query-input": "required name=search_term_string"
-		  }
-		}
-		</script>
+		
 		<!-- /SEO -->
 <?php
 	require_once('/common/uifooter.php');
