@@ -26,7 +26,7 @@
 <link rel="shortcut icon" type="image/ico" href="https://www.downloadmii.com/favicon.ico" />
 
 <!-- STYLESHEETS -->
-<link href="/css/bootstrap.css" rel="stylesheet"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 <link href="/css/mainStruct.css" rel="stylesheet"/>
 
 <!-- IN CASE OF IE 9 -->
