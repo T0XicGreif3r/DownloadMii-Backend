@@ -10,7 +10,7 @@
 <html>
 	<head>
 		<?php
-			require_once('\common\meta.php');
+			require_once($_SERVER['DOCUMENT_ROOT'] . '\common\meta.php');
 		?>
 		<title><?php if (isset($title)) echo $title . ' - '; ?> DownloadMii</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
