@@ -28,11 +28,11 @@
 			$('#appcontainer').empty();
 			dataSource.forEach(function(element) {
 				$('#appcontainer').append('<div class="well clearfix">' +
-											'<div class="app-vertical-center-outer pull-left">' +
-												'<img class="app-icon" src="' + (element.largeicon !== '' ? element.largeicon : '/img/no_icon.png') + '" />' +
+											'<div itemscope itemtype="http://schema.org/SoftwareApplication" class="app-vertical-center-outer pull-left">' +
+												'<img itemprop="image" class="app-icon" src="' + (element.largeicon !== '' ? element.largeicon : '/img/no_icon.png') + '" />' +
 												'<div class="pull-right">' +
-													'<h4 class="app-vertical-center-inner">' +
-														element.name + ' ' + element.version + ' by <span style="font-style: italic;">' + element.publisher + '</span>' +
+													'<h4 class="app-vertical-center-inner"><span itemprop="name">' +
+														element.name + '</span> <span itemprop="softwareVersion">' + element.version + '</span> by <span itemprop="publisher" itemscope itemtype="http://schema.org/Organization" style="font-style: italic;">' + element.publisher + '</span>' +
 													'</h4>' +
 												'</div>' +
 											'</div>' +
