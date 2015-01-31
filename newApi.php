@@ -82,13 +82,11 @@
 			$bindParamArgs = array();
 			
 			if (isset($queryStringParts['find'])) {
-				$bindParamTypes .= 'sss';
-				array_push($bindParamArgs, $queryStringParts['find']);
+				$bindParamTypes .= 'ss';
 				array_push($bindParamArgs, $queryStringParts['find']);
 				array_push($bindParamArgs, '%' . $queryStringParts['find'] . '%');
 				
-				$mysqlQuery .= ' AND (MATCH(app.name) AGAINST(? WITH QUERY EXPANSION)
-									OR MATCH(app.description) AGAINST(? WITH QUERY EXPANSION)
+				$mysqlQuery .= ' AND (MATCH(app.name, app.description) AGAINST(? WITH QUERY EXPANSION)
 									OR user.nick LIKE ?)';
 			}
 			
@@ -141,6 +139,12 @@
 					default:
 						$mysqlQuery .= ' ORDER BY appver.versionId DESC';
 				}
+			}
+			else if (isset($queryStringParts['find'])) {
+				$bindParamTypes .= 's';
+				array_push($bindParamArgs, $queryStringParts['find']);
+				
+				$mysqlQuery .= ' ORDER BY MATCH(app.name, app.description) AGAINST(? WITH QUERY EXPANSION) DESC';
 			}
 			else {
 				$mysqlQuery .= ' ORDER BY appver.versionId DESC';

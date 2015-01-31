@@ -27,7 +27,7 @@ some of the following things are horrebly outdated please take a look at api.php
 - [x] Allow the "developer" role to publish their application manually at any time they want.
 - [ ] Public page that displays all the current apps (paged with 50 apps per page) and allows the user to search for apps.
 - [ ] Automaticaly delete unused 3dsx/smdh files.
-- [ ] App data support, allow the user to attach an zip file that inside the app will get extracted inside the same dir as the 3dsx file.
+- [x] App data support, allow the user to attach an zip file that inside the app will get extracted inside the same dir as the 3dsx file.
 - etc
 
 

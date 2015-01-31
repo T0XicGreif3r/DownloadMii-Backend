@@ -105,8 +105,7 @@
 						$bindParamTypes = 'sss';
 						$bindParamArgs = array($param[2], $param[2], $param[2]);
 						
-						$mysqlQuery .= ' AND (MATCH(app.name) AGAINST(? WITH QUERY EXPANSION)
-											OR MATCH(app.description) AGAINST(? WITH QUERY EXPANSION)
+						$mysqlQuery .= ' AND (MATCH(app.name, app.description) AGAINST(? WITH QUERY EXPANSION)
 											OR user.nick LIKE ?)';
 						
 						if (count($param) > 3) {
