@@ -1,5 +1,5 @@
 <!-- SEO -->
-<meta name="description" content="DownloadMii is an online marketplace for Homebrew applications. Its also 100% free fo charge!" />
+<meta name="description" content="DownloadMii is an online marketplace for homebrew applications. It's 100% free of charge!" />
 <meta name="keywords" content="DownloadMii, Nintendo 3DS Homebrew, Homebrew Browser, 3ds, filfat, Wii U Homebrew" />
 <meta name="author" CONTENT="DownloadMii Team">
 <meta name="google-site-verification" content="oUzBcLbkKoA1gb5G8ZWgzzLR_LmIMFa0F8gsCH39LRc" />
