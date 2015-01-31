@@ -1,7 +1,6 @@
-﻿<!DOCTYPE html>
-
+<!DOCTYPE html>
 <html>
-<head runat="server">
+<head>
 	<?php
 		require_once('/common/meta.php');
 	?>
