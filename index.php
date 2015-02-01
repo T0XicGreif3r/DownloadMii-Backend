@@ -29,6 +29,7 @@
 			  <ul class="nav navbar-nav navbar-right">
 				<li><a data-scroll href="#HOMEwp">HOME</a></li>
 				<li><a href="/apps">BROWSE APPS</a></li>
+				<li><a href="/blog">BLOG</a></li>
 				<!--li><a data-scroll href="#ABOUTwp">ABOUT</a></li-->
 				<li><a data-scroll href="#DOWNLOADwp">DOWNLOAD</a></li>
 				<li><a href="/donate">DONATE</a></li>
