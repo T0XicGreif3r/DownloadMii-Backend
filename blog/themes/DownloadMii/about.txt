@@ -1,0 +1,5 @@
+Theme name:    DownloadMii
+Description:   The official DownloadMii theme.
+Author name:   Filiph Sandström
+Author site:   http://filfatstudios.com
+License:       http://filfatstudios.com/license
