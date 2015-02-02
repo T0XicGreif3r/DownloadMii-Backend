@@ -13,6 +13,7 @@
 			<?php
 				}
 			?>
+			<div class="addthis_sharing_toolbox"></div>
 			<br />
 			<article>
 				<?php echo article_markdown(); ?>
