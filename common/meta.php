@@ -87,6 +87,9 @@ catch(e){window.attachEvent("onload", $buo_f)}
 <meta property="og:url" content="https://www.downloadmii.com"/>
 <meta name="twitter:title" content="DownloadMii">
 
+<!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4db3337339acc1fc" async="async"></script>
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
