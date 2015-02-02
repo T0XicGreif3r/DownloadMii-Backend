@@ -6,7 +6,7 @@
 				Posted: <time><?php echo article_date(); ?></time> By <?php echo article_author('real_name'); ?>
 			</h3>
 			<?php
-				$pageTitle = article_title() + ' - DownloadMii Blog';
+				var $pageTitle = article_title() . ' - DownloadMii Blog';
 				$buffer=ob_get_contents();
 				ob_end_clean();
 				$buffer=str_replace("%TITLE%", $pageTitle,$buffer);
