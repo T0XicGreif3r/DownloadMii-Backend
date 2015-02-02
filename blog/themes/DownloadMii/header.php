@@ -5,7 +5,19 @@
 			require_once($_SERVER['DOCUMENT_ROOT'] . '\common\meta.php');
 		?>
 		<link rel="stylesheet" href="<?php echo theme_url('/css/style.css'); ?>">
-		<title>DownloadMii - Blog</title>
+		<?php
+		$url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+		if(false !== strpos($url,'posts')){
+		?>
+			<title>%TITLE%</title>
+		<?php
+		}
+		else{
+		?>
+			<title>DownloadMii - Blog</title>
+		<?php
+		}
+		?>
 
 		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
