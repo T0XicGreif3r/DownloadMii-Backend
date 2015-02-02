@@ -36,7 +36,7 @@
 		<div class="text-center">
 			<?php
 			$requestUri = strtok(getenv('REQUEST_URI'), '?');
-			$param = explode('/error/', rtrim(substr($requestUri, strlen('/index.php/')), '/')); //All URL "directories" after /api/ -> array
+			$param = explode('/', rtrim(substr($requestUri, strlen('/error/')), '/')); //All URL "directories" after /api/ -> array
 			$topLevelRequest = $param[0];
 			http_response_code($topLevelRequest);
 			switch ($topLevelRequest) {
