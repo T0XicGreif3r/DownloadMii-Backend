@@ -57,7 +57,7 @@
 		</div>
 		<footer>
 			<div class="content">
-				&copy;filfat Studios 2014-2015; Website designed by <a href="http://www.filfatstudios.com">filfat Studio's</a>
+				&copy;Filiph Sandstr&ouml;m 2014-2015; Website designed by <a href="http://www.filfatstudios.com">Filiph Sandstr&ouml;m</a>
 			</div>
 		</footer>
 		<!-- SCRIPTS  -->
