@@ -6,7 +6,7 @@
 	
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\user.php');
 	header('Cache-Control: private');
-?>
+?><!DOCTYPE html>
 <html>
 	<head>
 		<?php

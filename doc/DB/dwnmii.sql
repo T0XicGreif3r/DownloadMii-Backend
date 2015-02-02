@@ -40,9 +40,7 @@ CREATE TABLE apps(
 	downloads INT NOT NULL DEFAULT 0,
 	publishstate TINYINT NOT NULL DEFAULT 0,
 	failpublishmessage VARCHAR(24) NULL,
-	screenshot1 VARCHAR(255) NULL,
-	screenshot2 VARCHAR(255) NULL,
-	screenshot3 VARCHAR(255) NULL,
+	screenshotCollection INT NULL,
 	
 	FULLTEXT(name),
 	FULLTEXT(description),
@@ -50,7 +48,23 @@ CREATE TABLE apps(
 	FOREIGN KEY (publisher) REFERENCES users(userId),
 	FOREIGN KEY (version) REFERENCES appversions(versionId),
 	FOREIGN KEY (category) REFERENCES categories(categoryId),
-	FOREIGN KEY (subcategory) REFERENCES categories(categoryId)
+	FOREIGN KEY (subcategory) REFERENCES categories(categoryId),
+	FOREIGN KEY (screenshotCollection) REFERENCES screenshotcollections(collectionId)
+);
+
+CREATE TABLE screenshotcollections(
+	collectionId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	appGuid CHAR(36) NOT NULL,
+	
+	FOREIGN KEY (appGuid) REFERENCES apps(guid)
+);
+
+CREATE TABLE screenshots(
+	screenshotId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	collection INT NOT NULL,
+	url VARCHAR(255) NOT NULL,
+	
+	FOREIGN KEY (collection) REFERENCES screenshotcollections(collectionId)
 );
 
 CREATE TABLE ratings(
