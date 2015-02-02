@@ -16,7 +16,7 @@
 		<?php if(comments_open()): ?>
 		<section class="comments">
 			<?php if(has_comments()): ?>
-			<h3>Comments (<?php echo article_total_comments(); ?>)</h3>
+			<h3>Comments</h3>
 			<ul class="commentlist">
 				<?php $i = 0; while(comments()): $i++; ?>
 				<li class="comment" id="comment-<?php echo comment_id(); ?>">
