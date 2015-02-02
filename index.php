@@ -45,7 +45,7 @@
 		  <div class="container">
 			<div class="row">
 			  <div class="col-sm-12 text-center">
-				<img class="Product" src="img/Logo.png" alt="" />
+				<img class="Product" src="img/Logo.png" alt="DownloadMii logo" />
 				<p class="lead" style="margin-top:75px;">
 					DownloadMii is an Online marketplace for Nintendo 3DS homebrew applications and its 100% free of charge for the end-user. It is currently under development, and the Github project can be found <a href="https://github.com/DownloadMii/DownloadMii">here</a>!<br />
 					You can read about the latest news and/or app releases <a href="https://www.downloadmii.com/blog/">here</a>.<br />
