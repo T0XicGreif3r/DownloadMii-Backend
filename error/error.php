@@ -25,7 +25,6 @@
 				<div class="collapse navbar-collapse" id="navbar-collapse-main">
 				  <ul class="nav navbar-nav navbar-right">
 					<li><a href="/">HOME</a></li>
-					<!--li><a data-scroll href="#ABOUTwp">ABOUT</a></li-->
 					<li><a data-scroll href="/#DOWNLOADwp">DOWNLOAD</a></li>
 					<li><a href="/donate">DONATE</a></li>
 					<li><a href="/secure/myapps.php">USER CP</a></li> <!-- ToDo: redirect to user CP instead of "my apps" list -->
@@ -39,6 +38,7 @@
 			$requestUri = strtok(getenv('REQUEST_URI'), '?');
 			$param = explode('/error', rtrim(substr($requestUri, strlen('/error.php/')), '/')); //All URL "directories" after /api/ -> array
 			$topLevelRequest = $param[0];
+			http_response_code($topLevelRequest);
 			switch ($topLevelRequest) {
 				case '404':
 			?>
@@ -58,6 +58,7 @@
 				<h4>Unknown error!</h4>
 			<?php
 			}
+			echo $topLevelRequest;
 			?>
 		</div>
 <?php
