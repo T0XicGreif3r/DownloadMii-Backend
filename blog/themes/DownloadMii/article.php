@@ -3,15 +3,12 @@
 		<section class="content wrap" id="article-<?php echo article_id(); ?>">
 			<h1><?php echo article_title(); ?></h1>
 			<h3>
-				Posted: <time><?php echo article_date(); ?></time>
+				Posted: <time><?php echo article_date(); ?></time> By <?php echo article_author('real_name'); ?>
 			</h3>
 			<br />
 			<article>
 				<?php echo article_markdown(); ?>
 			</article>
-			<h3>
-				By <?php echo article_author('real_name'); ?>
-			</h3
 		</section>
 		<?php if(comments_open()): ?>
 		<section class="comments">
