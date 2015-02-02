@@ -17,7 +17,7 @@
 			<br />
 			<article>
 				<?php echo article_markdown(); ?>
-				<a href="https://www.downloadmii.com">Return to DownloadMii's homepage <\a>
+				<a href="https://www.downloadmii.com">Return to DownloadMii's homepage </a>
 			</article>
 		</section>
 		<?php if(comments_open()): ?>
