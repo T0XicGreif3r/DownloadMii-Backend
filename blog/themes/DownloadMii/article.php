@@ -5,6 +5,13 @@
 			<h3>
 				Posted: <time><?php echo article_date(); ?></time> By <?php echo article_author('real_name'); ?>
 			</h3>
+			<?php
+				if(article_custom_field('appnameField1', 'null') != 'null'){
+			?>
+				<a href="https://www.downloadmii.com/apps/<?php echo article_custom_field('appnameField1_GUID')?>"><?php echo article_custom_field('appnameField1')?></a>
+			<?php
+				
+			?>
 			<br />
 			<article>
 				<?php echo article_markdown(); ?>
