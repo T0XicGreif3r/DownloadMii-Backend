@@ -1,6 +1,5 @@
 Options +FollowSymLinks +ExecCGI
 
 RewriteEngine On
-RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.gif|\.jpeg|\.bmp)$
 RewriteRule ^api/.*  ./api.php [QSA]
 RewriteRule ^newapi/.*  ./newapi.php [QSA]

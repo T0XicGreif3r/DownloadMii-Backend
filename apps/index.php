@@ -3,11 +3,13 @@
 		DownloadMii App List Page (all published apps)
 	*/
 	
+	//TODO: Clean code...
+	
 	$title = 'Browse Apps';
 	require_once('../common/uiheader.php');
 	
 	$mysqlConn = connectToDatabase();
-	$allApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.publisher, app.description, app.downloads, app.publishstate, app.failpublishmessage, user.nick AS publisher, appver.number AS version, appver.largeIcon FROM apps app
+	$allApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.publisher, app.description, app.downloads, app.publishstate, user.nick AS publisher, appver.number AS version, appver.largeIcon FROM apps app
 													LEFT JOIN users user ON user.userId = app.publisher
 													LEFT JOIN appversions appver ON appver.versionId = app.version
 													WHERE app.publishstate = 1 ORDER BY appver.versionId DESC');
@@ -26,7 +28,7 @@
 	
 	<div id="appcontainer">
 <?php
-	foreach ($allApps as $app) { //ToDo: update based on search via Ajax
+	foreach ($allApps as $app) {
 ?>
 
 		<div class="well clearfix">
@@ -34,10 +36,12 @@
 				<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
 				<div class="pull-right">
 					<h4 class="app-vertical-center-inner">
+						<a href="/apps/<?php echo $app['guid'] ?>" style="color: black;">
 <?php
-			echo escapeHTMLChars($app['name'] . ' ' . $app['version']) . ' by <span style="font-style: italic;">' . $app['publisher'] . '</span>';
+		echo '<span itemprop="name">' . escapeHTMLChars($app['name']) . '</span> <span itemprop="softwareVersion">' . escapeHTMLChars($app['version']) . '</span> by <span itemprop="publisher" itemscope itemtype="http://schema.org/Organization" style="font-style: italic;">' . $app['publisher'] . '</span>';
 ?>
 
+						</a>
 					</h4>
 				</div>
 			</div>
@@ -48,7 +52,7 @@
 			</div>
 			<div class="clear-float" style="padding-top: 8px">
 <?php
-			echo escapeHTMLChars($app['description']);
+		echo escapeHTMLChars($app['description']);
 ?>
 
 			</div>
@@ -68,8 +72,10 @@
 											'<div itemscope itemtype="http://schema.org/SoftwareApplication" class="app-vertical-center-outer pull-left">' +
 												'<img itemprop="image" class="app-icon" src="' + (element.largeicon !== '' ? element.largeicon : '/img/no_icon.png') + '" />' +
 												'<div class="pull-right">' +
-													'<h4 class="app-vertical-center-inner"><span itemprop="name">' +
-														element.name + '</span> <span itemprop="softwareVersion">' + element.version + '</span> by <span itemprop="publisher" itemscope itemtype="http://schema.org/Organization" style="font-style: italic;">' + element.publisher + '</span>' +
+													'<h4 class="app-vertical-center-inner">' +
+														'<a href="/apps/' + element.guid + '" style="color: black;">' +
+															element.name + ' ' + element.version + ' by <span style="font-style: italic;">' + element.publisher + '</span>' +
+														'</a>' +
 													'</h4>' +
 												'</div>' +
 											'</div>' +
@@ -110,6 +116,12 @@
 		$('#resetbutton').on('click', function() {
 			printDefaultApps();
 			$('#searchtext').val('');
+		});
+		
+		$('#searchtext').on('keypress', function(e) {
+			if (e.which === 13) {
+				$('#searchbutton').click();
+			}
 		});
 		
 		var params = getURLParams();

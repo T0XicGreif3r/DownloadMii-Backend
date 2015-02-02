@@ -10,6 +10,26 @@
 	
 	use WindowsAzure\Common\ServicesBuilder;
 	
+	class blob {
+		public $md5;
+		public $name;
+		public $url;
+		public $fileHandle;
+		
+		public function upload($blobRestProxy, $container, $filePath) {
+			$this->md5 = md5_file($filePath); //Get file hash
+			$this->name = generateRandomString(); //Generate file blob name
+			$this->url = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . $container . '/' . $this->name; //Get Azure blob URL
+			
+			$this->fileHandle = fopen($filePath, 'r');
+			$blobRestProxy->createBlockBlob($container, $this->name, $fileHandle); //Upload blob to Azure Blob Service
+		}
+		
+		public function closeFileHandle() {
+			fclose($this->fileHandle);
+		}
+	}
+	
 	if (isset($_POST['guidid'], $_SESSION['publish_app_guid' . $_POST['guidid']])) {
 		$guid = $_SESSION['publish_app_guid' . $_POST['guidid']]; //Get GUID
 		
@@ -50,13 +70,13 @@
 				$isDeveloper = $_SESSION['user_role'] > 1;
 				$updatingApp = isset($_SESSION['user_app_version' . $guid]);
 				
+				$updatingAppData = is_uploaded_file($appDataPath);
 				if (!$updatingApp) {
 					throwExceptionIfTrue(!is_uploaded_file($app3dsxPath) || !is_uploaded_file($appSmdhPath), 'Please upload the required files.');
 				}
 				else {
 					$updating3dsx = is_uploaded_file($app3dsxPath);
 					$updatingSmdh = is_uploaded_file($appSmdhPath);
-					$updatingAppData = is_uploaded_file($appDataPath);
 					
 					//Check that if 3dsx/appdata is changed, the version also is
 					throwExceptionIfTrue($_SESSION['user_app_version' . $guid] === $_POST['version'] && ($updating3dsx || $updatingAppData), 'Please also update the version number when uploading a new 3dsx/appdata file.');
@@ -80,52 +100,41 @@
 					$blobRestProxy = ServicesBuilder::getInstance()->createBlobService(getConfigValue('azure_connection_string'));
 				}
 				
+				$app3dsxBlob = new blob();
 				if (!$updatingApp || $updating3dsx) {
-					$app3dsxMD5 = md5_file($app3dsxPath); //Get file hash
-					$app3dsxBlobName = generateRandomString(); //Generate file blob name
-					$app3dsxBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_3dsx') . '/' . $app3dsxBlobName; //Get Azure blob URL
-					
-					$app3dsxFile = fopen($app3dsxPath, 'r');
-					$blobRestProxy->createBlockBlob(getConfigValue('azure_container_3dsx'), $app3dsxBlobName, $app3dsxFile); //Upload blob to Azure Blob Service
-					fclose($app3dsxFile);
+					$app3dsxBlob->upload($blobRestProxy, getConfigValue('azure_container_3dsx'), $app3dsxPath);
+					$app3dsxBlob->closeFileHandle();
 				}
 				
+				$appSmdhBlob = new blob();
+				$appIconBlob = new blob();
 				if (!$updatingApp || $updatingSmdh) {
-					$appSmdhMD5 = md5_file($appSmdhPath);
-					$appSmdhBlobName = generateRandomString();
-					$appSmdhBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_smdh') . '/' . $appSmdhBlobName;
-					
-					$appSmdhFile = fopen($appSmdhPath, 'r');
-					$blobRestProxy->createBlockBlob(getConfigValue('azure_container_smdh'), $appSmdhBlobName, $appSmdhFile);
+					$appSmdhBlob->upload($blobRestProxy, getConfigValue('azure_container_smdh'), $appSmdhPath);
 					
 					//Upload large PNG icon (we don't include the small one because it's often improperly encoded(?))
-					$smdhData = new smdh($appSmdhFile);
+					$smdhData = new smdh($appSmdhBlob->fileHandle);
 					
-					$appPNG = tmpfile(); //Create temporary file to save PNG
-					imagepng($smdhData->getLargeIcon(), stream_get_meta_data($appPNG)['uri']);
+					$appIcon = tmpfile(); //Create temporary file to save PNG
+					imagepng($smdhData->getLargeIcon(), stream_get_meta_data($appIcon)['uri']);
 					
-					$appPNGBlobName = generateRandomString();
-					$appPNGBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_largeicon') . '/' . $appPNGBlobName;
-					$blobRestProxy->createBlockBlob(getConfigValue('azure_container_largeicon'), $appPNGBlobName, $appPNG);
+					$appIconBlob->upload($blobRestProxy, getConfigValue('azure_container_largeicon'), stream_get_meta_data($appIcon)['uri']);
 					
-					fclose($appPNG);
-					fclose($appSmdhFile);
+					$appIconBlob->closeFileHandle();
+					$appSmdhBlob->closeFileHandle();
 					$smdhData = null;
 				}
 				
-				if (is_uploaded_file($appDataPath)) {
-					$appDataMD5 = md5_file($appDataPath);
-					$appDataBlobName = generateRandomString();
-					$appDataBlobURL = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . getConfigValue('azure_container_appdata') . '/' . $appDataBlobName;
-					
-					$appDataFile = fopen($appDataPath, 'r');
-					$blobRestProxy->createBlockBlob(getConfigValue('azure_container_appdata'), $appDataBlobName, $appDataFile);
-					fclose($appDataFile);
+				$appDataBlob = new blob();
+				if ($updatingAppData) {
+					$appDataBlob->upload($blobRestProxy, getConfigValue('azure_container_appdata'), $appDataPath);
+					$appDataBlob->closeFileHandle();
 				}
 				else if (!$updatingApp) {
-					$appDataBlobURL = null;
-					$appDataMD5 = null;
+					$appDataBlob->url = null;
+					$appDataBlob->md5 = null;
 				}
+				
+				//TODO: Allow screenshot uploads
 				
 				if ($updatingApp) {
 					$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.3dsx, appver.smdh, appver.appdata, appver.largeIcon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM appversions appver
@@ -138,27 +147,27 @@
 					}
 					if (!$updatingSmdh) {
 						//Get current smdh URL and MD5, plus icon URL
-						$appSmdhBlobURL = $currentVersion['smdh'];
-						$appSmdhMD5 = $currentVersion['smdh_md5'];
-						$appPNGBlobURL = $currentVersion['largeIcon'];
+						$appSmdhBlob->url = $currentVersion['smdh'];
+						$appSmdhBlob->md5 = $currentVersion['smdh_md5'];
+						$appIconBlob->url = $currentVersion['largeIcon'];
 					}
 					
 					if (!$updating3dsx && $updatingAppData) {
 						//Get current 3dsx URL and MD5
-						$app3dsxBlobURL = $currentVersion['3dsx'];
-						$app3dsxMD5 = $currentVersion['3dsx_md5'];
+						$app3dsxBlob->url = $currentVersion['3dsx'];
+						$app3dsxBlob->md5 = $currentVersion['3dsx_md5'];
 					}
 					else if (!$updatingAppData && $updating3dsx) {
 						//Get current appdata URL and MD5
-						$appDataBlobURL = $currentVersion['appdata'];
-						$appDataMD5 = $currentVersion['appdata_md5'];
+						$appDataBlob->url = $currentVersion['appdata'];
+						$appDataBlob->md5 = $currentVersion['appdata_md5'];
 					}
 				}
 				
 				if (!$updatingApp || $updating3dsx || $updatingAppData) {
 					//Insert app version
 					$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO appversions (appGuid, number, 3dsx, smdh, appdata, largeIcon, 3dsx_md5, smdh_md5, appdata_md5)
-															VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 'sssssssss', [$guid, $appVersion, $app3dsxBlobURL, $appSmdhBlobURL, $appDataBlobURL, $appPNGBlobURL, $app3dsxMD5, $appSmdhMD5, $appDataMD5], true);
+															VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 'sssssssss', [$guid, $appVersion, $app3dsxBlob->url, $appSmdhBlob->url, $appDataBlob->url, $appIconBlob->url, $app3dsxBlob->md5, $appSmdhBlob->md5, $appDataBlob->md5], true);
 					$versionId = $stmt->insert_id;
 					$stmt->close();
 				}
@@ -166,7 +175,7 @@
 					//Update current app version with smdh URL and MD5
 					$stmt = executePreparedSQLQuery($mysqlConn, 'UPDATE appversions appver INNER JOIN apps app ON appver.versionId = app.version
 																	SET versionId = app.version, smdh = ?, largeIcon = ?, smdh_md5 = ?
-																	WHERE app.guid = ? AND appver.versionId = app.version', 'ssss', [$guid, $appSmdhBlobURL, $appPNGBlobURL, $appSmdhMD5]);
+																	WHERE app.guid = ? AND appver.versionId = app.version', 'ssss', [$guid, $appSmdhBlob->url, $appIconBlob->url, $appSmdhBlob->md5]);
 				}
 				
 				if (!$updatingApp) {
