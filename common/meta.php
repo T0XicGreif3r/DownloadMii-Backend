@@ -87,7 +87,6 @@ catch(e){window.attachEvent("onload", $buo_f)}
 <meta property="og:url" content="https://www.downloadmii.com"/>
 <meta name="twitter:title" content="DownloadMii">
 
-<!-- Go to www.addthis.com/dashboard to customize your tools -->
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4db3337339acc1fc" async="async"></script>
 
 <script>
