@@ -45,9 +45,6 @@ Column|Description|
 `downloads` | Download count |
 `publishstate` | Publish state: 0 - pending approval, 1 - published, 2 - rejected, 3 - hidden |
 `failpublishmessage` | If app rejected, reason why |
-`screenshot1` | Screenshot 1 url |
-`screenshot2` | Screenshot 2 url |
-`screenshot3` | Screenshot 3 url |
 
 ##Ratings
 Column|Description|
