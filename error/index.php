@@ -38,7 +38,7 @@
 			$requestUri = strtok(getenv('REQUEST_URI'), '?');
 			$param = explode('/', rtrim(substr($requestUri, strlen('/error/')), '/')); //All URL "directories" after /api/ -> array
 			$topLevelRequest = $param[0];
-			http_response_code($topLevelRequest);
+			//http_response_code($topLevelRequest); //todo
 			switch ($topLevelRequest) {
 				case '404':
 			?>
