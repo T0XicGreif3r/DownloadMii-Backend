@@ -14,6 +14,7 @@
 				}
 			?>
 			<br />
+			<div class="addthis_sharing_toolbox"></div>
 			<article>
 				<?php echo article_markdown(); ?>
 			</article>
