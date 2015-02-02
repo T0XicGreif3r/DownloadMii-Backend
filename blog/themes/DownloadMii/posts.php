@@ -10,11 +10,11 @@
 					<h1>
 						<a style="color: #25A4D6 !important;" href="<?php echo article_url(); ?>" title="<?php echo article_title(); ?>"><?php echo article_title(); ?></a>
 					</h1>
-					
 					<h3>
 						Posted: <time><?php echo article_date(); ?></time>
 					</h3>
-
+					<br />
+					
 					<div class="content">
 						<?php echo article_markdown(); ?>
 					</div>
