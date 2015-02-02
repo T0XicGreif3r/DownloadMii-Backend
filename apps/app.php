@@ -25,7 +25,21 @@
 ?>
 
 	<h1 class="text-center"><?php echo $app['name']; ?></h1>
-	<h3 class="text-center"><?php echo $app['category']; if ($app['subcategory'] !== null) { echo ' <span class="glyphicon glyphicon-arrow-right" style="font-size: 20px;"></span> ' . $app['subcategory']; } ?></h1>
+	<h3 class="text-center">
+		<span id="maincat" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"<?php if ($app['subcategory'] !== null) echo ' itemref="subcat"'; ?>>
+			<span itemprop="title"><?php echo $app['category']; ?></span>
+		</span>
+<?php
+	if ($app['subcategory'] !== null) {
+		echo
+		'<span class="glyphicon glyphicon-arrow-right" style="font-size: 20px;"></span>
+		<span id="subcat" itemscope itemtype="http://data-vocabulary.org/Breadcrumb" itemprop="child">
+			<span itemprop="title">' . $app['subcategory'] . '</span>
+		</span>';
+	}
+?>
+
+	</h3>
 	<br />
 	<div id="appcontainer">
 		<div class="well clearfix">
