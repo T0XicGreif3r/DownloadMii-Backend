@@ -31,8 +31,9 @@
 				<div class="collapse navbar-collapse" id="navbar-collapse-main">
 				  <ul class="nav navbar-nav navbar-right">
 					<li><a href="/">HOME</a></li>
-					<!--li><a data-scroll href="#ABOUTwp">ABOUT</a></li-->
-					<li><a data-scroll href="/#DOWNLOADwp">DOWNLOAD</a></li>
+					<li><a href="/apps">BROWSE APPS</a></li>
+					<li><a href="/blog">BLOG</a></li>
+					<li><a data-scroll href="#DOWNLOADwp">DOWNLOAD</a></li>
 					<li><a href="/donate">DONATE</a></li>
 					<li><a href="/secure/myapps.php">USER CP</a></li> <!-- ToDo: redirect to user CP instead of "my apps" list -->
 				  </ul>
@@ -70,7 +71,7 @@
 			</div>
 			<p>Keeping the server up costs quite a bit, so does also the time we spend<br />
 			   developing this application. If you like DownloadMii consider donating<br />
-			   to help us keep DownloadMii alive! Thanks :)</p>
+			   to help keep DownloadMii alive! Thanks :)</p>
 		</div>
 <?php
 	require_once('../common/ucpfooter.php');
