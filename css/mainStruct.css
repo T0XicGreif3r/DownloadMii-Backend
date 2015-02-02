@@ -53,6 +53,9 @@ h1{
 	font-weight: 300 !important;
 	font-style: none;
 }
+section .content .wrap h1, article h1{
+	font-size: 54px;
+}
 h2{
 	font-size: 48px;
 	color: #25A4D6;
