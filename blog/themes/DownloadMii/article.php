@@ -1,4 +1,4 @@
-<?php theme_include('header'); ?>
+1<?php theme_include('header'); ?>
 	<div style="padding: 0 40px; margin-top: 65px; margin-bottom: 35px;">
 		<section class="content wrap" id="article-<?php echo article_id(); ?>">
 			<h1><?php echo article_title(); ?></h1>
@@ -17,6 +17,7 @@
 			<br />
 			<article>
 				<?php echo article_markdown(); ?>
+				<a href="https://www.downloadmii.com">Return to DownloadMii's homepage<\a>
 			</article>
 		</section>
 		<?php if(comments_open()): ?>
