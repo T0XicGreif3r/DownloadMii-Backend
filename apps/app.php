@@ -5,8 +5,7 @@
 	
 	//TODO: Add more information (screenshots, reviews, etc.)
 	
-	$title = 'Browse Apps';
-	require_once('../common/uiheader.php');
+	require_once('../common/functions.php');
 	
 	$requestUri = strtok(getenv('REQUEST_URI'), '?');
 	$appGuid = rtrim(substr($requestUri, strlen('/apps/')), '/');
@@ -22,19 +21,26 @@
 	
 	printAndExitIfTrue(count($matchingApps) !== 1, 'Invalid app GUID.');
 	$app = $matchingApps[0];
+	
+	$title = $app['name'];
+	require_once('../common/uiheader.php');
 ?>
 
 	<h1 class="text-center"><?php echo $app['name']; ?></h1>
 	<h3 class="text-center">
 		<span id="maincat" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"<?php if ($app['subcategory'] !== null) echo ' itemref="subcat"'; ?>>
-			<span itemprop="title"><?php echo $app['category']; ?></span>
+			<a itemprop="url" href="/apps/<?php echo $app['category']; ?>">
+				<span itemprop="title"><?php echo $app['category']; ?></span>
+			</a>
 		</span>
 <?php
 	if ($app['subcategory'] !== null) {
 		echo
 		'<span class="glyphicon glyphicon-arrow-right" style="font-size: 20px;"></span>
 		<span id="subcat" itemscope itemtype="http://data-vocabulary.org/Breadcrumb" itemprop="child">
-			<span itemprop="title">' . $app['subcategory'] . '</span>
+			<a itemprop="url" href="/apps/' . $app['category'] . '/' . $app['subcategory'] . '">
+				<span itemprop="title">' . $app['subcategory'] . '</span>
+			</a>
 		</span>';
 	}
 ?>
