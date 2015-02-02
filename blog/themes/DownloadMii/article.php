@@ -1,4 +1,4 @@
-1<?php theme_include('header'); ?>
+<?php ob_start(); theme_include('header'); ?>
 	<div style="padding: 0 40px; margin-top: 65px; margin-bottom: 35px;">
 		<section class="content wrap" id="article-<?php echo article_id(); ?>">
 			<h1><?php echo article_title(); ?></h1>
@@ -7,6 +7,10 @@
 			</h3>
 			<?php
 				$pageTitle = article_title() + ' - DownloadMii Blog';
+				$buffer=ob_get_contents();
+				ob_end_clean();
+				$buffer=str_replace("%TITLE%", $pageTitle,$buffer);
+				echo $buffer;
 				if(article_custom_field('appnameField1', 'null') != 'null'){
 			?>
 					App: <a href="https://www.downloadmii.com/apps/<?php echo article_custom_field('appnameField1_GUID'); ?>"><?php echo article_custom_field('appnameField1'); ?></a>
