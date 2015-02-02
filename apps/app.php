@@ -11,8 +11,8 @@
 	$appGuid = rtrim(substr($requestUri, strlen('/apps/')), '/');
 	
 	$mysqlConn = connectToDatabase();
-	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.name, app.publisher, app.description, app.downloads, app.publishstate, app.failpublishmessage, user.nick AS publisher,
-														appver.number AS version, appver.largeIcon, maincat.name AS category, subcat.name AS subcategory FROM apps app
+	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.name, app.publisher, app.description, app.downloads, app.publishstate, app.failpublishmessage, app.screenshot1, app.screenshot2, app.screenshot3
+														user.nick AS publisher, appver.number AS version, appver.largeIcon, maincat.name AS category, subcat.name AS subcategory FROM apps app
 														LEFT JOIN users user ON user.userId = app.publisher
 														LEFT JOIN appversions appver ON appver.versionId = app.version
 														LEFT JOIN categories maincat ON maincat.categoryId = app.category

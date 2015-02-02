@@ -40,6 +40,9 @@ CREATE TABLE apps(
 	downloads INT NOT NULL DEFAULT 0,
 	publishstate TINYINT NOT NULL DEFAULT 0,
 	failpublishmessage VARCHAR(24) NULL,
+	screenshot1 VARCHAR(255) NULL,
+	screenshot2 VARCHAR(255) NULL,
+	screenshot3 VARCHAR(255) NULL,
 	
 	FULLTEXT(name),
 	FULLTEXT(description),
