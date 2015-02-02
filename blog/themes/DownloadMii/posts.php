@@ -10,14 +10,18 @@
 					<h1>
 						<a style="color: #25A4D6 !important;" href="<?php echo article_url(); ?>" title="<?php echo article_title(); ?>"><?php echo article_title(); ?></a>
 					</h1>
+					
+					<h3>
+						Posted: <time><?php echo article_date(); ?></time>
+					</h3>
 
 					<div class="content">
 						<?php echo article_markdown(); ?>
 					</div>
 
-					<footer>
-						Posted <time datetime="<?php echo date(DATE_W3C, article_time()); ?>"><?php echo relative_time(article_time()); ?></time> by <?php echo article_author('real_name'); ?>.
-					</footer>
+					<h3>
+						By <?php echo article_author('real_name'); ?>
+					</h3
 				</article>
 			</li>
 			<hr />
