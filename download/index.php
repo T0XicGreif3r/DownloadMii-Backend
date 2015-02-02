@@ -24,6 +24,8 @@
 			<div class="collapse navbar-collapse" id="navbar-collapse-main">
 			  <ul class="nav navbar-nav navbar-right">
 				<li><a href="/#HOMEwp">HOME</a></li>
+				<li><a href="/apps">BROWSE APPS</a></li>
+				<li><a href="/blog">BLOG</a></li>
 				<li><a href="/donate">DONATE</a></li>
 				<li><a href="/secure/myapps.php">USER CP</a></li> <!-- ToDo: redirect to user CP instead of "my apps" list -->
 			  </ul>
