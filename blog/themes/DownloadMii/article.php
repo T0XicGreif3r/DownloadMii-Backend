@@ -8,7 +8,7 @@
 			<?php
 				if(article_custom_field('appnameField1', 'null') != 'null'){
 			?>
-				<a href="https://www.downloadmii.com/apps/<?php echo article_custom_field('appnameField1_GUID')?>"><?php echo article_custom_field('appnameField1')?></a>
+				<a href="https://www.downloadmii.com/apps/<?php echo article_custom_field('appnameField1_GUID'); ?>"><?php echo article_custom_field('appnameField1'); ?></a>
 			<?php
 				
 			?>
