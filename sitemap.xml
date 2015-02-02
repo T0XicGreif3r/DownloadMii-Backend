@@ -4,30 +4,56 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
 <url>
   <loc>https://www.downloadmii.com/</loc>
-  <changefreq>always</changefreq>
+  <changefreq>hourly</changefreq>
 </url>
 <url>
   <loc>https://www.downloadmii.com/apps/</loc>
-  <changefreq>always</changefreq>
+  <changefreq>hourly</changefreq>
+</url>
+<url>
+  <loc>https://www.downloadmii.com/blog/</loc>
+  <changefreq>hourly</changefreq>
 </url>
 <url>
   <loc>https://www.downloadmii.com/donate/</loc>
-  <changefreq>always</changefreq>
+  <changefreq>hourly</changefreq>
 </url>
 <url>
   <loc>https://www.downloadmii.com/download/</loc>
-  <changefreq>always</changefreq>
+  <changefreq>hourly</changefreq>
 </url>
 <url>
   <loc>https://www.downloadmii.com/secure/login.php</loc>
-  <changefreq>always</changefreq>
+  <changefreq>hourly</changefreq>
 </url>
 <url>
   <loc>https://www.downloadmii.com/secure/register.php</loc>
-  <changefreq>always</changefreq>
+  <changefreq>hourly</changefreq>
+</url>
+<url>
+  <loc>https://www.downloadmii.com/blog/index.php/category/news</loc>
+  <changefreq>hourly</changefreq>
+</url>
+<url>
+  <loc>https://www.downloadmii.com/blog/index.php/category/app-showcases</loc>
+  <changefreq>hourly</changefreq>
+</url>
+<url>
+  <loc>https://www.downloadmii.com/blog/index.php/posts/blog-launched</loc>
+  <changefreq>hourly</changefreq>
+</url>
+<url>
+  <loc>https://www.downloadmii.com/blog/index.php/feeds/rss</loc>
+  <changefreq>hourly</changefreq>
+</url>
+<url>
+  <loc>https://www.downloadmii.com/blog/index.php/admin/login</loc>
+  <changefreq>hourly</changefreq>
+</url>
+<url>
+  <loc>https://www.downloadmii.com/blog/index.php/admin/amnesia</loc>
+  <changefreq>hourly</changefreq>
 </url>
 </urlset>
