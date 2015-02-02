@@ -6,6 +6,7 @@
 				Posted: <time><?php echo article_date(); ?></time> By <?php echo article_author('real_name'); ?>
 			</h3>
 			<?php
+				$pageTitle = article_title() + ' - DownloadMii Blog';
 				if(article_custom_field('appnameField1', 'null') != 'null'){
 			?>
 					App: <a href="https://www.downloadmii.com/apps/<?php echo article_custom_field('appnameField1_GUID'); ?>"><?php echo article_custom_field('appnameField1'); ?></a>
