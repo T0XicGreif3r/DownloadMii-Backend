@@ -58,6 +58,7 @@
 		<!-- SEO -->
 		
 		<!-- /SEO -->
+		<div>
 <?php
 	require_once('/common/uifooter.php');
 ?>
