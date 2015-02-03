@@ -11,13 +11,15 @@
 	$appGuid = rtrim(substr($requestUri, strlen('/apps/')), '/');
 	
 	$mysqlConn = connectToDatabase();
-	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.name, app.publisher, app.description, app.downloads, app.publishstate, app.failpublishmessage, app.screenshot1, app.screenshot2, app.screenshot3
-														user.nick AS publisher, appver.number AS version, appver.largeIcon, maincat.name AS category, subcat.name AS subcategory FROM apps app
+	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.name, app.description, app.downloads, app.publishstate, app.failpublishmessage,
+														user.nick AS publisher, appver.number AS version, appver.largeIcon, maincat.name AS category, subcat.name AS subcategory, group_concat(scr.url) AS screenshots FROM apps app
 														LEFT JOIN users user ON user.userId = app.publisher
 														LEFT JOIN appversions appver ON appver.versionId = app.version
 														LEFT JOIN categories maincat ON maincat.categoryId = app.category
 														LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
-														WHERE app.guid = ?', 's', [$appGuid]);
+														LEFT JOIN screenshots scr ON scr.appGuid = app.guid
+														WHERE app.publishstate = 1 AND app.guid = ?
+														GROUP BY app.guid', 's', [$appGuid]);
 	
 	printAndExitIfTrue(count($matchingApps) !== 1, 'Invalid app GUID.');
 	$app = $matchingApps[0];
@@ -71,8 +73,29 @@
 ?>
 
 			</div>
-		</div>
+			
+<?php
+	if ($app['screenshots'] !== null) {
+		$app['screenshots'] = '/vendor/test.png,/vendor/test.png,/vendor/test.png,/vendor/test.png,/vendor/test.png';
+		$screenshots = explode(',', $app['screenshots']);
+		$screenshotRows = array_chunk($screenshots, 2);
+		foreach ($screenshotRows as $screenshotRow) {
+			echo '<div class="row">
+			';
+			foreach ($screenshotRow as $screenshot) {
+				echo
+				'<div class="col-md-' . (12 / count($screenshotRow)) . '" style="text-align: center;">
+					<img class="app-screenshot" src="' . $screenshot . '" />
+				</div>
+				';
+			}
+			echo '</div>
+			';
+		}
+	}
+?>
 
+		</div>
 	</div>
 <?php		
 	require_once('../common/uifooter.php');

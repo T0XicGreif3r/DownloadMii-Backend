@@ -21,7 +21,7 @@
 			#maincontent {
 				margin-left: auto;
 				margin-right: auto;
-				max-width: 1200px;
+				max-width: 1060px;
 			}
 			
 			.downloadmii {
@@ -43,6 +43,12 @@
 				width: 48px;
 				height: 48px;
 				margin-right: 12px;
+			}
+			
+			.app-screenshot {
+				width: 400px;
+				height: 240px;
+				margin-top: 32px;
 			}
 			
 			.app-vertical-center-outer {
