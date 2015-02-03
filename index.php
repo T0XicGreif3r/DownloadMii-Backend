@@ -25,7 +25,6 @@
 				<li><a data-scroll href="#HOMEwp">HOME</a></li>
 				<li><a href="/apps">BROWSE APPS</a></li>
 				<li><a href="/blog">BLOG</a></li>
-				<!--li><a data-scroll href="#ABOUTwp">ABOUT</a></li-->
 				<li><a data-scroll href="#DOWNLOADwp">DOWNLOAD</a></li>
 				<li><a href="/donate">DONATE</a></li>
 				<li><a href="/secure/myapps.php">USER CP</a></li> <!-- ToDo: redirect to user CP instead of "my apps" list -->
@@ -46,6 +45,7 @@
 					You can read about the latest news and/or app releases <a href="https://www.downloadmii.com/blog/">here</a>.<br />
 					We <span class="glyphicon glyphicon-heart" aria-hidden="true" style="color: red;"></span> Developers!
 				</p>
+				<h1 style="visibility: hidden;">DownloadMii</h1>
 			  </div>
 			</div>
 		  </div>
