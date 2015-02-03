@@ -78,18 +78,16 @@
 	if ($app['screenshots'] !== null) {
 		$screenshots = explode(',', $app['screenshots']);
 		$screenshotRows = array_chunk($screenshots, 2);
+		
 		foreach ($screenshotRows as $screenshotRow) {
-			echo '<div class="row">
-			';
+			echo '<div class="row">';
 			foreach ($screenshotRow as $screenshot) {
 				echo
 				'<div class="col-md-' . (12 / count($screenshotRow)) . '" style="text-align: center;">
 					<img class="app-screenshot" src="' . $screenshot . '" />
-				</div>
-				';
+				</div>';
 			}
-			echo '</div>
-			';
+			echo '</div>';
 		}
 	}
 ?>

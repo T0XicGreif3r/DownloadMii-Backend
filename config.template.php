@@ -11,6 +11,7 @@
 		'azure_container_smdh' => '',
 		'azure_container_appdata' => '',
 		'azure_container_largeicon' => '',
+		'azure_container_screenshots' => '',
 		
 		//MySQL
 		'mysql_host' => '',

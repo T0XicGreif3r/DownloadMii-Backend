@@ -82,6 +82,12 @@
 					throwExceptionIfTrue($_SESSION['user_app_version' . $guid] === $_POST['version'] && ($updating3dsx || $updatingAppData), 'Please also update the version number when uploading a new 3dsx/appdata file.');
 				}
 				
+				//Check which screenshots were uploaded
+				$screenshotsUploaded = array();
+				for ($i = 1; $i <= 3; $i++) {
+					array_push($screenshotsUploaded, isset($_FILES['scr' . $i]) && is_uploaded_file($_FILES['scr' . $i]['tmp_name']));
+				}
+				
 				$mysqlConn = connectToDatabase();
 				
 				//Check if categories exist and are valid
@@ -96,7 +102,7 @@
 				}
 				
 				//Initialize Azure Blob Service if files will be uploaded
-				if (!$updatingApp || $updating3dsx || $updatingSmdh || $updatingAppData) {
+				if (!$updatingApp || $updating3dsx || $updatingSmdh || $updatingAppData || count($screenshotsUploaded) > 0) {
 					$blobRestProxy = ServicesBuilder::getInstance()->createBlobService(getConfigValue('azure_connection_string'));
 				}
 				
@@ -134,8 +140,6 @@
 					$appDataBlob->md5 = null;
 				}
 				
-				//TODO: Allow screenshot uploads
-				
 				if ($updatingApp) {
 					$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.3dsx, appver.smdh, appver.appdata, appver.largeIcon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM appversions appver
 																		LEFT JOIN apps app ON appver.versionId = app.version
@@ -167,7 +171,7 @@
 				if (!$updatingApp || $updating3dsx || $updatingAppData) {
 					//Insert app version
 					$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO appversions (appGuid, number, 3dsx, smdh, appdata, largeIcon, 3dsx_md5, smdh_md5, appdata_md5)
-															VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 'sssssssss', [$guid, $appVersion, $app3dsxBlob->url, $appSmdhBlob->url, $appDataBlob->url, $appIconBlob->url, $app3dsxBlob->md5, $appSmdhBlob->md5, $appDataBlob->md5], true);
+																	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 'sssssssss', [$guid, $appVersion, $app3dsxBlob->url, $appSmdhBlob->url, $appDataBlob->url, $appIconBlob->url, $app3dsxBlob->md5, $appSmdhBlob->md5, $appDataBlob->md5], true);
 					$versionId = $stmt->insert_id;
 					$stmt->close();
 				}
@@ -191,9 +195,25 @@
 															'sisiiis', [$appName, $versionId, $appDescription, $appCategory, $appSubCategory, $isDeveloper ? 1 : 0, $guid]);
 				}
 				
+				unset($_SESSION['publish_app_guid' . $_POST['guidid']]);
+				
+				for ($i = 1; $i <= 3; $i++) {
+					//If screenshot is uploaded...
+					if ($screenshotsUploaded[$i - 1]) {
+						//...push it to storage and insert/update a database row for it
+						$appScreenshotBlob = new blob();
+						$appScreenshotBlob->upload($blobRestProxy, getConfigValue('azure_container_screenshots'), $_FILES['scr' . $i]['tmp_name']);
+						$appScreenshotBlob->closeFileHandle();
+						
+						executePreparedSQLQuery($mysqlConn, 'INSERT INTO screenshots (appGuid, imageIndex, url)
+																VALUES (?, ?, ?)
+																ON DUPLICATE KEY UPDATE url=?',
+																'siss', [$guid, $i, $appScreenshotBlob->url, $appScreenshotBlob->url]);
+					}
+				}
+				
 				unset($_SESSION['myapps_token' . $guid]);
 				unset($_SESSION['publish_token' . $guid]);
-				unset($_SESSION['publish_app_guid' . $_POST['guidid']]);
 				
 				if ($isDeveloper) {
 					echo 'Your application has been published.';

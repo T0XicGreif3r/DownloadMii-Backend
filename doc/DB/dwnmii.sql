@@ -53,7 +53,10 @@ CREATE TABLE apps(
 CREATE TABLE screenshots(
 	screenshotId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	appGuid CHAR(36) NOT NULL,
+	imageIndex TINYINT NOT NULL,
 	url VARCHAR(255) NOT NULL,
+	
+	PRIMARY KEY(appGuid, imageIndex);
 	
 	FOREIGN KEY (appGuid) REFERENCES apps(guid)
 );
