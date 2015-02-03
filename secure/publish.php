@@ -119,23 +119,27 @@
 						<input type="file" class="filestyle" id="appdata" name="appdata" accept=".zip">
 					</div>
 				</div>
-				<div class="row">
-					<?php
-						for ($i = 1; $i <= 3; $i++) {
+				<?php
+					for ($i = 0; $i < 2; $i++) {
+						echo '<div class="row">';
+						for ($j = 1; $j <= 2; $j++) {
+							$imageIndex = $i * 2 + $j;
+							
 							echo
-							'<div class="col-md-4 form-group">
-								<label for="scr' . $i . '">Screenshot ' . $i . ' (optional';
+							'<div class="col-md-6 form-group">
+								<label for="scr' . $imageIndex . '">Screenshot ' . $imageIndex . ' (optional';
 							
 							if ($editing) echo ', only upload if you want to update';
 							
 							echo
 								'):</label>
-								<input type="file" class="filestyle" id="scr' . $i . '" name="scr' . $i . '">
-							</div>
-							';
+								<input type="file" class="filestyle" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '">
+							</div>';
 						}
-					?>
-				</div>
+						echo '</div>';
+					}
+				?>
+				
 				<div class="form-group">
 					<div class="g-recaptcha" data-sitekey="<?php echo getConfigValue('apikey_recaptcha_site'); ?>"></div>
 				</div>
