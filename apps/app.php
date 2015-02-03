@@ -76,7 +76,6 @@
 			
 <?php
 	if ($app['screenshots'] !== null) {
-		$app['screenshots'] = '/vendor/test.png,/vendor/test.png,/vendor/test.png,/vendor/test.png,/vendor/test.png';
 		$screenshots = explode(',', $app['screenshots']);
 		$screenshotRows = array_chunk($screenshots, 2);
 		foreach ($screenshotRows as $screenshotRow) {
