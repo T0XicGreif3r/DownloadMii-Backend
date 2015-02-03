@@ -47,7 +47,8 @@
 					Are you a Developer? Remember<br />
 					We <span class="glyphicon glyphicon-heart" aria-hidden="true" style="color: red;"></span> Developers!
 				</p>
-				<h1 style="visibility: hidden;">DownloadMii</h1>
+				<h1 style="visibility: hidden; font-size: 0px;">DownloadMii</h1>
+				<h2 style="visibility: hidden; font-size: 0px;">Download free 3DS homebrew applications</h2>
 			  </div>
 			</div>
 		  </div>
