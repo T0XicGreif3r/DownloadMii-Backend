@@ -29,7 +29,7 @@
 
 <!-- STYLESHEETS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-<link href="/css/mainStruct.css" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/mainStruct.min.css"/>
 
 <!-- IN CASE OF OLD WEBBROWSER -->
 <script> 
