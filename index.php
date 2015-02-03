@@ -42,7 +42,8 @@
 				<img class="Product" src="img/Logo.png" alt="DownloadMii logo" />
 				<p class="lead">
 					DownloadMii is an Online marketplace for Nintendo 3DS homebrew applications and its 100% free of charge for the end-user. It is currently under development, and the Github project can be found <a href="https://github.com/DownloadMii/DownloadMii">here</a>!<br />
-					You can read about the latest news, 3DS news and app releases/showcases <a href="https://www.downloadmii.com/blog/">here</a>.<br /><br />
+					You can read about the latest news, 3DS news and app releases/showcases <a href="https://www.downloadmii.com/blog/">here</a>.<br />
+					You will need a way to run 3dsx files on your Nintendo 3DS.<br />
 					
 					Are you a Developer? Remember<br />
 					We <span class="glyphicon glyphicon-heart" aria-hidden="true" style="color: red;"></span> Developers!
