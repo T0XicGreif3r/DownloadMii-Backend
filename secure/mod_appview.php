@@ -15,30 +15,44 @@
 	
 	$mysqlConn = connectToDatabase();
 	
-	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*, user.nick AS publisher, appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.3dsx, appver.smdh, appver.appdata, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5, appver.largeIcon FROM apps app
+	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*,
+														user.nick AS publisher, appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.3dsx, appver.smdh, appver.appdata, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5, appver.largeIcon, group_concat(scr.url) AS screenshots FROM apps app
 														LEFT JOIN users user ON user.userId = app.publisher
 														LEFT JOIN appversions appver ON appver.versionId = app.version
 														LEFT JOIN categories maincat ON maincat.categoryId = app.category
 														LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
+														LEFT JOIN screenshots scr ON scr.appGuid = app.guid
 														WHERE app.guid = ? LIMIT 1', 's', [$_GET['guid']]); //Get app with requested GUID
 	
 	printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID
 	$currentApp = $matchingApps[0];
 	
+	$screenshots = explode(',', $currentApp['screenshots']);
+	
 	//Print all app attributes
 	foreach ($currentApp as $attributeName => $attributeValue) {
-		$safeValue = escapeHTMLChars($attributeValue);
-		if ($attributeName == '3dsx' || $attributeName == 'smdh' || $attributeName == 'appdata' || $attributeName == 'largeIcon') {
-			echo $attributeName . ': <a href="' . $safeValue . '">' . $safeValue . '</a><br />';
+		if ($attributeName == 'screenshots') {
+			for ($i = 0; $i < count($screenshots); $i++) {
+				echo $attributeName . ' (' . ($i + 1) . '): <a href="' . $screenshots[$i] . '">' . $screenshots[$i] . '</a><br />';
+			}
+		}
+		else if ($attributeName == '3dsx' || $attributeName == 'smdh' || $attributeName == 'appdata' || $attributeName == 'largeIcon') {
+			echo $attributeName . ': <a href="' . $attributeValue . '">' . $attributeValue . '</a><br />';
 		}
 		else {
+			$safeValue = escapeHTMLChars($attributeValue);
 			echo $attributeName . ': ' . $safeValue . '<br />';
 		}
 	}
 	
 	//Print icon
 	echo '<img src="' . $currentApp['largeIcon'] . '" /><br />';
+	
+	for ($i = 0; $i < count($screenshots); $i++) {
+		echo '<img src="' . $screenshots[$i] . '" /> ';
+	}
 ?>
+<br />
 <br />
 <form action="mod_appset.php" method="post">
 Set publish state:
