@@ -55,6 +55,7 @@
 	<!-- Recommended links -->
 	<div class="col-md-3 col-xs-0">
 		<div class="addthis_recommended_vertical"></div>
+		<div class="addthis_vertical_follow_toolbox"></div>
 	</div>
 </div>
 
