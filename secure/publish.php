@@ -120,21 +120,23 @@
 					</div>
 				</div>
 				<?php
-					for ($i = 0; $i < 2; $i++) {
+					for ($i = 0; $i < ceil(getConfigValue('downloadmii_max_screenshots') / 2); $i++) {
 						echo '<div class="row">';
 						for ($j = 1; $j <= 2; $j++) {
 							$imageIndex = $i * 2 + $j;
 							
-							echo
-							'<div class="col-md-6 form-group">
-								<label for="scr' . $imageIndex . '">Screenshot ' . $imageIndex . ' (optional';
-							
-							if ($editing) echo ', only upload if you want to update';
-							
-							echo
-								'):</label>
-								<input type="file" class="filestyle" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '">
-							</div>';
+							if ($imageIndex < getConfigValue('downloadmii_max_screenshots') + 1) {
+								echo
+								'<div class="col-md-6 form-group">
+									<label for="scr' . $imageIndex . '">Screenshot ' . $imageIndex . ' (optional';
+								
+								if ($editing) echo ', only upload if you want to update';
+								
+								echo
+									'):</label>
+									<input type="file" class="filestyle" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '">
+								</div>';
+							}
 						}
 						echo '</div>';
 					}

@@ -84,7 +84,7 @@
 				
 				//Check which screenshots were uploaded
 				$screenshotsUploaded = array();
-				for ($i = 1; $i <= 4; $i++) {
+				for ($i = 1; $i <= getConfigValue('downloadmii_max_screenshots'); $i++) {
 					array_push($screenshotsUploaded, isset($_FILES['scr' . $i]) && is_uploaded_file($_FILES['scr' . $i]['tmp_name']));
 				}
 				
@@ -197,7 +197,7 @@
 				
 				unset($_SESSION['publish_app_guid' . $_POST['guidid']]);
 				
-				for ($i = 1; $i <= 4; $i++) {
+				for ($i = 1; $i <= getConfigValue('downloadmii_max_screenshots'); $i++) {
 					//If screenshot is uploaded...
 					if ($screenshotsUploaded[$i - 1]) {
 						//...push it to storage and insert/update a database row for it

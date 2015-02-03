@@ -24,6 +24,7 @@
 		'apikey_recaptcha_secret' => '',
 		
 		//DownloadMii
-		'downloadmii_app_guid' => ''
+		'downloadmii_app_guid' => '',
+		'downloadmii_max_screenshots' => 4
 	);
 ?>
