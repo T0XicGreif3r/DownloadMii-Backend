@@ -1,7 +1,7 @@
 <?php theme_include('header'); ?>
 
 <div id="content" class="">
-	<div class="col-md-9 col-xs-12">
+	<div class="col-md-10 col-xs-12">
 		<?php if(has_posts()): ?>
 			<ul class="items">
 				<?php $i = 0; while(posts()): ?>
@@ -53,7 +53,7 @@
 		<?php endif; ?>
 	</div>
 	<!-- Recommended links -->
-	<div class="col-md-3 col-xs-0" style="margin-top: 112px;">
+	<div class="col-md-2 col-xs-0" style="margin-top: 112px;">
 		<div class="addthis_recommended_vertical"></div>
 		<div class="addthis_vertical_follow_toolbox"></div>
 	</div>
