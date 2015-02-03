@@ -79,6 +79,9 @@ h2{
 #HOME {
   margin-top: 55px;
 }
+#HOME .lead{
+  margin-top:75px;
+}
 
 #SHOWCASE {
   background-color: #25A4D6;
@@ -136,6 +139,10 @@ footer a:hover{
 /* MISC */
 .WayPoint{
 	
+}
+.SEO{
+	visibility: hidden;
+	font-size: 0px;
 }
 .Product{
 	max-width: 100%;
