@@ -31,7 +31,7 @@
 	<h1 class="text-center"><?php echo $app['name']; ?></h1>
 	<h3 class="text-center">
 		<span id="maincat" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"<?php if ($app['subcategory'] !== null) echo ' itemref="subcat"'; ?>>
-			<a itemprop="url" href="/apps/<?php echo $app['category']; ?>">
+			<a itemprop="url" href="/apps/<?php echo $app['category']; ?>" style="color: black;">
 				<span itemprop="title"><?php echo $app['category']; ?></span>
 			</a>
 		</span>
@@ -40,7 +40,7 @@
 		echo
 		'<span class="glyphicon glyphicon-arrow-right" style="font-size: 20px;"></span>
 		<span id="subcat" itemscope itemtype="http://data-vocabulary.org/Breadcrumb" itemprop="child">
-			<a itemprop="url" href="/apps/' . $app['category'] . '/' . $app['subcategory'] . '">
+			<a itemprop="url" href="/apps/' . $app['category'] . '/' . $app['subcategory'] . '" style="color: black;">
 				<span itemprop="title">' . $app['subcategory'] . '</span>
 			</a>
 		</span>';
