@@ -53,7 +53,7 @@
 		<?php endif; ?>
 	</div>
 	<!-- Recommended links -->
-	<div class="col-md-3 col-xs-0">
+	<div class="col-md-3 col-xs-0" style="margin-top: 56px;">
 		<div class="addthis_recommended_vertical"></div>
 		<div class="addthis_vertical_follow_toolbox"></div>
 	</div>
