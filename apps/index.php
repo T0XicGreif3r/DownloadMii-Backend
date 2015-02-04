@@ -8,11 +8,32 @@
 	$title = 'Browse Apps';
 	require_once('../common/uiheader.php');
 	
+	$mysqlQuery = 'SELECT app.guid, app.name, app.description, app.downloads, app.publishstate, user.nick AS publisher, appver.number AS version, appver.largeIcon FROM apps app
+					LEFT JOIN users user ON user.userId = app.publisher
+					LEFT JOIN appversions appver ON appver.versionId = app.version
+					LEFT JOIN categories maincat ON maincat.categoryId = app.category
+					LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
+					WHERE app.publishstate = 1';
+	
+	$mysqlQueryEnd = ' ORDER BY appver.versionId DESC';
+	
+	$bindParamTypes = '';
+	$bindParamArgs = array();
+	
+	$requestUri = strtok(getenv('REQUEST_URI'), '?');
+	$uriParams = explode('/', rtrim(substr($requestUri, strlen('/apps/')), '/')); //All URL "directories" after /apps/ -> array
+	for ($i = 0; $i < count($uriParams) && $i < 2; $i++) {
+		if (strlen($uriParams[$i]) > 0) {
+			$mysqlQuery .= ' AND ' . ($i === 0 ? 'maincat' : 'subcat') . '.name = ?';
+			$bindParamTypes .= 's';
+			array_push($bindParamArgs, $uriParams[$i]);
+		}
+	}
+	
+	$mysqlQuery .= $mysqlQueryEnd;
+	
 	$mysqlConn = connectToDatabase();
-	$allApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.downloads, app.publishstate, user.nick AS publisher, appver.number AS version, appver.largeIcon FROM apps app
-													LEFT JOIN users user ON user.userId = app.publisher
-													LEFT JOIN appversions appver ON appver.versionId = app.version
-													WHERE app.publishstate = 1 ORDER BY appver.versionId DESC');
+	$allApps = getArrayFromSQLQuery($mysqlConn, $mysqlQuery, $bindParamTypes, $bindParamArgs);
 ?>
 
 	<h1 class="text-center">Browse Apps</h1>
@@ -36,7 +57,7 @@
 				<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
 				<div class="pull-right">
 					<h4 class="app-vertical-center-inner">
-						<a href="/apps/<?php echo $app['guid'] ?>" style="color: black;">
+						<a href="/apps/view/<?php echo $app['guid'] ?>" style="color: black;">
 <?php
 		echo '<span itemprop="name">' . escapeHTMLChars($app['name']) . '</span> <span itemprop="softwareVersion">' . escapeHTMLChars($app['version']) . '</span> by <span itemprop="publisher" itemscope itemtype="http://schema.org/Organization" style="font-style: italic;">' . $app['publisher'] . '</span>';
 ?>

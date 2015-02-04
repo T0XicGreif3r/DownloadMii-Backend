@@ -190,7 +190,7 @@
 		$stmt = $conn->prepare($sql);
 		printAndExitIfTrue(!$stmt, 'Error preparing database query.');
 		
-		if (isset($bindParamTypes, $bindParamVarsArr) && !empty($bindParamTypes)) {
+		if (isset($bindParamTypes, $bindParamVarsArr) && !empty($bindParamTypes) && !empty($bindParamVarsArr)) {
 			$callUserArgs = $bindParamVarsArr;
 			array_unshift($callUserArgs, $bindParamTypes);
 			

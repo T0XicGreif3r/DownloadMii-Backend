@@ -8,7 +8,7 @@
 	require_once('../common/functions.php');
 	
 	$requestUri = strtok(getenv('REQUEST_URI'), '?');
-	$appGuid = rtrim(substr($requestUri, strlen('/apps/')), '/');
+	$appGuid = rtrim(substr($requestUri, strlen('/apps/view/')), '/');
 	
 	$mysqlConn = connectToDatabase();
 	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.name, app.description, app.downloads, app.publishstate, app.failpublishmessage,
