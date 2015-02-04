@@ -30,6 +30,44 @@
 		}
 	}
 	
+	function processScreenshot($filename) {
+		$originalSizeInfo = getimagesize($filename); //Get input image size and MIME information
+		$originalWidth = $originalSizeInfo[0];
+		$originalHeight = $originalSizeInfo[1];
+		$originalMIME = $originalSizeInfo['mime'];
+		
+		if ($originalWidth !== 400 || ($originalHeight !== 240 && $originalHeight !== 480)) { //If width isn't 400, and height isn't 240 or 480...
+			//...do some resizing
+			
+			$image = null;
+			switch ($originalMIME) {
+				case 'image/jpeg':
+					$image = imagecreatefromjpeg($filename);
+					break;
+				
+				case 'image/png':
+					$image = imagecreatefrompng($filename);
+					break;
+			}
+			
+			$scale = 400 / $originalWidth; //Calculate horizontal scaling
+			$newWidth = 400;
+			$newHeight = $originalHeight * $scale / 480 >= 0.75 ? 480 : 240; //Estimate if the image is of the top screen only or both screens, and adjust the height for that
+			
+			$resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+			imagecopyresampled($resizedImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight); //Resize the image
+			
+			$screenshot = tmpfile(); //Create temporary file to save PNG
+			imagepng($resizedImage, stream_get_meta_data($screenshot)['uri']); //Save processed screenshot
+			imagedestroy($resizedImage);
+			
+			return $screenshot; //Return temporary screenshot file handle
+		}
+		else {
+			return fopen($filename, 'r'); //We didn't do anything, return the file handle of the original screenshot
+		}
+	}
+	
 	if (isset($_POST['guidid'], $_SESSION['publish_app_guid' . $_POST['guidid']])) {
 		$guid = $_SESSION['publish_app_guid' . $_POST['guidid']]; //Get GUID
 		
@@ -86,6 +124,12 @@
 				$screenshotsUploaded = array();
 				for ($i = 1; $i <= getConfigValue('downloadmii_max_screenshots'); $i++) {
 					array_push($screenshotsUploaded, isset($_FILES['scr' . $i]) && is_uploaded_file($_FILES['scr' . $i]['tmp_name']));
+					
+					if ($screenshotsUploaded[$i - 1]) {
+						//Verify that image is JPEG/PNG
+						$imageMIME = getimagesize($_FILES['scr' . $i]['tmp_name'])['mime'];
+						throwExceptionIfTrue(!($imageMIME && ($imageMIME === 'image/jpeg' || $imageMIME === 'image/png')), 'Invalid screenshot file type. Screenshots must be in JPEG or PNG format.');
+					}
 				}
 				
 				$mysqlConn = connectToDatabase();
@@ -202,7 +246,8 @@
 					if ($screenshotsUploaded[$i - 1]) {
 						//...push it to storage and insert/update a database row for it
 						$appScreenshotBlob = new blob();
-						$appScreenshotBlob->upload($blobRestProxy, getConfigValue('azure_container_screenshots'), $_FILES['scr' . $i]['tmp_name']);
+						$processedScreenshotHandle = processScreenshot($_FILES['scr' . $i]['tmp_name']);
+						$appScreenshotBlob->upload($blobRestProxy, getConfigValue('azure_container_screenshots'), stream_get_meta_data($processedScreenshotHandle)['uri']);
 						$appScreenshotBlob->closeFileHandle();
 						
 						executePreparedSQLQuery($mysqlConn, 'INSERT INTO screenshots (appGuid, imageIndex, url)

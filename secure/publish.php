@@ -105,7 +105,7 @@
 					<label for="description">Description (300 character limit):</label>
 					<textarea class="form-control" id="description" name="description" rows="6" maxlength="300"><?php printAttributeValueFromChoices(@$_POST['description'], $appToEdit['description'], false); ?></textarea>
 				</div>
-				<div class="row">
+				<div class="row" style="margin-bottom: 48px;">
 					<div class="col-md-4 form-group">
 						<label for="3dsx">3dsx file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
 						<input type="file" class="filestyle" id="3dsx" name="3dsx" accept=".3dsx"<?php if (!$editing) echo ' required'; ?>>
@@ -134,7 +134,7 @@
 								
 								echo
 									'):</label>
-									<input type="file" class="filestyle" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '">
+									<input type="file" class="filestyle" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '" accept=".jpg,.jpeg,.png">
 								</div>';
 							}
 						}
@@ -143,6 +143,9 @@
 				?>
 				
 				<div class="form-group">
+					Please only post screenshots of either only the top screen or both screens. They should also be 1:1 to the 3DS screen resolutions.
+				</div>
+				<div class="form-group" style="margin-top: 48px;">
 					<div class="g-recaptcha" data-sitekey="<?php echo getConfigValue('apikey_recaptcha_site'); ?>"></div>
 				</div>
 				<div class="form-group">
