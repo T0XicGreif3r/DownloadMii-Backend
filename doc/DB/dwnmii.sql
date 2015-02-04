@@ -47,7 +47,7 @@ CREATE TABLE apps(
 	FOREIGN KEY (publisher) REFERENCES users(userId),
 	FOREIGN KEY (version) REFERENCES appversions(versionId),
 	FOREIGN KEY (category) REFERENCES categories(categoryId),
-	FOREIGN KEY (subcategory) REFERENCES categories(categoryId),
+	FOREIGN KEY (subcategory) REFERENCES categories(categoryId)
 );
 
 CREATE TABLE screenshots(
