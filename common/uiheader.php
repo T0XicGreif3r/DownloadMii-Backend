@@ -1,7 +1,7 @@
 <?php
 	/*
 		DownloadMii Page Header
-		This file automatically includes functions.php and user.php, which includes functions.php
+		This file automatically includes user.php, which includes functions.php
 	*/
 	
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\user.php');
@@ -47,7 +47,7 @@
 			
 			.app-screenshot {
 				width: 400px;
-				height: 240px;
+				height: auto;
 				margin-top: 32px;
 			}
 			
@@ -60,6 +60,16 @@
 				height: 48px;
 				display: table-cell;
 				vertical-align: middle;
+			}
+			
+			.app-screenshot-vertical-center {
+				float: none;
+				display: inline-block;
+				vertical-align: middle;
+			}
+			
+			.app-vertical-center-inner {
+				height: 48px;
 			}
 			
 			.clear-float {

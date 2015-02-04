@@ -63,7 +63,7 @@
 				</div>
 			</div>
 			<div class="app-vertical-center-outer pull-right btn-toolbar">
-				<div class="btn-toolbar app-vertical-center-inner">
+				<div class="app-vertical-center-inner">
 					<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> <?php echo $app['downloads']; ?> unique downloads</button>
 				</div>
 			</div>
@@ -83,7 +83,7 @@
 			echo '<div class="row">';
 			foreach ($screenshotRow as $screenshot) {
 				echo
-				'<div class="col-md-' . (12 / count($screenshotRow)) . '" style="text-align: center;">
+				'<div class="col-md-' . (12 / count($screenshotRow)) . ' app-screenshot-vertical-center" style="text-align: center;">
 					<img class="app-screenshot" src="' . $screenshot . '" />
 				</div>';
 			}
