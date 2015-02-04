@@ -46,7 +46,7 @@
 						Beta builds are somewhere in between stable and nightly providing you the benifit of deeply tested software but also the latest features faster, use these builds if you are ready to lose some stability for new features!
 					  </div>
 					  <div class="col-sm-4 col-xs-12">
-						Nightly builds are mainly used for and by developers to quickly test new and awesome features, hotfixes and such. Do not excpect stability if you use this version!
+						Nightly builds are mainly used for and by developers to quickly test new and awesome features, hotfixes and such. Do not expect stability if you use this version!
 					  </div>
 				   </div>
 				</div>
