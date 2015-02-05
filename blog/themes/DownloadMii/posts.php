@@ -6,7 +6,7 @@
 			<ul class="items">
 				<?php $i = 0; while(posts()): ?>
 				<li>
-					<article class="wrap" <?php $i++; if($i & 1){ ?> style="background: #D3D3D3 !important; <?php } ?>>
+					<article class="wrap" <?php $i++; if(!($i & 1)){ ?> style="background: #F6F6F6 !important; <?php } ?>>
 						<h1>
 							<a style="color: #25A4D6 !important;" href="<?php echo article_url(); ?>" title="<?php echo article_title(); ?>"><?php echo article_title(); ?></a>
 						</h1>
