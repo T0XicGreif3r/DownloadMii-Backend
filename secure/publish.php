@@ -143,7 +143,7 @@
 				?>
 				
 				<div class="form-group">
-					Please include either only the top screen or both screens in each screenshot. They should also be 1:1 to the 3DS screen resolutions (400x240 or 400x480).
+					Please include either only the top screen or both screens in each screenshot. They should also be 1:1 to the 3DS screen resolution(s); 400x240 or 400x480.
 				</div>
 				<div class="form-group" style="margin-top: 48px;">
 					<div class="g-recaptcha" data-sitekey="<?php echo getConfigValue('apikey_recaptcha_site'); ?>"></div>
