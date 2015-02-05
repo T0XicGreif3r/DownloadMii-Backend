@@ -38,7 +38,7 @@
 <?php
 	if ($app['subcategory'] !== null) {
 		echo
-		'<span class="glyphicon glyphicon-arrow-right" style="font-size: 20px;"></span>
+		'<span class="glyphicon glyphicon-chevron-right" style="font-size: 20px;"></span>
 		<span id="subcat" itemscope itemtype="http://data-vocabulary.org/Breadcrumb" itemprop="child">
 			<a itemprop="url" href="/apps/' . $app['category'] . '/' . $app['subcategory'] . '" style="color: black;">
 				<span itemprop="title">' . $app['subcategory'] . '</span>
