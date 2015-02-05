@@ -56,7 +56,7 @@ CREATE TABLE screenshots(
 	imageIndex TINYINT NOT NULL,
 	url VARCHAR(255) NOT NULL,
 	
-	CONSTRAINT uq_guid_index UNIQUE(appGuid, imageIndex),
+	UNIQUE KEY uq_guid_index(appGuid, imageIndex),
 	
 	FOREIGN KEY (appGuid) REFERENCES apps(guid)
 );
