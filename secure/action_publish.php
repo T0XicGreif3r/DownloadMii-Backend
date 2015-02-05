@@ -22,7 +22,7 @@
 			$this->url = 'https://' . getConfigValue('azure_storage_account') . '.blob.core.windows.net/' . $container . '/' . $this->name; //Get Azure blob URL
 			
 			$this->fileHandle = fopen($filePath, 'r');
-			$blobRestProxy->createBlockBlob($container, $this->name, $fileHandle); //Upload blob to Azure Blob Service
+			$blobRestProxy->createBlockBlob($container, $this->name, $this->fileHandle); //Upload blob to Azure Blob Service
 		}
 		
 		public function closeFileHandle() {
