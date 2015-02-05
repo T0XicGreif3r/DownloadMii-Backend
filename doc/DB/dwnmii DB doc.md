@@ -46,6 +46,14 @@ Column|Description|
 `publishstate` | Publish state: 0 - pending approval, 1 - published, 2 - rejected, 3 - hidden |
 `failpublishmessage` | If app rejected, reason why |
 
+##Screenshots
+Column|Description|
+---|:---|
+`ratingId` | Id of the sceenshot |
+`appGuid` | id of the app the screenshot belongs to, reference into apps table |
+`imageIndex` | Image index for app (starts at 1) |
+`url` | Screenshot url |
+
 ##Ratings
 Column|Description|
 ---|:---|
