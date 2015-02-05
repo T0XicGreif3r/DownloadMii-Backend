@@ -5,7 +5,7 @@
 		<?php if(has_posts()): ?>
 			<ul class="items">
 				<?php $i = 0; while(posts()): ?>
-				<li>
+				<li <?php if(!($i % 2 == 0)){ ?> style="background:gray !important; <?php } ?>>
 					<article class="wrap">
 						<h1>
 							<a style="color: #25A4D6 !important;" href="<?php echo article_url(); ?>" title="<?php echo article_title(); ?>"><?php echo article_title(); ?></a>
