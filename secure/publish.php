@@ -19,7 +19,7 @@
 		
 		$appToEdit = null;
 		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && md5($myappsToken) === $_GET['token']) {
-			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.publisher, app.version, app.description, app.category, app.subcategory, app.rating, app.downloads, app.publishstate,
+			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.category, app.subcategory, app.rating, app.downloads, app.publishstate,
 																appver.number AS version FROM apps app
 																LEFT JOIN appversions appver ON appver.versionId = app.version
 																WHERE app.guid = ? AND app.publisher = ? LIMIT 1', 'ss', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
@@ -105,7 +105,7 @@
 					<label for="description">Description (300 character limit):</label>
 					<textarea class="form-control" id="description" name="description" rows="6" maxlength="300"><?php printAttributeValueFromChoices(@$_POST['description'], $appToEdit['description'], false); ?></textarea>
 				</div>
-				<div class="row">
+				<div class="row" style="margin-bottom: 48px;">
 					<div class="col-md-4 form-group">
 						<label for="3dsx">3dsx file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
 						<input type="file" class="filestyle" id="3dsx" name="3dsx" accept=".3dsx"<?php if (!$editing) echo ' required'; ?>>
@@ -119,7 +119,33 @@
 						<input type="file" class="filestyle" id="appdata" name="appdata" accept=".zip">
 					</div>
 				</div>
+				<?php
+					for ($i = 0; $i < ceil(getConfigValue('downloadmii_max_screenshots') / 2); $i++) {
+						echo '<div class="row">';
+						for ($j = 1; $j <= 2; $j++) {
+							$imageIndex = $i * 2 + $j;
+							
+							if ($imageIndex < getConfigValue('downloadmii_max_screenshots') + 1) {
+								echo
+								'<div class="col-md-6 form-group">
+									<label for="scr' . $imageIndex . '">Screenshot ' . $imageIndex . ' (optional';
+								
+								if ($editing) echo ', only upload if you want to update';
+								
+								echo
+									'):</label>
+									<input type="file" class="filestyle" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '" accept=".jpg,.jpeg,.png">
+								</div>';
+							}
+						}
+						echo '</div>';
+					}
+				?>
+				
 				<div class="form-group">
+					Please only post screenshots of either only the top screen or both screens. They should also be 1:1 to the 3DS screen resolutions.
+				</div>
+				<div class="form-group" style="margin-top: 48px;">
 					<div class="g-recaptcha" data-sitekey="<?php echo getConfigValue('apikey_recaptcha_site'); ?>"></div>
 				</div>
 				<div class="form-group">

@@ -74,8 +74,8 @@
 	$topLevelRequest = $param[0];
 			
 	//Base app query
-	$baseAppQuery = 'SELECT app.guid, app.name, app.publisher, app.version, app.description, app.category, app.subcategory, app.rating, app.downloads, user.nick AS publisher,
-					appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.largeIcon AS largeicon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM apps app
+	$baseAppQuery = 'SELECT app.guid, app.name, app.description, app.rating, app.downloads,
+					user.nick AS publisher, appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.largeIcon AS largeicon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM apps app
 					LEFT JOIN users user ON user.userId = app.publisher
 					LEFT JOIN appversions appver ON appver.versionId = app.version
 					LEFT JOIN categories maincat ON maincat.categoryId = app.category

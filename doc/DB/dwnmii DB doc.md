@@ -25,6 +25,11 @@ Column|Description|
 `number` | Version number, ex: '1.0.0.0' |
 `3dsx` | 3dsx url |
 `smdh` | smdh url |
+`appdata` | appdata url |
+`largeIcon` | large icon url |
+`3dsx_md5` | 3dsx md5 |
+`smdh_md5` | smdh md5 |
+`appdata_md5` | appdata md5 |
 
 ##Apps
 Column|Description|
@@ -40,6 +45,14 @@ Column|Description|
 `downloads` | Download count |
 `publishstate` | Publish state: 0 - pending approval, 1 - published, 2 - rejected, 3 - hidden |
 `failpublishmessage` | If app rejected, reason why |
+
+##Screenshots
+Column|Description|
+---|:---|
+`ratingId` | Id of the sceenshot |
+`appGuid` | id of the app the screenshot belongs to, reference into apps table |
+`imageIndex` | Image index for app (starts at 1) |
+`url` | Screenshot url |
 
 ##Ratings
 Column|Description|

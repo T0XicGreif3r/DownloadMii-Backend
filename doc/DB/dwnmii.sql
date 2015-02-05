@@ -49,6 +49,17 @@ CREATE TABLE apps(
 	FOREIGN KEY (subcategory) REFERENCES categories(categoryId)
 );
 
+CREATE TABLE screenshots(
+	screenshotId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	appGuid CHAR(36) NOT NULL,
+	imageIndex TINYINT NOT NULL,
+	url VARCHAR(255) NOT NULL,
+	
+	UNIQUE KEY uq_guid_index(appGuid, imageIndex),
+	
+	FOREIGN KEY (appGuid) REFERENCES apps(guid)
+);
+
 CREATE TABLE ratings(
 	ratingId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	appGuid CHAR(36) NOT NULL,

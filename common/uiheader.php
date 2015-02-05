@@ -1,12 +1,12 @@
 <?php
 	/*
 		DownloadMii Page Header
-		This file automatically includes functions.php and user.php, which includes functions.php
+		This file automatically includes user.php, which includes functions.php
 	*/
 	
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\user.php');
 	header('Cache-Control: private');
-?>
+?><!DOCTYPE html>
 <html>
 	<head>
 		<?php
@@ -21,7 +21,7 @@
 			#maincontent {
 				margin-left: auto;
 				margin-right: auto;
-				max-width: 1200px;
+				max-width: 1060px;
 			}
 			
 			.downloadmii {
@@ -45,6 +45,12 @@
 				margin-right: 12px;
 			}
 			
+			.app-screenshot {
+				width: 400px;
+				height: auto;
+				margin-top: 32px;
+			}
+			
 			.app-vertical-center-outer {
 				height: auto;
 				display: table;
@@ -54,6 +60,16 @@
 				height: 48px;
 				display: table-cell;
 				vertical-align: middle;
+			}
+			
+			.app-screenshot-vertical-center {
+				float: none;
+				display: inline-block;
+				vertical-align: middle;
+			}
+			
+			.app-vertical-center-inner {
+				height: 48px;
 			}
 			
 			.clear-float {

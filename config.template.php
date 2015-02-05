@@ -11,6 +11,7 @@
 		'azure_container_smdh' => '',
 		'azure_container_appdata' => '',
 		'azure_container_largeicon' => '',
+		'azure_container_screenshots' => '',
 		
 		//MySQL
 		'mysql_host' => '',
@@ -23,6 +24,7 @@
 		'apikey_recaptcha_secret' => '',
 		
 		//DownloadMii
-		'downloadmii_app_guid' => ''
+		'downloadmii_app_guid' => '',
+		'downloadmii_max_screenshots' => 4
 	);
 ?>
