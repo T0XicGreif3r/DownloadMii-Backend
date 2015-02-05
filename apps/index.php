@@ -67,7 +67,7 @@
 				</div>
 			</div>
 			<div class="app-vertical-center-outer pull-right btn-toolbar">
-				<div class="btn-toolbar app-vertical-center-inner">
+				<div class="app-vertical-center-inner">
 					<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> <?php echo $app['downloads']; ?> unique downloads</button>
 				</div>
 			</div>
@@ -101,7 +101,7 @@
 												'</div>' +
 											'</div>' +
 											'<div class="app-vertical-center-outer pull-right btn-toolbar">' +
-												'<div class="btn-toolbar app-vertical-center-inner">' +
+												'<div class="app-vertical-center-inner">' +
 													'<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> ' + element.downloads + ' unique downloads</button>' +
 												'</div>' +
 											'</div>' +

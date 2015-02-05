@@ -34,7 +34,7 @@
 				</div>
 			</div>
 			<div class="app-vertical-center-outer pull-right btn-toolbar">
-				<div class="btn-toolbar app-vertical-center-inner">
+				<div class="app-vertical-center-inner">
 					<a role="button" class="btn btn-primary" href="publish.php?guid=<?php echo $app['guid']; ?>&token=<?php echo md5($_SESSION['myapps_token' . $app['guid']]); ?>">Update</a>
 					<div class="pull-right" style="margin-left: 5px;"> <!-- this shouldn't be like this -->
 						<div class="btn-group">
