@@ -5,6 +5,7 @@
 			<h3>
 				Posted: <time><?php echo article_date(); ?></time> By <?php echo article_author('real_name'); ?>
 			</h3>
+			<div class="addthis_sharing_toolbox"></div>
 			<?php
 				$pageTitle = article_title() . ' - DownloadMii Blog';
 				$buffer=ob_get_contents();
@@ -18,8 +19,13 @@
 			<?php
 				}
 			?>
-			<div class="addthis_sharing_toolbox"></div>
 			<br />
+			<article>
+				<?php echo article_markdown(); ?>
+				<a href="https://www.downloadmii.com">Return to DownloadMii's homepage </a>
+			</article>
+		</section>
+		<section class="ads">
 			<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 			<!-- DownloadMii_Blog -->
 			<ins class="adsbygoogle"
@@ -29,10 +35,6 @@
 			<script>
 			(adsbygoogle = window.adsbygoogle || []).push({});
 			</script>
-			<article>
-				<?php echo article_markdown(); ?>
-				<a href="https://www.downloadmii.com">Return to DownloadMii's homepage </a>
-			</article>
 		</section>
 		<section class="comments">
 			  <div id="disqus_thread"></div>
