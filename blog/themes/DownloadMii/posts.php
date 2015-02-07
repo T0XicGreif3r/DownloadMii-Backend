@@ -6,7 +6,7 @@
 			<ul class="items">
 				<?php $i = 0; while(posts()): ?>
 				<li>
-					<article class="wrap" <?php $i++; if(!($i & 1)){ ?> style="background: #F6F6F6 !important;" <?php } ?>>
+					<article class="wrap">
 						<h1>
 							<a style="color: #25A4D6 !important;" href="<?php echo article_url(); ?>" title="<?php echo article_title(); ?>"><?php echo article_title(); ?></a>
 						</h1>
@@ -22,6 +22,7 @@
 						<h3>
 							By <?php echo article_author('real_name'); ?>
 						</h3>
+						<br />
 						<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 						<!-- DownloadMii_Blog -->
 						<ins class="adsbygoogle"
