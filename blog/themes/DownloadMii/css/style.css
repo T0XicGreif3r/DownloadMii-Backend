@@ -1,6 +1,10 @@
 /**
  *   Index page listing, category listing, search page results
  */
+body{
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
 .items {
 	list-style: none;
 	float: left;
