@@ -103,8 +103,8 @@ if(false !== strpos($url,'posts')){
 	<meta name="twitter:title" content="%SOCIAL_TITLE%">
 	<meta property="og:title" content="%SOCIAL_TITLE%"/>
 	<meta name="twitter:description" content="%SOCIAL_DESC%">
-	<meta name="twitter:url" content="https://www.downloadmii.com/%SOCIAL_URL%">
-	<meta property="og:url" content="https://www.downloadmii.com/%SOCIAL_URL%"/>
+	<meta name="twitter:url" content="https://www.downloadmii.com%SOCIAL_URL%">
+	<meta property="og:url" content="https://www.downloadmii.com%SOCIAL_URL%"/>
 <?php
 }
 else{
