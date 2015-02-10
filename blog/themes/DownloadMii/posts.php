@@ -4,9 +4,9 @@
 	<div class="col-md-9 col-xs-12">
 		<?php if(has_posts()): ?>
 			<ul class="items">
-				<?php $i = 0; while(posts()): ?>
+				<?php $i = 0; while(posts()): $i++; ?>
 				<li>
-					<article class="wrap">
+					<article class="wrap" id="post<?php echo $i; ?>">
 						<h1>
 							<a style="color: #25A4D6 !important;" href="<?php echo article_url(); ?>" title="<?php echo article_title(); ?>"><?php echo article_title(); ?></a>
 						</h1>
@@ -59,5 +59,9 @@
 		<div class="addthis_vertical_follow_toolbox"></div>
 	</div>
 </div>
-
+<script>
+$('#post3').addClass('animated bounceInDown');
+$('#post3').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){$('#post2').addClass('animated bounceInDown')});
+$('#post2').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){$('#post1').addClass('animated bounceInDown')});
+</script>
 <?php theme_include('footer'); ?>
