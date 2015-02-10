@@ -30,9 +30,9 @@
 				</div>
 				<div class="collapse navbar-collapse" id="navbar-collapse-main">
 				  <ul class="nav navbar-nav navbar-right">
-					<li><a href="/">HOME</a></li>
 					<li><a href="/apps">BROWSE APPS</a></li>
 					<li><a href="/blog">BLOG</a></li>
+					<li><a href="/about">ABOUT</a></li>
 					<li><a data-scroll href="#DOWNLOADwp">DOWNLOAD</a></li>
 					<li><a href="/donate">DONATE</a></li>
 					<li><a href="/secure/myapps.php">USER CP</a></li> <!-- ToDo: redirect to user CP instead of "my apps" list -->
@@ -42,17 +42,17 @@
 			</nav>
 		</header>
 		<div class="text-center">
-			<h1>Donate</h1>
+			<h1 class="animated bounceInDown">Donate</h1>
 			<br />
 			<div class="row text-center">
 			  <div class="row">
-				  <div class="col-sm-5 col-xs-12 well clearfix" style="background: #25A4D6;box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);border:0;">
+				  <div class="animated flipInY col-sm-5 col-xs-12 well clearfix" style="background: #25A4D6;box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);border:0;">
 					<h2 class="font-white">Gratipay</h2>
 					<h4 class="font-white">(recommended)<h4>
 					<script data-gratipay-username="filfat" src="//grtp.co/v1.js"></script>
 				  </div>
 				  <div class="col-sm-2 col-xs-0"></div>
-				  <div class="col-sm-5 col-xs-12 well clearfix" style="background: #25A4D6;box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);border:0;">
+				  <div class="animated flipInY col-sm-5 col-xs-12 well clearfix" style="background: #25A4D6;box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);border:0;">
 					<h2 class="font-white">PayPal</h2>
 					<br />
 					<br />
@@ -69,7 +69,7 @@
 				  </div>
 			  </div>
 			</div>
-			<p>Keeping the server up costs quite a bit, so does also the time we spend<br />
+			<p class="animated fadeIn">Keeping the server up costs quite a bit, so does also the time we spend<br />
 			   developing this application. If you like DownloadMii consider donating<br />
 			   to help keep DownloadMii alive! Thanks :)</p>
 		</div>

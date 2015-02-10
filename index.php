@@ -25,6 +25,7 @@
 				<li><a data-scroll href="#HOMEwp">HOME</a></li>
 				<li><a href="/apps">BROWSE APPS</a></li>
 				<li><a href="/blog">BLOG</a></li>
+				<li><a href="/about">ABOUT</a></li>
 				<li><a data-scroll href="#DOWNLOADwp">DOWNLOAD</a></li>
 				<li><a href="/donate">DONATE</a></li>
 				<li><a href="/secure/myapps.php">USER CP</a></li> <!-- ToDo: redirect to user CP instead of "my apps" list -->

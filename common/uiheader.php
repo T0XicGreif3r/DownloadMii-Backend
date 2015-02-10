@@ -106,6 +106,8 @@
 				  <ul class="nav navbar-nav navbar-right">
 				  	<li><a href="/apps">BROWSE APPS</a></li>
 					<li><a href="/blog">BLOG</a></li>
+					<li><a href="/about">ABOUT</a></li>
+					<li><a href="/donate">DONATE</a></li>
 					<?php
 						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
 					?>
