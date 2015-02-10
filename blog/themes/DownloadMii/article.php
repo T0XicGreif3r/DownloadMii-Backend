@@ -11,6 +11,9 @@
 				$buffer=ob_get_contents();
 				ob_end_clean();
 				$buffer=str_replace("%TITLE%", $pageTitle,$buffer);
+				$buffer=str_replace("%SOCIAL_TITLE%", $pageTitle,$buffer);
+				$buffer=str_replace("%SOCIAL_URL%", article_url(),$buffer);
+				$buffer=str_replace("%SOCIAL_DESC%", article_description(),$buffer);
 				echo $buffer;
 				if(article_custom_field('appnameField1', 'null') != 'null'){
 			?>
