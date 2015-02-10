@@ -54,8 +54,8 @@ catch(e){window.attachEvent("onload", $buo_f)}
 <!-- PLATFORM SPECIFIC -->
 <!-- MICROSOFT -->
 <meta name="application-name" content="DownloadMii" />
-<link rel="dns-prefetch" href="http://filfatstudios.com"/>
-<link rel="prerender" href="https://www.downloadmii.com/apps/" />
+<link rel="dns-prefetch" href="https://www.downloadmii.com"/>
+<link rel="prerender" href="https://www.downloadmii.com/" />
 
 <!-- IE SITE PIN -->
 <meta name="msapplication-starturl" content="https://www.downloadmii.com" />
@@ -88,7 +88,7 @@ catch(e){window.attachEvent("onload", $buo_f)}
 <link rel="icon" sizes="128x128" href="/img/Apple/touch-icon-iphone-retina.png" />
 <meta name="theme-color" content="#25A4D6">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="prerender" href="https://www.downloadmii.com/apps/">
+<link rel="prerender" href="https://www.downloadmii.com/">
 
 <!-- SOCIAL MEDIA -->
 <meta property="og:type" content="website"/>
