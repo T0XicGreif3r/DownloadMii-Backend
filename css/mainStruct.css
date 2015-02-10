@@ -62,6 +62,16 @@ h2{
 	font-weight: 300 !important;
 	font-style: none;
 }
+h3{
+	font-size: 28px;
+	font-weight: bold !important;
+	font-style: none;
+}
+p, li{
+	font-size: 16px;
+	font-weight: 300 !important;
+	font-style: none;
+}
 
 .font-white{
 	color: white;
