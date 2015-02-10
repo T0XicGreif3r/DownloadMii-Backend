@@ -46,7 +46,7 @@
 		
 		<?php if (isset($errorMessage)) {
 ?>
-		<div class="alert alert-danger">
+		<div class="animated shake alert alert-danger">
 			<a class="close" href="#" data-dismiss="alert">&times;</a>
 			<strong>Error!</strong> <?php echo $errorMessage; ?>
 		</div>
