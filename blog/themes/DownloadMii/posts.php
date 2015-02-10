@@ -59,9 +59,4 @@
 		<div class="addthis_vertical_follow_toolbox"></div>
 	</div>
 </div>
-<script>
-$('#post3').addClass('animated bounceInDown');
-$('#post3').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){$('#post2').addClass('animated bounceInDown')});
-$('#post2').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){$('#post1').addClass('animated bounceInDown')});
-</script>
 <?php theme_include('footer'); ?>
