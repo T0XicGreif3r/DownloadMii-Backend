@@ -7,3 +7,6 @@ Allow: /secure/register.php
 Disallow: /api/
 Disallow: /newApi/
 Disallow: /blog/index.php/admin/
+# ALWAYS allow CSS and JS
+Allow: /*.css$
+Allow: /*.js$
