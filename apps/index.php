@@ -39,7 +39,7 @@
 	<h1 class="text-center">Browse Apps</h1>
 	<br />
 		<div class="input-group">
-		  <input type="text" class="form-control" id="searchtext" placeholder="App name...">
+		  <input type="search" class="form-control" id="searchtext" placeholder="App name...">
 		  <span class="input-group-btn">
 			<button class="btn btn-primary" id="searchbutton" type="button">Search</button>
 			<button class="btn btn-danger" id="resetbutton" type="button">Reset</button>
