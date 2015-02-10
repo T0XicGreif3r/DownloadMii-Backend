@@ -91,13 +91,23 @@ catch(e){window.attachEvent("onload", $buo_f)}
 
 <!-- SOCIAL MEDIA -->
 <meta property="og:type" content="website"/>
-<meta property="og:image" content="http://www.downloadmii.com/img/livetiles/largetile.png"/>
 <meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://www.downloadmii.com/img/livetiles/largetile.png"/>
+<meta name="twitter:image" content="https://www.downloadmii.com/img/livetiles/largetile.png">
 <meta name="twitter:site" content="@filfat">
 <meta name="twitter:creator" content="@filfat">
 <?php
 $url = 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-if(false !== strpos($url,'posts')){}
+if(false !== strpos($url,'posts')){
+?>
+	<meta name="twitter:url" content="%SOCIAL_URL%">
+	<meta name="twitter:title" content="%SOCIAL_TITLE%">
+	<meta property="og:title" content="%SOCIAL_TITLE%"/>
+	<meta name="twitter:description" content="%SOCIAL_DESC%">
+	<meta name="twitter:url" content="%SOCIAL_URL%">
+	<meta property="og:url" content="%SOCIAL_URL%"/>
+<?php
+}
 else{
 ?>
 	<meta property="og:title" content="DownloadMii - Download homebrew directly to your 3DS"/>
