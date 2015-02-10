@@ -1,3 +1,10 @@
+<?php
+	if($_SERVER["HTTPS"] != "on")
+	{
+	    header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+	    exit();
+	}
+?>
 <!-- SEO -->
 <meta http-equiv="Cache-control" content="public">
 <meta name="description" content="DownloadMii is an online marketplace for homebrew applications. Choose from tons of Homebrew applications and download them directly to your Nintendo 3DS" />
