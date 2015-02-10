@@ -90,11 +90,21 @@ catch(e){window.attachEvent("onload", $buo_f)}
 <link rel="prerender" href="https://www.downloadmii.com/apps/">
 
 <!-- SOCIAL MEDIA -->
-<meta property="og:title" content="DownloadMii - Download homebrew directly to your 3DS"/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="http://www.downloadmii.com/img/livetiles/largetile.png"/>
-<meta property="og:url" content="https://www.downloadmii.com"/>
-<meta name="twitter:title" content="DownloadMii">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@filfat">
+<meta name="twitter:creator" content="@filfat">
+<?php
+if(false !== strpos($url,'posts')){}
+else{
+?>
+	<meta property="og:title" content="DownloadMii - Download homebrew directly to your 3DS"/>
+	<meta property="og:url" content="https://www.downloadmii.com"/>
+	<meta name="twitter:title" content="DownloadMii">
+<?php
+}
+?>
 
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4db3337339acc1fc" async="async"></script>
 
