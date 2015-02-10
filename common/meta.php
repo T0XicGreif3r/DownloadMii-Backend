@@ -96,6 +96,7 @@ catch(e){window.attachEvent("onload", $buo_f)}
 <meta name="twitter:site" content="@filfat">
 <meta name="twitter:creator" content="@filfat">
 <?php
+$url = 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 if(false !== strpos($url,'posts')){}
 else{
 ?>
