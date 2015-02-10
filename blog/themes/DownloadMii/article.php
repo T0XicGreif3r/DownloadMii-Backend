@@ -20,10 +20,12 @@
 				}
 			?>
 			<br />
-			<article>
-				<?php echo article_markdown(); ?>
-				<a href="https://www.downloadmii.com">Return to DownloadMii's homepage </a>
-			</article>
+			<div class="well clearfix">
+				<article>
+					<?php echo article_markdown(); ?>
+					<a href="https://www.downloadmii.com">Return to DownloadMii's homepage </a>
+				</article>
+			</div>
 		</section>
 		<section class="ads">
 			<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
