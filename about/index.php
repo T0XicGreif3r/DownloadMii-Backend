@@ -34,6 +34,10 @@
 			<li>jQuery (JavaScript Library)</li>
 			<li>#3dsdev</li>
 			<li>All the Contributors that didn't make it to this list! :)</li>
+		<br />
+		<h2>Legal</h2>
+		DownloadMii is licensed under a modified version of GNU that you can find <a href="https://raw.githubusercontent.com/DownloadMii/DownloadMii/master/LICENSE">here</a>.
+		By using this service you agree to <a href="https://www.downloadmii.com/legal/terms/">these</a> terms.
 	</div>
 <?php
 	require_once('../common/uifooter.php');
