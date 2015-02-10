@@ -100,7 +100,6 @@ catch(e){window.attachEvent("onload", $buo_f)}
 $url = 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 if(false !== strpos($url,'posts')){
 ?>
-	<meta name="twitter:url" content="%SOCIAL_URL%">
 	<meta name="twitter:title" content="%SOCIAL_TITLE%">
 	<meta property="og:title" content="%SOCIAL_TITLE%"/>
 	<meta name="twitter:description" content="%SOCIAL_DESC%">
