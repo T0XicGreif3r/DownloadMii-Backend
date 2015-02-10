@@ -55,11 +55,9 @@
 			</div>
 			<!-- /DOWNLOAD -->
 		</div>
-		<footer>
-			<div class="content">
-				&copy;Filiph Sandstr&ouml;m 2014-2015; Website designed by <a href="http://www.filfatstudios.com">Filiph Sandstr&ouml;m</a>; (Owners retain copyright to their respective works)
-			</div>
-		</footer>
+		<?php
+			require_once($_SERVER['DOCUMENT_ROOT'] . '\common\copyrightbar.php');
+		?>
 		<!-- SCRIPTS  -->
 		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
