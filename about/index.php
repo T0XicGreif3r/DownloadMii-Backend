@@ -2,9 +2,9 @@
 <html>
 <head runat="server">
 	<?php
-		require_once('../common/meta.php');
+		$title = 'About Us';
+		require_once('../common/uiheader.php');
 	?>
-    <title>DownloadMii - Download</title>
 </head>
 <body>
 	<h1 class="text-center">About Us</h1>
