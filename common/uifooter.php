@@ -25,7 +25,7 @@
 			<!-- DOWNLOAD-->
 			<div id="SHOWCASE" class="pad-section">
 			  <div class="container">
-				<h1 class="animated infinite fadeInLeft text-center" style="color: white !important;" >Download</h1> <hr />
+				<h1 class="animated fadeInLeft text-center" style="color: white !important;" >Download</h1> <hr />
 				<div class="row text-center">
 				  <div class="row">
 					  <div class="col-sm-4 col-xs-12">
