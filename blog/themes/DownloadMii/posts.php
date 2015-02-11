@@ -7,7 +7,7 @@
 				<?php $i = 0; while(posts()): $i++; ?>
 				<li>
 					<article class="wrap" id="post<?php echo $i; ?>">
-						<h1 class="animated bounceInDown">
+						<h1 class="animated bounceInLeft">
 							<a style="color: #25A4D6 !important;" href="<?php echo article_url(); ?>" title="<?php echo article_title(); ?>"><?php echo article_title(); ?></a>
 						</h1>
 						<h3>
