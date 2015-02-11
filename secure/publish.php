@@ -41,7 +41,7 @@
 		
 		$editing = isset($appToEdit);
 ?>
-		<h1 class="text-center"><?php if (isset($appToEdit)) echo 'Updating ' . escapeHTMLChars($appToEdit['name']); else echo 'Add a new application'; ?></h1>
+		<h1 class="animated bounceInDown text-center"><?php if (isset($appToEdit)) echo 'Updating ' . escapeHTMLChars($appToEdit['name']); else echo 'Add a new application'; ?></h1>
 		<br />
 		
 		<?php if (isset($errorMessage)) {

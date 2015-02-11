@@ -8,7 +8,7 @@
 	
 	$_SESSION['register_token'] = uniqid(mt_rand(), true);
 ?>
-		<h1 class="text-center">Create an account</h1>
+		<h1 class="animated bounceInDown text-center">Create an account</h1>
 		<br />
 		<form role="form" class="small-width" action="action_register.php" method="post" accept-charset="utf-8">
 			<label class="sr-only" for="name">Username (3-24 characters):</label>

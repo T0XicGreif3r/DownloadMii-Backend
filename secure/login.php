@@ -8,7 +8,7 @@
 	
 	$_SESSION['login_token'] = uniqid(mt_rand(), true);
 ?>
-		<h1 class="text-center">Log in</h1>
+		<h1 class="animated bounceInDown text-center">Log in</h1>
 		<br />
 		<form role="form" class="small-width" action="action_login.php" method="post" accept-charset="utf-8">
 			<label class="sr-only" for="name">Username:</label>

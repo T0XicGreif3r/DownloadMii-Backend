@@ -13,7 +13,7 @@
 														WHERE app.publisher = ? ORDER BY appver.versionId DESC', 'i', [$_SESSION['user_id']]);
 ?>
 
-		<h1 class="text-center">My Apps</h1>
+		<h1 class="animated bounceInDown text-center">My Apps</h1>
 		<br />
 <?php
 		foreach ($userApps as $app) {
