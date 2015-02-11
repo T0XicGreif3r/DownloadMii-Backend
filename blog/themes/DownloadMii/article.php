@@ -1,7 +1,7 @@
 <?php ob_start(); theme_include('header'); ?>
 	<div style="padding: 0 40px; margin-top: 65px; margin-bottom: 35px;">
 		<section class="content wrap" id="article-<?php echo article_id(); ?>">
-			<h1><?php echo article_title(); ?></h1>
+			<h1 class="animated bounceInDown"><?php echo article_title(); ?></h1>
 			<h3>
 				Posted: <time><?php echo article_date(); ?></time> By <?php echo article_author('real_name'); ?>
 			</h3>
