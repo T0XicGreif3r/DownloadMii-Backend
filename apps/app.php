@@ -28,7 +28,7 @@
 	require_once('../common/uiheader.php');
 ?>
 
-	<h1 class="text-center"><?php echo $app['name']; ?></h1>
+	<h1 class="animated bounceInDown text-center"><?php echo $app['name']; ?></h1>
 	<h3 class="text-center">
 		<span id="maincat" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"<?php if ($app['subcategory'] !== null) echo ' itemref="subcat"'; ?>>
 			<a itemprop="url" href="/apps/<?php echo $app['category']; ?>" style="color: black;">

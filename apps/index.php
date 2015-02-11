@@ -36,7 +36,7 @@
 	$allApps = getArrayFromSQLQuery($mysqlConn, $mysqlQuery, $bindParamTypes, $bindParamArgs);
 ?>
 
-	<h1 class="text-center">Browse Apps</h1>
+	<h1 class="animated bounceInDown text-center">Browse Apps</h1>
 	<br />
 		<div class="input-group">
 		  <input type="search" class="form-control" id="searchtext" placeholder="App name...">
