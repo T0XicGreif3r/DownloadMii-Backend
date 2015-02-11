@@ -10,28 +10,30 @@
 						<h1 class="animated bounceInLeft">
 							<a style="color: #25A4D6 !important;" href="<?php echo article_url(); ?>" title="<?php echo article_title(); ?>"><?php echo article_title(); ?></a>
 						</h1>
-						<h3>
-							Posted: <time><?php echo article_date(); ?></time>
-						</h3>
-						<br />
-						
-						<div class="content">
-							<?php echo article_markdown(); ?>
+						<div class="animated bounceInRight">
+							<h3>
+								Posted: <time><?php echo article_date(); ?></time>
+							</h3>
+							<br />
+							
+							<div class="content">
+								<?php echo article_markdown(); ?>
+							</div>
+		
+							<h3>
+								By <?php echo article_author('real_name'); ?>
+							</h3>
+							<br />
+							<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+							<!-- DownloadMii_Blog -->
+							<ins class="adsbygoogle"
+								 style="display:inline-block;width:320px;height:100px"
+								 data-ad-client="ca-pub-1408003448017335"
+								 data-ad-slot="8380336033"></ins>
+							<script>
+							(adsbygoogle = window.adsbygoogle || []).push({});
+							</script>
 						</div>
-	
-						<h3>
-							By <?php echo article_author('real_name'); ?>
-						</h3>
-						<br />
-						<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-						<!-- DownloadMii_Blog -->
-						<ins class="adsbygoogle"
-						     style="display:inline-block;width:320px;height:100px"
-						     data-ad-client="ca-pub-1408003448017335"
-						     data-ad-slot="8380336033"></ins>
-						<script>
-						(adsbygoogle = window.adsbygoogle || []).push({});
-						</script>
 					</article>
 				</li>
 				<hr />
