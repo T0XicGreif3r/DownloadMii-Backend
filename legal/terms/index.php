@@ -2,7 +2,7 @@
 	/*
 		DownloadMii Terms of Use page
 	*/
-	$title = 'Browse Apps';
+	$title = 'Terms Of Use';
 	require_once('../../common/uiheader.php');
 ?>
 <h1 class="animated bounceInDown text-center">Terms of Use</h1>
