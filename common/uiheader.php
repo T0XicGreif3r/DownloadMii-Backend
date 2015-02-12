@@ -121,6 +121,7 @@
 						<?php
 							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {
 						?>
+						<li role="presentation" class="divider"></li>
 						<li><a href="/secure/mod_apps.php">MOD CP</a></li>
 						<?php
 							}
@@ -132,6 +133,7 @@
 						<?php
 							}
 						?>
+						<li role="presentation" class="divider"></li>
 						<li><a href="/secure/action_signout.php">LOGOUT</a></li>
 						<?php
 							}
