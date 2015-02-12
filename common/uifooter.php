@@ -59,8 +59,8 @@
 			require_once($_SERVER['DOCUMENT_ROOT'] . '\common\copyrightbar.php');
 		?>
 		<!-- SCRIPTS  -->
-		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/js/bootstrap-filestyle.min.js"> </script>
 		<script type="text/javascript" src="/js/smooth-scroll.js"></script>
 		<script type="text/javascript" src="/js/common.js"></script>
