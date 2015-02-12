@@ -7,7 +7,11 @@
 ?>
 <!-- SEO -->
 <meta http-equiv="Cache-control" content="public">
-<meta name="description" content="DownloadMii is an online marketplace for homebrew applications. Choose from tons of Homebrew applications and download them directly to your Nintendo 3DS" />
+<?php if (isset($description)) { ?>
+	<meta name="description" content="<?php echo $description ?>" />
+<?php } else{ ?>
+	<meta name="description" content="DownloadMii is an online marketplace for homebrew applications. Choose from tons of Homebrew applications and download them directly to your Nintendo 3DS" />
+<?php }?>
 <meta name="keywords" content="DownloadMii, Nintendo 3DS Homebrew, Homebrew Browser, 3ds, filfat, Wii U Homebrew, build, release, latest, homebrew applications, nightly, " />
 <link rel="author" href="https://plus.google.com/+Filfatofficial"/>
 <link rel="publisher" href="https://plus.google.com/+Filfatofficial/"/>
