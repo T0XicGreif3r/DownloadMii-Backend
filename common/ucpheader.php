@@ -12,7 +12,7 @@
 		}
 	}
 	else if (!strcasecmp($_SERVER['REQUEST_URI'], '/secure/login.php') || !strcasecmp($_SERVER['REQUEST_URI'], '/secure/register.php')) {
-		header('Location: http://' . $_SERVER['HTTP_HOST'] . '/secure/myapps.php'); //Redirect to "my apps" page if trying to access login page while logged in
+		header('Location: http://' . $_SERVER['HTTP_HOST'] . '/secure/myapps/'); //Redirect to "my apps" page if trying to access login page while logged in
 	}
 	
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\uiheader.php');

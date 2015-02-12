@@ -116,7 +116,7 @@
 						<?php
 							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
 						?>
-						<li><a href="/secure/myapps.php">MY APPS</a></li>
+						<li><a href="/secure/myapps/">MY APPS</a></li>
 						<li><a href="/secure/publish.php">SUBMIT APP</a></li>
 						<?php
 							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {

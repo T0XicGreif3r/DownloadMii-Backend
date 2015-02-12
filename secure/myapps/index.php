@@ -4,7 +4,7 @@
 	*/
 	
 	$title = 'My Apps';
-	require_once('../common/ucpheader.php');
+	require_once('../../common/ucpheader.php');
 	
 	if (clientLoggedIn()) {
 		$mysqlConn = connectToDatabase();
@@ -35,7 +35,7 @@
 			</div>
 			<div class="app-vertical-center-outer pull-right btn-toolbar">
 				<div class="app-vertical-center-inner">
-					<a role="button" class="btn btn-primary" href="publish.php?guid=<?php echo $app['guid']; ?>&token=<?php echo md5($_SESSION['myapps_token' . $app['guid']]); ?>">Update</a>
+					<a role="button" class="btn btn-primary" href="/secure/publish.php?guid=<?php echo $app['guid']; ?>&token=<?php echo md5($_SESSION['myapps_token' . $app['guid']]); ?>">Update</a>
 					<div class="pull-right" style="margin-left: 5px;"> <!-- this shouldn't be like this -->
 						<div class="btn-group">
 <?php
@@ -90,5 +90,5 @@
 	<br />
 <?php
 	}
-	require_once('../common/ucpfooter.php');
+	require_once('../../common/ucpfooter.php');
 ?>

@@ -34,6 +34,6 @@
 	$_SESSION['user_token'] = $tokenSha1;
 	
 	//Redirect to "my apps" list
-	$redirectUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/secure/myapps.php';
+	$redirectUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/secure/myapps/';
 	header('Location: ' . $redirectUrl);
 ?>

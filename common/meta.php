@@ -1,9 +1,9 @@
 <?php
-	if($_SERVER["HTTPS"] != "on")
+	/*if($_SERVER["HTTPS"] != "on")
 	{
 	    header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
 	    exit();
-	}
+	}*/
 ?>
 <!-- SEO -->
 <?php if (isset($description)) { ?>
@@ -66,7 +66,7 @@ catch(e){window.attachEvent("onload", $buo_f)}
 <meta name="msapplication-window" content="width=1024;height=768" />
 <meta name="msapplication-tooltip" content="Visit DownloadMii" />
 <meta content="name=Home;action-uri=./;icon-uri=./favicon.ico" name="msapplication-task" />
-<meta content="name=User CP;action-uri=./secure/myapps.php;icon-uri=./favicon.ico" name="msapplication-task" />
+<meta content="name=User CP;action-uri=./secure/myapps/;icon-uri=./favicon.ico" name="msapplication-task" />
 
 
 <!-- LIVE TILE -->
