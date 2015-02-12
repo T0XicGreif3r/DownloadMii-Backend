@@ -54,7 +54,7 @@
 
 		<div  itemscope itemtype="http://schema.org/SoftwareApplication" class="well clearfix">
 			<div class="app-vertical-center-outer pull-left">
-				<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
+				<img class="app-icon" alt="App logo" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
 				<div class="pull-right">
 					<h4 class="app-vertical-center-inner">
 						<a href="/apps/view/<?php echo $app['guid'] ?>" style="color: black;">
