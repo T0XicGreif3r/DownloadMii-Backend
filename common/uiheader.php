@@ -133,6 +133,7 @@
 						<?php
 							}
 						?>
+						<!--li><a href="/secure/usercp/">NOTIFICATIONS <span class="badge">42</span></a></li-->
 						<li role="presentation" class="divider"></li>
 						<li><a href="/secure/action_signout.php">LOGOUT</a></li>
 						<?php
