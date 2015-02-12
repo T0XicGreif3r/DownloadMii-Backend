@@ -4,6 +4,7 @@
 		DownloadMii Download page
 	*/
 	$title = 'Download';
+	$description = 'The official download page for DownloadMii. You can choose between the release and beta versions!';
 	require_once('../common/uiheader.php');
 ?>
 <div class="row">
