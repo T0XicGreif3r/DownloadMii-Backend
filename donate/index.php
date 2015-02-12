@@ -1,6 +1,6 @@
 <?php
 	/*
-		DownloadMii Donate page
+		DownloadMii Donation page
 	*/
 	$title = 'Donate';
 	require_once('../common/uiheader.php');
