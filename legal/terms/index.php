@@ -10,11 +10,11 @@
 <div class="animated bounceInLeft well text-center">
   ANY PARTICIPATION IN THIS SITE WILL CONSTITUTE ACCEPTANCE OF THIS AGREEMENT.<br />
   IF YOU DO NOT AGREE TO ABIDE BY THE ABOVE, PLEASE DO NOT USE THIS SERVICE!
-<p> If you require any more information or have any questions about our Terms of Service, please feel free to contact us by email at <a name="contactlink"></a> <a href="mailto:filiph.sandstrom@filfatstudios.com">https://www.downloadmii.com/contact</a>.<h2>Introduction</h2>
+<p> If you require any more information or have any questions about our Terms of Service, please feel free to contact us at <a href="https://www.downloadmii.com/contact">https://www.downloadmii.com/contact</a>.<h2>Introduction</h2>
 
             <p>These terms and conditions govern your use of this website; by using this website, you accept these terms and conditions in full and without reservation. If you disagree with these terms and conditions or any part of these terms and conditions, you must not use this website.</p>
 
-            <p>You must be at least 13 [eighteen] years of age to use this website.  By using this website and by agreeing to these terms and conditions, you warrant and represent that you are at least 13 years of age.</p>
+            <p>You must be at least 13 years of age to use this website.  By using this website and by agreeing to these terms and conditions, you warrant and represent that you are at least 13 years of age.</p>
 
 
             <h2>License to use website</h2>
