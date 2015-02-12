@@ -43,10 +43,11 @@
 			  	<h1 class="animated bounceInDown text-center">Download</h1>
 				<br />
 				<div class="animated bounceInLeft text-center">
-					Hi! We are glad to see that you are interested in DownloadMii.<br />
+					<p>Hi! We are glad to see that you are interested in DownloadMii.<br />
 					Before you download DownloadMii, take a while and figure out which version is right for you.<br />
-					We recommend the more stable version (release), however if you want to be bad-ass and try the lates and greatedt festured pick the beta release :)<br />
+					We recommend the more stable version (release), however if you want to be bad-ass and try the lates and greatedt festured pick the beta release :)</p><br />
 				</div>
+				<br />
 				<div class="animated bounceInRight row text-center">
 				  <div class="row">
 					  <div id="release" class="col-sm-5 col-xs-12 well clearfix" style="background: #25A4D6;box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);border:0;">
