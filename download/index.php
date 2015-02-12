@@ -36,11 +36,13 @@
 <script>
   if(window.location.hash) {
       var hash = window.location.hash.substring(1);
+      setTimeout(function(){
+      	      if(hash == "beta")
+	      	$('#betaC').addClass('animated pulse');
+	      else if(hash == "release")
+	      	$('#releaseC').addClass('animated pulse');
+      }, 1000);
       
-      if(hash == "beta")
-      	$('#betaC').addClass('animated pulse');
-      else if(hash == "release")
-      	$('#releaseC').addClass('animated pulse');
   }
 </script>
 <?php
