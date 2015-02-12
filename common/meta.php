@@ -38,7 +38,7 @@
 <link rel="shortcut icon" type="image/ico" href="https://www.downloadmii.com/favicon.ico" />
 
 <!-- STYLESHEETS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/mainStruct.min.css"/>
 <link rel="stylesheet" href="/css/animate.css">
 
