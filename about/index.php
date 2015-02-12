@@ -14,6 +14,7 @@
 		DownloadMii is an online marketplace for homebrew applications that runs nativly on the supported platform(s).
 		Development started November 2014 by <a href="http://filfatstudios.com">Filiph Sandstr&ouml;m</a> after users requested a "app store" for the Nintendo 3DS.
 		DownloadMii is currently in early development which means that bug can, nay; may occur, You have been warned.
+		If you have any futher questions make sure to contact us <a href="/contact/">here</a>.
 		<br />
 		<h2>Credits</h2>
 		<h3>Website Frontend<h3>
