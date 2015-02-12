@@ -1,6 +1,6 @@
 <?php
 	$title = 'Home';
-	require_once('../common/uiheader.php');
+	require_once('/common/uiheader.php');
 ?>
 <div id="HOME" class="pad-section">
   <div class="container">
