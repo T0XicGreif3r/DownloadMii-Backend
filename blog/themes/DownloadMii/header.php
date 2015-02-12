@@ -2,6 +2,7 @@
 <html lang="en">
 	<head>
 		<?php
+			$description = "%DESCRIPTION%";
 			require_once($_SERVER['DOCUMENT_ROOT'] . '\common\meta.php');
 		?>
 		<link rel="stylesheet" href="<?php echo theme_url('/css/style.css'); ?>">
