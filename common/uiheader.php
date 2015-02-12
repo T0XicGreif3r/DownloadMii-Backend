@@ -110,35 +110,40 @@
 					<li><a href="/about">ABOUT</a></li>
 					<li><a data-scroll href="#DOWNLOADwp">DOWNLOAD</a></li>
 					<li><a href="/donate">DONATE</a></li>
-					<?php
-						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
-					?>
-					<li><a href="/secure/myapps.php">MY APPS</a></li>
-					<li><a href="/secure/publish.php">SUBMIT APP</a></li>
-					<?php
-						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {
-					?>
-					<li><a href="/secure/mod_apps.php">MOD CP</a></li>
-					<?php
-						}
-					?>
-					<?php
-						if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 4) {
-					?>
-					<li><a href="/secure/admin.php">ADMIN CP</a></li>
-					<?php
-						}
-					?>
-					<li><a href="/secure/action_signout.php">LOGOUT</a></li>
-					<?php
-						}
-						else {
-					?>
-					<li><a href="/secure/login.php">LOGIN</a></li>
-					<li><a href="/secure/register.php">REGISTER</a></li>
-					<?php
-						}
-					?>
+					<li class="dropdown">
+				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">User CP <span class="caret"></span></a>
+				          <ul class="dropdown-menu" role="menu">
+						<?php
+							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
+						?>
+						<li><a href="/secure/myapps.php">MY APPS</a></li>
+						<li><a href="/secure/publish.php">SUBMIT APP</a></li>
+						<?php
+							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {
+						?>
+						<li><a href="/secure/mod_apps.php">MOD CP</a></li>
+						<?php
+							}
+						?>
+						<?php
+							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 4) {
+						?>
+						<li><a href="/secure/admin.php">ADMIN CP</a></li>
+						<?php
+							}
+						?>
+						<li><a href="/secure/action_signout.php">LOGOUT</a></li>
+						<?php
+							}
+							else {
+						?>
+						<li><a href="/secure/login.php">LOGIN</a></li>
+						<li><a href="/secure/register.php">REGISTER</a></li>
+						<?php
+							}
+						?>
+					</ul>
+				  </li>
 				  </ul>
 				</div>
 			  </div>
