@@ -3,7 +3,7 @@
 		DownloadMii Terms of Use page
 	*/
 	$title = 'Browse Apps';
-	require_once('../common/uiheader.php');
+	require_once('../../common/uiheader.php');
 ?>
 <h1 class="animated bounceInDown text-center">Terms of Use</h1>
 <br />
@@ -158,5 +158,5 @@ This includes:
 	     	
 </div>
 <?php		
-	require_once('../common/uifooter.php');
+	require_once('../../common/uifooter.php');
 ?>
