@@ -4,13 +4,13 @@
 	*/
 	
 	$title = 'Sign Up';
-	require_once('../common/ucpheader.php');
+	require_once('../../common/ucpheader.php');
 	
 	$_SESSION['register_token'] = uniqid(mt_rand(), true);
 ?>
 		<h1 class="animated bounceInDown text-center">Create an account</h1>
 		<br />
-		<form role="form" class="small-width" action="action_register.php" method="post" accept-charset="utf-8">
+		<form role="form" class="small-width" action="/secure/action_register.php" method="post" accept-charset="utf-8">
 			<label class="sr-only" for="name">Username (3-24 characters):</label>
 			<input type="text" class="form-control no-bottom-border-radius" id="user" name="user" placeholder="Username (3-24 characters)" maxlength="24" required>
 			
@@ -31,5 +31,5 @@
 		<form>
 		<script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script>
 <?php
-	require_once('../common/ucpfooter.php');
+	require_once('../../common/ucpfooter.php');
 ?>

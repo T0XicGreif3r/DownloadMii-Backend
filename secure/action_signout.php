@@ -10,5 +10,5 @@
 	session_destroy();
 	
 	//Redirect to login page
-	header('Location: http://' . $_SERVER['HTTP_HOST'] . '/secure/login.php');
+	header('Location: http://' . $_SERVER['HTTP_HOST'] . '/secure/login');
 ?>

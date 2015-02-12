@@ -140,8 +140,8 @@
 							}
 							else {
 						?>
-						<li><a href="/secure/login.php">LOGIN</a></li>
-						<li><a href="/secure/register.php">REGISTER</a></li>
+						<li><a href="/secure/login/">LOGIN</a></li>
+						<li><a href="/secure/register/">REGISTER</a></li>
 						<?php
 							}
 						?>

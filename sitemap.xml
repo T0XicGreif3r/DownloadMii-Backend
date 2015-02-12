@@ -25,11 +25,11 @@
   <changefreq>hourly</changefreq>
 </url>
 <url>
-  <loc>https://www.downloadmii.com/secure/login.php</loc>
+  <loc>https://www.downloadmii.com/secure/login/</loc>
   <changefreq>hourly</changefreq>
 </url>
 <url>
-  <loc>https://www.downloadmii.com/secure/register.php</loc>
+  <loc>https://www.downloadmii.com/secure/register/</loc>
   <changefreq>hourly</changefreq>
 </url>
 <url>
