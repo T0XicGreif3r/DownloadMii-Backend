@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php
 	/*
-		DownloadMii Terms of Use page
+		DownloadMii Download page
 	*/
 	$title = 'Download';
 	require_once('../common/uiheader.php');
@@ -33,7 +33,17 @@
 	</div>
   </div>
 </div>
-<!-- /HOME -->
+<script>
+  if(window.location.hash) {
+      var hash = window.location.hash.substring(1);
+      alert (hash);
+      
+      if(hash == "beta")
+      	$('#beta').addClass('animated pulse');
+      else if(hash == "release")
+      	$('#release').addClass('animated pulse');
+  }
+</script>
 <?php
 	require_once('../common/ucpfooter.php');
 ?>
