@@ -49,6 +49,8 @@
 					Are you a Developer? Remember:<br />
 					We <span class="glyphicon glyphicon-heart" aria-hidden="true" style="color: red;"></span> Developers!
 				</p>
+				<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/DownloadMii" data-widget-id="565828916062212097">Tweets av @DownloadMii</a>
+				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 				<h1 class="SEO">DownloadMii</h1>
 				<h2 class="SEO">Download free 3DS homebrew applications</h2>
 			  </div>
