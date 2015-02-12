@@ -13,7 +13,7 @@
 	<div class="animated bounceInLeft text-center">
 		<p class="lead">Hi! We are glad to see that you are interested in DownloadMii.<br />
 		Before you download DownloadMii, take a while and figure out which version is right for you.<br />
-		We recommend the more stable version (release), however if you want to be bad-ass and try the lates and greatest festured pick the beta release :)</p><br />
+		We recommend the more stable version (release), however if you want to be bad-ass and try the lates and greatest features; pick the beta release :)</p><br />
 	</div>
 	<br />
 	<div class="animated bounceInRight row text-center">
