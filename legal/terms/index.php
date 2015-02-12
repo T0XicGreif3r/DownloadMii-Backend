@@ -10,8 +10,6 @@
 <div class="animated bounceInLeft well text-center">
   ANY PARTICIPATION IN THIS SITE WILL CONSTITUTE ACCEPTANCE OF THIS AGREEMENT.<br />
   IF YOU DO NOT AGREE TO ABIDE BY THE ABOVE, PLEASE DO NOT USE THIS SERVICE!
-  
-  <h1> Terms of Service for DownloadMii</h1>
 <p> If you require any more information or have any questions about our Terms of Service, please feel free to contact us by email at <a name="contactlink"></a> <a href="mailto:filiph.sandstrom@filfatstudios.com">https://www.downloadmii.com/contact</a>.<h2>Introduction</h2>
 
             <p>These terms and conditions govern your use of this website; by using this website, you accept these terms and conditions in full and without reservation. If you disagree with these terms and conditions or any part of these terms and conditions, you must not use this website.</p>
