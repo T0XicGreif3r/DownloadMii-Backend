@@ -6,7 +6,6 @@
 	}
 ?>
 <!-- SEO -->
-<meta http-equiv="Cache-control" content="public">
 <?php if (isset($description)) { ?>
 	<meta name="description" content="<?php echo $description ?>" />
 <?php } else{ ?>
