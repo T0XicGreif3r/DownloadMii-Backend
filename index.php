@@ -2,7 +2,6 @@
 	$title = 'Home';
 	require_once('/common/uiheader.php');
 ?>
-<div id="HOME" class="pad-section">
   <div class="container">
 	<div class="row">
 	  <div class="col-sm-12 text-center">
@@ -23,7 +22,6 @@
 	  </div>
 	</div>
   </div>
-</div>
 <div>
 <?php
 	require_once('/common/uifooter.php');
