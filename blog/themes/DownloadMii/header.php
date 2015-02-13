@@ -60,7 +60,7 @@
 				        		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <?php if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) { echo strtoupper($_SESSION['user_nick']); } else { echo 'USER CP'; } ?><span class="caret"></span></a>
 				        		<ul class="dropdown-menu" role="menu">
 								<?php while(categories()): ?>
-									<li><a href="<?php echo category_url(); ?>" title="<?php echo category_description(); ?>"><?php echo strtoupper(category_title()); ?> (<?php echo category_count(); ?>)</a></li>
+									<li><a href="<?php echo category_url(); ?>" title="<?php echo category_description(); ?>"><?php echo strtoupper(category_title()); ?> <span class="badge"><?php echo category_count(); ?></span></a></li>
 								<?php endwhile; ?>
 							</ul>
 						</li>
