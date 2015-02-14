@@ -9,10 +9,10 @@
 	$_SESSION['register_token'] = uniqid(mt_rand(), true);
 ?>
 		<h1 class="animated bounceInDown text-center">Create an account</h1>
-		<p>You'll need a DownloadMii account to publish apps, rate apps and much more.<br />
+		<p class="animated bounceInLeft text-center">You'll need a DownloadMii account to publish apps, rate apps and much more.<br />
 		Creating an account is 100% free and painless!</p>
 		<br />
-		<form role="form" class="small-width" action="/secure/action_register.php" method="post" accept-charset="utf-8">
+		<form role="form" class="animated bounceInRight small-width" action="/secure/action_register.php" method="post" accept-charset="utf-8">
 			<label class="sr-only" for="name">Username (3-24 characters):</label>
 			<input type="text" class="form-control no-bottom-border-radius" id="user" name="user" placeholder="Username (3-24 characters)" maxlength="24" required>
 			
