@@ -3,8 +3,8 @@
 		DownloadMii Register Handler
 	*/
 	
-	require_once('../common/user.php');
-	require_once('../common/recaptchalib.php');
+	require_once('../../common/user.php');
+	require_once('../../common/recaptchalib.php');
 	
 	sendResponseCodeAndExitIfTrue(!isset($_SESSION['register_token']), 422); //Check if session register token is set
 	$registerToken = $_SESSION['register_token'];

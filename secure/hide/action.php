@@ -3,7 +3,7 @@
 		DownloadMii App Hiding Handler
 	*/
 	
-	require_once('../common/user.php');
+	require_once('../../common/user.php');
 	
 	sendResponseCodeAndExitIfTrue(!isset($_POST['guidid']), 400);
 	sendResponseCodeAndExitIfTrue(!isset($_SESSION['hide_app_guid' . $_POST['guidid']]), 422); //Check if GUID of app to remove is set

@@ -152,6 +152,13 @@
 	}
 	
 	/**
+	* Exit and print a message if user isn't logged in or has access level lower than required
+	*/
+	function verifyRole($minimumLevel) {
+		printAndExitIfTrue(!clientLoggedIn() || $_SESSION['user_role'] < $minimumLevel, 'You do not have permission to access this page.');
+	}
+	
+	/**
 	* Get a value from the config.php file
 	*
 	* @param string $key The configuration key to get a value from

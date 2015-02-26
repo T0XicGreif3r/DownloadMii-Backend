@@ -117,25 +117,25 @@
 							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
 						?>
 						<li><a href="/secure/myapps/">MY APPS</a></li>
-						<li><a href="/secure/publish.php">SUBMIT APP</a></li>
+						<li><a href="/secure/publish/">SUBMIT APP</a></li>
 						<?php
 							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {
 						?>
 						<li role="presentation" class="divider"></li>
-						<li><a href="/secure/mod_apps.php">MOD CP</a></li>
+						<li><a href="/secure/mod/">MOD CP</a></li>
 						<?php
 							}
 						?>
 						<?php
 							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 4) {
 						?>
-						<li><a href="/secure/admin.php">ADMIN CP</a></li>
+						<li><a href="/secure/admin/">ADMIN CP</a></li>
 						<?php
 							}
 						?>
 						<!--li><a href="/secure/usercp/">NOTIFICATIONS <span class="badge">42</span></a></li-->
 						<li role="presentation" class="divider"></li>
-						<li><a href="/secure/action_signout.php">LOGOUT</a></li>
+						<li><a href="/secure/signout/">LOGOUT</a></li>
 						<?php
 							}
 							else {

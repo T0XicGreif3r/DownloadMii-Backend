@@ -10,7 +10,7 @@
 ?>
 		<h1 class="animated bounceInDown text-center">Log in</h1>
 		<br />
-		<form role="form" class="small-width" action="/secure/action_login.php" method="post" accept-charset="utf-8">
+		<form role="form" class="small-width" action="action.php" method="post" accept-charset="utf-8">
 			<label class="sr-only" for="name">Username:</label>
 			<input type="text" class="form-control no-bottom-border-radius" id="user" name="user" placeholder="Username" maxlength="24" required>
 			

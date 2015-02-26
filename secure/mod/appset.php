@@ -1,12 +1,12 @@
 <?php
-	require_once('../common/user.php');
+	require_once('../../common/user.php');
 	
 	if (isset($_SESSION['mod_appview_token'])) {
 		$appsetToken = $_SESSION['mod_appview_token'];
 		unset($_SESSION['mod_appview_token']);
 	}
 	
-	printAndExitIfTrue(!clientLoggedIn() || $_SESSION['user_role'] < 3, 'You do not have permission to access this page.');
+	verifyRole(3);
 	
 	sendResponseCodeAndExitIfTrue(!(isset($_POST['guid'], $_POST['publishstate'], $_POST['failpublishmessage'], $_POST['token'])), 400);
 	sendResponseCodeAndExitIfTrue(!isset($appsetToken) || md5($appsetToken) !== $_POST['token'] || !is_numeric($_POST['publishstate']) || $_POST['publishstate'] < 0 || $_POST['publishstate'] > 4, 422);

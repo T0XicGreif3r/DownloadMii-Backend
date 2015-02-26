@@ -1,7 +1,7 @@
 <?php
-	require_once('../common/user.php');
+	require_once('../../common/user.php');
 	
-	printAndExitIfTrue(!clientLoggedIn() || $_SESSION['user_role'] < 3, 'You do not have permission to access this page.');
+	verifyRole(3);
 	
 	$_SESSION['mod_apps_token'] = uniqid(mt_rand(), true); //Generate token for moderator action
 	
@@ -17,13 +17,13 @@
 	
 	$md5Token = md5($_SESSION['mod_apps_token']);
 	foreach ($pendingApps as $app) {
-		echo '<br />' . '<a href="mod_appview.php?guid=' . $app['guid'] . '&token=' . $md5Token . '">' . $app['guid'] . '</a> (name: ' . escapeHTMLChars($app['name']) . ', version: ' . escapeHTMLChars($app['version']) . ', publisher: ' . escapeHTMLChars($app['publisher']) . ')';
+		echo '<br />' . '<a href="appview.php?guid=' . $app['guid'] . '&token=' . $md5Token . '">' . $app['guid'] . '</a> (name: ' . escapeHTMLChars($app['name']) . ', version: ' . escapeHTMLChars($app['version']) . ', publisher: ' . escapeHTMLChars($app['publisher']) . ')';
 	}
 ?>
 <br />
 <br />
 <br />
-<form action="mod_appview.php" method="get">
+<form action="appview.php" method="get">
 Query app by GUID:
 <br />
 <input type="text" name="guid" size="50">

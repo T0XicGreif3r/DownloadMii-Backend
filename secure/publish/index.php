@@ -4,8 +4,8 @@
 	*/
 	
 	$title = 'Publish App';
-	require_once('../common/ucpheader.php');
-	require_once('action_publish.php');
+	require_once('../../common/ucpheader.php');
+	require_once('action.php');
 	
 	if (isset($_GET['guid']) && isset($_SESSION['myapps_token' . $_GET['guid']])) {
 		$myappsToken = $_SESSION['myapps_token' . $_GET['guid']];
@@ -27,7 +27,7 @@
 			printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
 			
 			$appToEdit = $matchingApps[0];
-			
+			 
 			$_SESSION['publish_app_guid' . $guidId] = $appToEdit['guid'];
 			$_SESSION['user_app_version' . $appToEdit['guid']] = $appToEdit['version'];
 		}
@@ -56,7 +56,7 @@
 ?>
 
 		<div class="well">
-			<form role="form" action="publish.php" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+			<form role="form" action="index.php" method="post" enctype="multipart/form-data" accept-charset="utf-8">
 				<div class="row">
 					<div class="col-md-6 form-group">
 						<label for="name">Name:</label>
@@ -115,7 +115,7 @@
 						<input type="file" class="filestyle" id="smdh" name="smdh" accept=".smdh,.bin,.icn"<?php if (!$editing) echo ' required'; ?>>
 					</div>
 					<div class="col-md-4 form-group">
-						<label for="appdata">Additional data ZIP file (optional<?php if ($editing) echo ', only upload if you want to update'; ?>):</label> <!-- TODO: add checkbox for deleting app data -->
+						<label for="appdata">Additional data ZIP file (optional<?php if ($editing) echo ', only upload if you want to update'; ?>):</label>
 						<input type="file" class="filestyle" id="appdata" name="appdata" accept=".zip">
 					</div>
 				</div>
@@ -232,5 +232,5 @@
 		
 	<?php
 		}
-	require_once('../common/ucpfooter.php');
+	require_once('../../common/ucpfooter.php');
 ?>

@@ -3,10 +3,10 @@
 		DownloadMii Publishing Handler
 	*/
 	
-	require_once('../common/user.php');
-	require_once('../common/smdh.php');
-	require_once('../common/recaptchalib.php');
-	require_once('../vendor/autoload.php');
+	require_once('../../common/user.php');
+	require_once('../../common/smdh.php');
+	require_once('../../common/recaptchalib.php');
+	require_once('../../vendor/autoload.php');
 	
 	use WindowsAzure\Common\ServicesBuilder;
 	

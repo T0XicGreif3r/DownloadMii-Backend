@@ -12,7 +12,7 @@
 		<p class="animated bounceInLeft text-center">You'll need a DownloadMii account to publish apps, rate apps and much more.<br />
 		Creating an account is 100% free and painless!</p>
 		<br />
-		<form role="form" class="animated bounceInRight small-width" action="/secure/action_register.php" method="post" accept-charset="utf-8">
+		<form role="form" class="animated bounceInRight small-width" action="action.php" method="post" accept-charset="utf-8">
 			<label class="sr-only" for="name">Username (3-24 characters):</label>
 			<input type="text" class="form-control no-bottom-border-radius" id="user" name="user" placeholder="Username (3-24 characters)" maxlength="24" required>
 			

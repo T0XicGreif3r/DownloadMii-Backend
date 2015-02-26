@@ -1,12 +1,12 @@
 <?php
-	require_once('../common/user.php');
+	require_once('../../common/user.php');
 	
 	if (isset($_SESSION['mod_apps_token'])) {
 		$appsToken = $_SESSION['mod_apps_token'];
 		unset($_SESSION['mod_apps_token']);
 	}
 	
-	printAndExitIfTrue(!clientLoggedIn() || $_SESSION['user_role'] < 3, 'You do not have permission to access this page.');
+	verifyRole(3);
 	
 	$_SESSION['mod_appview_token'] = uniqid(mt_rand(), true); //Generate token for moderator action
 	
@@ -54,7 +54,7 @@
 ?>
 <br />
 <br />
-<form action="mod_appset.php" method="post">
+<form action="appset.php" method="post">
 Set publish state:
 <br />
 <select name="publishstate" required>

@@ -35,12 +35,12 @@
 			</div>
 			<div class="app-vertical-center-outer pull-right btn-toolbar">
 				<div class="app-vertical-center-inner">
-					<a role="button" class="btn btn-primary" href="/secure/publish.php?guid=<?php echo $app['guid']; ?>&token=<?php echo md5($_SESSION['myapps_token' . $app['guid']]); ?>">Update</a>
+					<a role="button" class="btn btn-primary" href="/secure/publish/?guid=<?php echo $app['guid']; ?>&token=<?php echo md5($_SESSION['myapps_token' . $app['guid']]); ?>">Update</a>
 					<div class="pull-right" style="margin-left: 5px;"> <!-- this shouldn't be like this -->
 						<div class="btn-group">
 <?php
 			if ($app['publishstate'] !== 2 && $app['publishstate'] !== 3) {
-				echo '<a role="button" class="btn btn-danger" href="hide.php?guid=' . $app['guid'] . '&token=' . md5($_SESSION['myapps_token' . $app['guid']]) . '">Hide</a>';
+				echo '<a role="button" class="btn btn-danger" href="/secure/hide/?guid=' . $app['guid'] . '&token=' . md5($_SESSION['myapps_token' . $app['guid']]) . '">Hide</a>';
 			}
 			
 			switch ($app['publishstate']) {

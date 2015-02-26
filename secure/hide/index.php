@@ -4,7 +4,7 @@
 	*/
 	
 	$title = 'Hide App';
-	require_once('../common/ucpheader.php');
+	require_once('../../common/ucpheader.php');
 	
 	if (isset($_GET['guid']) && isset($_SESSION['myapps_token' . $_GET['guid']])) {
 		$myappsToken = $_SESSION['myapps_token' . $_GET['guid']];
@@ -30,7 +30,7 @@
 ?>
 		<h1 class="text-center"><?php echo 'Hiding ' . $appToRemove['name']; ?></h1>
 		<br />
-		<form role="form" class="small-width" action="action_hide.php" method="post" accept-charset="utf-8">
+		<form role="form" class="small-width" action="action.php" method="post" accept-charset="utf-8">
 			<label for="pass">Enter your password and an exclamation mark to confirm hiding the app:</label>
 			<input type="password" class="form-control no-bottom-border-radius" id="pass" name="pass" placeholder="Password" required>
 			
@@ -45,5 +45,5 @@
 		}
 	}
 	
-	require_once('../common/ucpfooter.php');
+	require_once('../../common/ucpfooter.php');
 ?>
