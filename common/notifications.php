@@ -1,6 +1,6 @@
 <?php
 	/*
-		DownloadMii Notification Manager
+		DownloadMii Notification Manager (WIP)
 	*/
 	
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\functions.php');
