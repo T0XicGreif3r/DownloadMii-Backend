@@ -85,3 +85,14 @@ CREATE TABLE developers(
 	FOREIGN KEY (appGuid) REFERENCES apps(guid),
 	FOREIGN KEY (developerId) REFERENCES users(userId)
 );
+
+CREATE TABLE notifications(
+	notificationId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	userId INT NOT NULL,
+	timeCreated TIMESTAMP NOT NULL,
+	shortDescription TEXT NOT NULL,
+	longDescription TEXT NOT NULL,
+	isRead TINYINT NOT NULL DEFAULT 0,
+
+	FOREIGN KEY (userId) REFERENCES users(userId)
+);

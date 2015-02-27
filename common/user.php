@@ -1,10 +1,11 @@
 <?php
 	/*
 		DownloadMii User Handler
-		This file automatically includes functions.php
+		This file automatically includes functions.php and notifications.php
 	*/
 	
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\functions.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\notifications.php');
 	
 	session_start();
 	
@@ -23,6 +24,9 @@
 		if (count($matchingUsers) === 1) {
 			$_SESSION['user_nick'] = $matchingUsers[0]['nick'];
 			$_SESSION['user_role'] = $matchingUsers[0]['role'];
+	
+			$notificationManager = new notification_manager();
+			$unreadNotifications = $notificationManager->getUnreadNotifications();
 		}
 		else {
 			session_unset();
