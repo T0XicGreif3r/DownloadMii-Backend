@@ -110,9 +110,22 @@
 					<li><a href="/about">ABOUT</a></li>
 					<li><a data-scroll href="#DOWNLOADwp">DOWNLOAD</a></li>
 					<li><a href="/donate">DONATE</a></li>
-					<li class="dropdown">
-				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <?php if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) { echo strtoupper($_SESSION['user_nick']); } else { echo 'USER CP'; } ?><span class="caret"></span></a>
-				          <ul class="dropdown-menu" role="menu">
+					  <li class="dropdown">
+				        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> 
+						<?php
+							if (clientLoggedIn()) {
+								echo strtoupper($_SESSION['user_nick']);
+								if (count($unreadNotifications) > 0) {
+									echo ' <span class="badge">!</span>';
+								}
+							}
+							else {
+								echo 'USER CP';
+							}
+						?>
+						
+						<span class="caret"></span></a>
+				        <ul class="dropdown-menu" role="menu">
 						<?php
 							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
 						?>
@@ -121,7 +134,9 @@
 						<?php
 							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {
 						?>
+						
 						<li role="presentation" class="divider"></li>
+						<li><a href="/secure/usercp/">NOTIFICATIONS <span class="badge"><?php echo count($unreadNotifications); ?></span></a></li>
 						<li><a href="/secure/mod/">MOD CP</a></li>
 						<?php
 							}
@@ -133,7 +148,7 @@
 						<?php
 							}
 						?>
-						<!--li><a href="/secure/usercp/">NOTIFICATIONS <span class="badge">42</span></a></li-->
+						
 						<li role="presentation" class="divider"></li>
 						<li><a href="/secure/signout/">LOGOUT</a></li>
 						<?php
