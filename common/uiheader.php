@@ -111,7 +111,7 @@
 					<li><a data-scroll href="#DOWNLOADwp">DOWNLOAD</a></li>
 					<li><a href="/donate">DONATE</a></li>
 					<li class="dropdown">
-				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <?php if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) { echo strtoupper($_SESSION['user_nick']); } else { echo 'USER CP'; } ?><span class="caret"></span></a>
+				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <?php if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) { echo strtoupper($_SESSION['user_nick']); } else { echo 'ACCOUNT'; } ?><span class="caret"></span></a>
 				          <ul class="dropdown-menu" role="menu">
 						<?php
 							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
