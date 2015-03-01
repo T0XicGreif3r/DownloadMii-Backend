@@ -52,6 +52,8 @@
 				width: 400px;
 				height: auto;
 				margin-top: 32px;
+				border: 2px solid black;
+				border-radius: 3px;
 			}
 			
 			.app-vertical-center-outer {
