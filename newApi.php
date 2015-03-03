@@ -70,8 +70,7 @@
 					LEFT JOIN categories maincat ON maincat.categoryId = app.category
 					LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
 					LEFT JOIN screenshots scr ON scr.appGuid = app.guid
-					WHERE app.publishstate = 1
-					GROUP BY app.guid';
+					WHERE app.publishstate = 1';
 	
 	switch (strtolower($topLevelRequest)) {
 		case 'apps':
@@ -127,6 +126,7 @@
 				}
 			}
 			
+			$mysqlQuery .= ' GROUP BY app.guid';
 			if (isset($queryStringParts['sort'])) {
 				switch ($queryStringParts['sort']) {
 					case 'name':
