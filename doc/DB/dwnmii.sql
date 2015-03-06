@@ -38,7 +38,7 @@ CREATE TABLE apps(
 	subcategory INT NULL,
 	rating TINYINT NOT NULL DEFAULT 0,
 	downloads INT NOT NULL DEFAULT 0,
-	publishstate TINYINT NOT NULL DEFAULT 0,
+	publishstate TINYINT NOT NULL DEFAULT 0,				-- Use bitwise operations in the future?
 	failpublishmessage VARCHAR(24) NULL,
 	
 	FULLTEXT ft_name_desc(name, description),
