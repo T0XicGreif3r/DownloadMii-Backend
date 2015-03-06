@@ -7,7 +7,7 @@
 	require_once('../../common/ucpheader.php');
 	
 	foreach ($unreadNotifications as $notification) {
-		echo '<b>' . $notification->shortDescription . '</b> (' . $notification->timeCreated . ')<br>' . $notification->longDescription . '<br><br>';
+		echo '<b>' . $notification->summary . '</b> (' . $notification->timeCreated . ')<br>' . $notification->body . '<br><br>';
 	}
 	
 	require_once('../../common/ucpfooter.php');

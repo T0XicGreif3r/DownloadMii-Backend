@@ -54,6 +54,7 @@
 ?>
 <br />
 <br />
+
 <form action="appset.php" method="post">
 Set publish state:
 <br />
@@ -65,11 +66,17 @@ Set publish state:
 <option value="3">[3] Hidden</option>
 </select>
 <br />
-Message if "not approved" is selected (short, tell submitter why):
+<br />
+
+<b>([2], [3])</b> Message (keep short, tell submitter reason):
 <br />
 <input type="text" name="failpublishmessage" size="50" maxlength="24">
+<br />
+<input type="checkbox" name="sendnotification" value="yes"<?php if ($currentApp['publishstate'] == 0) echo ' checked'; ?>> <b>([1], [2], [3])</b> Send notification?
 <input type="hidden" name="guid" value="<?php echo $currentApp['guid']; ?>">
 <input type="hidden" name="token" value="<?php echo md5($_SESSION['mod_appview_token']); ?>">
+
+<br />
 <br />
 <input type="submit" value="Set">
 </form>

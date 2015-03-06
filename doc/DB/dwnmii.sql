@@ -90,8 +90,8 @@ CREATE TABLE notifications(
 	notificationId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	userId INT NOT NULL,
 	timeCreated TIMESTAMP NOT NULL,
-	shortDescription TEXT NOT NULL,
-	longDescription TEXT NOT NULL,
+	summary TEXT NOT NULL,
+	body TEXT NOT NULL,
 	isRead TINYINT NOT NULL DEFAULT 0,
 
 	FOREIGN KEY (userId) REFERENCES users(userId)
