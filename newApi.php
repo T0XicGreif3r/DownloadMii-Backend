@@ -260,7 +260,7 @@
 						$mysqlConn = connectToDatabase();
 						$mysqlQuery = 'SELECT appver.number AS version FROM apps app
 										LEFT JOIN appversions appver ON appver.versionId = app.version
-										WHERE app.publishstate = 1 AND app.guid = ? LIMIT 1';
+										WHERE (app.publishstate = 1 OR app.publishstate = 4 OR app.publishstate = 5) AND app.guid = ? LIMIT 1';
 						
 						$matchingApps = getArrayFromSQLQuery($mysqlConn, $mysqlQuery, 's', [getConfigValue('downloadmii_app_guid')]);
 						printAndExitIfTrue(count($matchingApps) !== 1, 'Invalid DownloadMii app GUID in config.');
