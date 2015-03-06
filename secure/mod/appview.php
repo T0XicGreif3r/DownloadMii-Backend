@@ -18,11 +18,11 @@
 	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.*,
 														user.nick AS publisher, appver.number AS version, maincat.name AS category, subcat.name AS subcategory, appver.3dsx, appver.smdh, appver.appdata, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5, appver.largeIcon, group_concat(scr.url) AS screenshots FROM apps app
 														LEFT JOIN users user ON user.userId = app.publisher
-														LEFT JOIN appversions appver ON appver.versionId = app.version
+														LEFT JOIN appversions appver ON appver.versionId = (SELECT versionId FROM appversions WHERE appGuid = ? ORDER BY versionId DESC LIMIT 1)
 														LEFT JOIN categories maincat ON maincat.categoryId = app.category
 														LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
 														LEFT JOIN screenshots scr ON scr.appGuid = app.guid
-														WHERE app.guid = ? LIMIT 1', 's', [$_GET['guid']]); //Get app with requested GUID
+														WHERE app.guid = ? LIMIT 1', 'ss', [$_GET['guid'], $_GET['guid']]); //Get app with requested GUID
 	
 	printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID
 	$currentApp = $matchingApps[0];
@@ -63,6 +63,8 @@ Set publish state:
 <option value="1">[1] Published</option>
 <option value="2">[2] Not approved</option>
 <option value="3">[3] Hidden</option>
+<option value="4">[4] Published - newer version pending approval</option>
+<option value="5">[5] Published - newer version not approved</option>
 </select>
 <br />
 Message if "not approved" is selected (short, tell submitter why):

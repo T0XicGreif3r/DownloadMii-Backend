@@ -12,7 +12,7 @@
 	}
 	
 	if (clientLoggedIn()) {
-		printAndExitIfTrue($_SESSION['user_role'] < 1, 'You do not have permission to publish apps.');
+		verifyRole(1);
 		
 		$guidId = uniqid(mt_rand(), true);
 		$mysqlConn = connectToDatabase();
@@ -21,8 +21,8 @@
 		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && md5($myappsToken) === $_GET['token']) {
 			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.category, app.subcategory, app.rating, app.downloads, app.publishstate,
 																appver.number AS version FROM apps app
-																LEFT JOIN appversions appver ON appver.versionId = app.version
-																WHERE app.guid = ? AND app.publisher = ? LIMIT 1', 'ss', [$_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
+																LEFT JOIN appversions appver ON appver.versionId = (SELECT versionId FROM appversions WHERE appGuid = ? ORDER BY versionId DESC LIMIT 1)
+																WHERE app.guid = ? AND app.publisher = ? LIMIT 1', 'sss', [$_GET['guid'], $_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
 			
 			printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
 			
@@ -56,7 +56,7 @@
 ?>
 
 		<div class="well">
-			<form role="form" action="index.php" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+			<form role="form" action="index.php<?php if (!empty($_SERVER['QUERY_STRING'])) echo '?' . $_SERVER['QUERY_STRING']; ?>" method="post" enctype="multipart/form-data" accept-charset="utf-8">
 				<div class="row">
 					<div class="col-md-6 form-group">
 						<label for="name">Name:</label>

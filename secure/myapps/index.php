@@ -8,8 +8,9 @@
 	
 	if (clientLoggedIn()) {
 		$mysqlConn = connectToDatabase();
-		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.downloads, app.publishstate, app.failpublishmessage, appver.number AS version, appver.largeIcon FROM apps app
+		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.downloads, app.publishstate, app.failpublishmessage, appver.number AS version, appver.largeIcon, appver_new.number AS version_new FROM apps app
 														LEFT JOIN appversions appver ON appver.versionId = app.version
+														LEFT JOIN appversions appver_new ON appver_new.versionId = (SELECT versionId FROM appversions WHERE appGuid = app.guid ORDER BY versionId DESC LIMIT 1)
 														WHERE app.publisher = ? ORDER BY appver.versionId DESC', 'i', [$_SESSION['user_id']]);
 ?>
 
@@ -63,6 +64,14 @@
 					
 				case 3:
 					echo '<button class="btn btn-danger disabled"><span class="glyphicon glyphicon-eye-close"></span> Hidden</button>';
+					break;
+					
+				case 4:
+					echo '<button class="btn btn-info disabled"><span class="glyphicon glyphicon-ok"></span> Published (version ' . $app['version_new'] . ' pending approval)</button>';
+					break;
+					
+				case 5:
+					echo '<button class="btn btn-warning disabled"><span class="glyphicon glyphicon-info-sign"></span> Published (version ' . $app['version_new'] . ': ' . escapeHTMLChars($app['failpublishmessage']) . ')</button>';
 					break;
 			}
 ?>

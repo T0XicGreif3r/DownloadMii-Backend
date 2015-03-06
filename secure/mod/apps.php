@@ -9,11 +9,12 @@
 	$pendingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, appver.number AS version, user.nick AS publisher FROM apps app
 														LEFT JOIN appversions appver ON appver.versionId = app.version
 														LEFT JOIN users user ON user.userId = app.publisher
-														WHERE app.publishstate = 0 ORDER BY version ASC LIMIT 50');
+														WHERE app.publishstate = 0 OR app.publishstate = 4
+														ORDER BY version ASC LIMIT 50');
 														
 	$mysqlConn->close();
 	
-	echo 'Pending apps (showing only oldest 50):<br />';
+	echo 'Pending apps/updates (showing only oldest 50):<br />';
 	
 	$md5Token = md5($_SESSION['mod_apps_token']);
 	foreach ($pendingApps as $app) {

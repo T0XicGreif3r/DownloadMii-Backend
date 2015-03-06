@@ -76,7 +76,7 @@
 				$publishToken = $_SESSION['publish_token' . $guid];
 		
 				sendResponseCodeAndExitIfTrue(!clientLoggedIn(), 403);
-				printAndExitIfTrue($_SESSION['user_role'] < 1, 'You do not have permission to publish apps.');
+				verifyRole(1);
 				
 				throwExceptionIfTrue(!(isset($_POST['name'], $_POST['version'], $_POST['category'], $_POST['description'], $_FILES['3dsx'], $_FILES['smdh'], $_POST["g-recaptcha-response"], $_POST['publishtoken'])), 'One or more required POST variables have not been set.'); //Check if all expected POST vars are set
 				throwExceptionIfTrue(empty($_POST['name']) || empty($_POST['version']), 'Please fill all required fields.'); //Check if fields aren't empty
@@ -188,11 +188,14 @@
 					$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.3dsx, appver.smdh, appver.appdata, appver.largeIcon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM appversions appver
 																		LEFT JOIN apps app ON appver.versionId = app.version
 																		WHERE app.guid = ? LIMIT 1', 's', [$guid])[0];
+																		
+					$currentPublishState = getArrayFromSQLQuery($mysqlConn, 'SELECT publishstate FROM apps WHERE guid = ? LIMIT 1', 's', [$guid])[0]['publishstate'];
 					
 					if (!$updating3dsx && !$updatingAppData) {
 						//Get current version ID
 						$versionId = $currentVersion['versionId'];
 					}
+					
 					if (!$updatingSmdh) {
 						//Get current smdh URL and MD5, plus icon URL
 						$appSmdhBlob->url = $currentVersion['smdh'];
@@ -200,30 +203,25 @@
 						$appIconBlob->url = $currentVersion['largeIcon'];
 					}
 					
-					if (!$updating3dsx && $updatingAppData) {
+					if (!$updating3dsx) {
 						//Get current 3dsx URL and MD5
 						$app3dsxBlob->url = $currentVersion['3dsx'];
 						$app3dsxBlob->md5 = $currentVersion['3dsx_md5'];
 					}
-					else if (!$updatingAppData && $updating3dsx) {
+					
+					if (!$updatingAppData) {
 						//Get current appdata URL and MD5
 						$appDataBlob->url = $currentVersion['appdata'];
 						$appDataBlob->md5 = $currentVersion['appdata_md5'];
 					}
 				}
 				
-				if (!$updatingApp || $updating3dsx || $updatingAppData) {
+				if (!$updatingApp || $updating3dsx || $updatingSmdh || $updatingAppData) {
 					//Insert app version
 					$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO appversions (appGuid, number, 3dsx, smdh, appdata, largeIcon, 3dsx_md5, smdh_md5, appdata_md5)
 																	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 'sssssssss', [$guid, $appVersion, $app3dsxBlob->url, $appSmdhBlob->url, $appDataBlob->url, $appIconBlob->url, $app3dsxBlob->md5, $appSmdhBlob->md5, $appDataBlob->md5], true);
 					$versionId = $stmt->insert_id;
 					$stmt->close();
-				}
-				else if ($updatingSmdh) {
-					//Update current app version with smdh URL and MD5
-					$stmt = executePreparedSQLQuery($mysqlConn, 'UPDATE appversions appver INNER JOIN apps app ON appver.versionId = app.version
-																	SET versionId = app.version, smdh = ?, largeIcon = ?, smdh_md5 = ?
-																	WHERE app.guid = ? AND appver.versionId = app.version', 'ssss', [$guid, $appSmdhBlob->url, $appIconBlob->url, $appSmdhBlob->md5]);
 				}
 				
 				if (!$updatingApp) {
@@ -232,11 +230,17 @@
 															VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
 															'ssiisiii', [$guid, $appName, $_SESSION['user_id'], $versionId, $appDescription, $appCategory, $appSubCategory, $isDeveloper ? 1 : 0]);
 				}
-				else {
-					//Update app row
-					executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, version = ?, description = ?, category = ?, subcategory = ?, publishstate = ?
+				else if ($updating3dsx || $updatingAppData) {
+					//Update app row, including publish state
+					executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, description = ?, category = ?, subcategory = ?, publishstate = ?
 															WHERE guid = ?',
-															'sisiiis', [$appName, $versionId, $appDescription, $appCategory, $appSubCategory, $isDeveloper ? 1 : 0, $guid]);
+															'ssiiis', [$appName, $appDescription, $appCategory, $appSubCategory, $currentPublishState !== 0 ? ($isDeveloper ? 1 : 4) : 0, $guid]);
+				}
+				else {
+					//Update app row, excluding publish state
+					executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, description = ?, category = ?, subcategory = ?
+															WHERE guid = ?',
+															'ssiis', [$appName, $appDescription, $appCategory, $appSubCategory, $guid]);
 				}
 				
 				unset($_SESSION['publish_app_guid' . $_POST['guidid']]);
@@ -252,7 +256,7 @@
 						
 						executePreparedSQLQuery($mysqlConn, 'INSERT INTO screenshots (appGuid, imageIndex, url)
 																VALUES (?, ?, ?)
-																ON DUPLICATE KEY UPDATE url=?',
+																ON DUPLICATE KEY UPDATE url = ?',
 																'siss', [$guid, $i, $appScreenshotBlob->url, $appScreenshotBlob->url]);
 					}
 				}
@@ -260,11 +264,16 @@
 				unset($_SESSION['myapps_token' . $guid]);
 				unset($_SESSION['publish_token' . $guid]);
 				
-				if ($isDeveloper) {
+				if ($isDeveloper || ($updatingApp && $currentPublishState === 1 && !$updating3dsx && !$updatingAppData)) {
 					echo 'Your application has been published.';
 				}
 				else {
-					echo 'Your application has been submitted and is now pending approval from our staff.';
+					if (!$updatingApp) {
+						echo 'Your application has been submitted and is now pending approval from our staff.';
+					}
+					else {
+						echo 'Your update has been submitted and is now pending approval from our staff. The current version is still available.';
+					}
 				}
 				
 				exit();
