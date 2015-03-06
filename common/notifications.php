@@ -8,8 +8,8 @@
 	class notification {
 		public $userId;
 		public $timeCreated;
-		public $shortDescription;
-		public $longDescription;
+		public $summary;
+		public $body;
 		public $isRead;
 	}
 	
@@ -17,27 +17,32 @@
 		private $mysqlConn;
 		private $connIsExternal;
 		
-		//function createNotification()
+		public function createNotification($userId, $summary, $body) {
+			executePreparedSQLQuery($this->mysqlConn, 'INSERT INTO notifications (userId, summary, body)
+													VALUES (?, ?, ?)',
+													'iss', [$userId, escapeHTMLChars($summary), escapeHTMLChars($body)]);
+		}
 		
-		function getUnreadNotifications() {
+		public function getLatestNotifications() {
 			//Get notifications from database
-			$notifications = getArrayFromSQLQuery($this->mysqlConn, 'SELECT userId, timeCreated, shortDescription, longDescription, isRead FROM notifications WHERE userId = ? AND isRead = 0', 'i', [$_SESSION['user_id']]);
+			$notifications = getArrayFromSQLQuery($this->mysqlConn, 'SELECT userId, timeCreated, summary, body, isRead FROM notifications WHERE userId = ? ORDER BY notificationId DESC LIMIT 10', 'i', [$_SESSION['user_id']]);
 			
-			//Convert notifications to object
-			$notificationsObj = array();
-			for ($i = 0; $i < count($notifications); $i++) {
-				array_push($notificationsObj, new notification());
-				foreach ($notifications[$i] as $key => $value)
-				{
-					$notificationsObj[$i]->$key = $value;
-				}
-			}
+			return $this->getNotificationObjectFromArray($notifications);
+		}
+		
+		public function getLatestUnreadNotifications() {
+			//Get notifications from database
+			$notifications = getArrayFromSQLQuery($this->mysqlConn, 'SELECT userId, timeCreated, summary, body, isRead FROM notifications WHERE userId = ? AND isRead = 0 ORDER BY notificationId DESC LIMIT 10', 'i', [$_SESSION['user_id']]);
 			
-			return $notificationsObj;
+			//Set "isRead" attribute
+			executePreparedSQLQuery($this->mysqlConn, 'UPDATE notifications SET isRead = 1 WHERE userId = ? AND isRead = 0 ORDER BY notificationId DESC LIMIT 10', 'i', [$_SESSION['user_id']]);
+			
+			return $this->getNotificationObjectFromArray($notifications);
 		}
 		
 		public function __construct($mysqlConn = null) {
 			$this->connIsExternal = $mysqlConn !== null;
+			
 			if ($this->connIsExternal) {
 				$this->mysqlConn = $mysqlConn;
 			}
@@ -50,6 +55,20 @@
 			if (!$this->connIsExternal) {
 				$this->mysqlConn->close();
 			}
+		}
+		
+		private function getNotificationObjectFromArray($notifications) {
+			//Convert notifications to object
+			$notificationsObj = array();
+			for ($i = 0; $i < count($notifications); $i++) {
+				array_push($notificationsObj, new notification());
+				foreach ($notifications[$i] as $key => $value)
+				{
+					$notificationsObj[$i]->$key = $value;
+				}
+			}
+			
+			return $notificationsObj;
 		}
 	}
 ?>

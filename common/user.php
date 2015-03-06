@@ -25,8 +25,8 @@
 			$_SESSION['user_nick'] = $matchingUsers[0]['nick'];
 			$_SESSION['user_role'] = $matchingUsers[0]['role'];
 	
-			$notificationManager = new notification_manager();
-			$unreadNotifications = $notificationManager->getUnreadNotifications();
+			$notificationManager = new notification_manager($mysqlConn);
+			$unreadNotifications = $notificationManager->getLatestUnreadNotifications();
 		}
 		else {
 			session_unset();
