@@ -70,7 +70,7 @@
 					LEFT JOIN categories maincat ON maincat.categoryId = app.category
 					LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
 					LEFT JOIN screenshots scr ON scr.appGuid = app.guid
-					WHERE app.publishstate = 1 OR app.publishstate = 4 OR app.publishstate = 5';
+					WHERE (app.publishstate = 1 OR app.publishstate = 4 OR app.publishstate = 5)';
 	
 	switch (strtolower($topLevelRequest)) {
 		case 'apps':
