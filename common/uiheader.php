@@ -13,7 +13,7 @@
 		<?php
 			require_once($_SERVER['DOCUMENT_ROOT'] . '\common\meta.php');
 		?>
-		<title><?php if (isset($title)) echo $title . ' - '; ?> DownloadMii</title>
+		<title><?php if (isset($title)) echo $title . ' - '; ?>DownloadMii</title>
 		<style>
 			header {
 				margin-bottom: 75px;
@@ -88,6 +88,10 @@
 			.no-top-border-radius {
 				border-top-left-radius: 0; border-top-right-radius: 0;
 			}
+			
+			.dropdown-menu {
+				text-align: right;
+			}
 		</style>
 	</head>
 	<body>
@@ -114,8 +118,10 @@
 				        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> 
 						<?php
 							if (clientLoggedIn()) {
+								$displayNotificationInfo = (!isset($printNotificationsInHeader) || $printNotificationsInHeader) && $unreadNotificationCount > 0;
+								
 								echo strtoupper($_SESSION['user_nick']);
-								if (count($unreadNotifications) > 0) {
+								if ($displayNotificationInfo) {
 									echo ' <span class="badge">!</span>';
 								}
 							}
@@ -131,12 +137,31 @@
 						?>
 						<li><a href="/secure/myapps/">MY APPS</a></li>
 						<li><a href="/secure/publish/">SUBMIT APP</a></li>
+						<li role="presentation" class="divider"></li>
+						
 						<?php
+							// ** START NOTIFICATIONS **
+							if ($displayNotificationInfo) {
+						?>
+						<?php
+							foreach ($unreadNotificationSummaries as $notificationSummary) {
+								echo '<li><a href="/secure/notifications/"><strong>' . $notificationSummary . '</strong></a></li>';
+							}
+						?>
+						<li><a href="/secure/notifications/">ALL NOTIFICATIONS <span class="badge"><?php echo $unreadNotificationCount; ?></span></a></li>
+						<?php
+							}
+							else {
+						?>
+						<li><a href="/secure/notifications/">NOTIFICATIONS</a></li>
+						
+						<?php
+							}
+							// ** END NOTIFICATIONS **
+							
 							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {
 						?>
-						
 						<li role="presentation" class="divider"></li>
-						<li><a href="/secure/usercp/">NOTIFICATIONS <span class="badge"><?php echo count($unreadNotifications); ?></span></a></li>
 						<li><a href="/secure/mod/">MOD CP</a></li>
 						<?php
 							}

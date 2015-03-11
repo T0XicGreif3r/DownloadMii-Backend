@@ -18,26 +18,30 @@
 		private $connIsExternal;
 		
 		public function createNotification($userId, $summary, $body) {
+			//Insert notification entry into database
 			executePreparedSQLQuery($this->mysqlConn, 'INSERT INTO notifications (userId, summary, body)
 													VALUES (?, ?, ?)',
 													'iss', [$userId, escapeHTMLChars($summary), escapeHTMLChars($body)]);
 		}
 		
-		public function getLatestNotifications() {
-			//Get notifications from database
-			$notifications = getArrayFromSQLQuery($this->mysqlConn, 'SELECT userId, timeCreated, summary, body, isRead FROM notifications WHERE userId = ? ORDER BY notificationId DESC LIMIT 10', 'i', [$_SESSION['user_id']]);
-			
-			return $this->getNotificationObjectFromArray($notifications);
+		public function getNotifications($count) {
+			return $this->getNotificationObjects($count, true);
 		}
 		
-		public function getLatestUnreadNotifications() {
-			//Get notifications from database
-			$notifications = getArrayFromSQLQuery($this->mysqlConn, 'SELECT userId, timeCreated, summary, body, isRead FROM notifications WHERE userId = ? AND isRead = 0 ORDER BY notificationId DESC LIMIT 10', 'i', [$_SESSION['user_id']]);
-			
-			//Set "isRead" attribute
-			executePreparedSQLQuery($this->mysqlConn, 'UPDATE notifications SET isRead = 1 WHERE userId = ? AND isRead = 0 ORDER BY notificationId DESC LIMIT 10', 'i', [$_SESSION['user_id']]);
-			
-			return $this->getNotificationObjectFromArray($notifications);
+		public function getUnreadNotifications($count) {
+			return $this->getNotificationObjects($count, false);
+		}
+		
+		public function getNotificationSummaries($count) {
+			return $this->getNotificationSummaryStrings($count, true);
+		}
+		
+		public function getUnreadNotificationSummaries($count) {
+			return $this->getNotificationSummaryStrings($count, false);
+		}
+		
+		public function getUnreadNotificationCount() {
+			return getArrayFromSQLQuery($this->mysqlConn, 'SELECT COUNT(*) FROM notifications WHERE userId = ? AND isRead = 0', 'i', [$_SESSION['user_id']])[0]['COUNT(*)'];
 		}
 		
 		public function __construct($mysqlConn = null) {
@@ -57,7 +61,15 @@
 			}
 		}
 		
-		private function getNotificationObjectFromArray($notifications) {
+		private function getNotificationObjects($count, $includeRead) {
+			//Get notifications from database
+			$notifications = getArrayFromSQLQuery($this->mysqlConn, 'SELECT userId, timeCreated, summary, body, isRead FROM notifications WHERE userId = ?' .
+																		(!$includeRead ? ' AND isRead = 0' : '') . ' ORDER BY notificationId DESC LIMIT ?', 'ii', [$_SESSION['user_id'], $count]);
+			
+			//Set "isRead" attribute
+			executePreparedSQLQuery($this->mysqlConn, 'UPDATE notifications SET isRead = 1 WHERE userId = ?' .
+														(!$includeRead ? ' AND isRead = 0' : '') . ' AND isRead = 0 ORDER BY notificationId DESC LIMIT ?', 'ii', [$_SESSION['user_id'], $count]);
+			
 			//Convert notifications to object
 			$notificationsObj = array();
 			for ($i = 0; $i < count($notifications); $i++) {
@@ -69,6 +81,19 @@
 			}
 			
 			return $notificationsObj;
+		}
+		
+		private function getNotificationSummaryStrings($count, $includeRead) {
+			//Get notifications from database
+			$notifications = getArrayFromSQLQuery($this->mysqlConn, 'SELECT summary FROM notifications WHERE userId = ?' .
+																		(!$includeRead ? ' AND isRead = 0' : '') . ' ORDER BY notificationId DESC LIMIT ?', 'ii', [$_SESSION['user_id'], $count]);
+			
+			$summariesObj = array();
+			foreach ($notifications as $notification) {
+				array_push($summariesObj, $notification['summary']);
+			}
+			
+			return $summariesObj;
 		}
 	}
 ?>
