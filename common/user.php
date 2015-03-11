@@ -26,7 +26,8 @@
 			$_SESSION['user_role'] = $matchingUsers[0]['role'];
 	
 			$notificationManager = new notification_manager($mysqlConn);
-			$unreadNotifications = $notificationManager->getLatestUnreadNotifications();
+			$unreadNotificationCount = $notificationManager->getUnreadNotificationCount();
+			$unreadNotificationSummaries = $notificationManager->getUnreadNotificationSummaries(2);
 		}
 		else {
 			session_unset();
