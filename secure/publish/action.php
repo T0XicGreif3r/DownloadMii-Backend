@@ -185,16 +185,11 @@
 				}
 				
 				if ($updatingApp) {
-					$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.3dsx, appver.smdh, appver.appdata, appver.largeIcon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM appversions appver
+					$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.3dsx, appver.smdh, appver.appdata, appver.largeIcon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM appversions appver
 																		LEFT JOIN apps app ON appver.versionId = app.version
 																		WHERE app.guid = ? LIMIT 1', 's', [$guid])[0];
 																		
 					$currentPublishState = getArrayFromSQLQuery($mysqlConn, 'SELECT publishstate FROM apps WHERE guid = ? LIMIT 1', 's', [$guid])[0]['publishstate'];
-					
-					if (!$updating3dsx && !$updatingAppData) {
-						//Get current version ID
-						$versionId = $currentVersion['versionId'];
-					}
 					
 					if (!$updatingSmdh) {
 						//Get current smdh URL and MD5, plus icon URL
