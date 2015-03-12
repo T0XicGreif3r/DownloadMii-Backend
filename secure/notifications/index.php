@@ -21,7 +21,12 @@
 		<div class="pull-left">
 			<h4><strong>
 <?php
-				echo $notification->summary;
+				if (!empty($notification->rootRelativeURL)) {
+					echo '<a href="' . $notification->rootRelativeURL . '">' . $notification->summary . '</a>';
+				}
+				else {
+					echo $notification->summary;
+				}
 ?>
 			</strong></h4>
 		</div>

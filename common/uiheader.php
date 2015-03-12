@@ -144,8 +144,8 @@
 							if ($displayNotificationInfo) {
 						?>
 						<?php
-							foreach ($unreadNotificationSummaries as $notificationSummary) {
-								echo '<li><a href="/secure/notifications/"><strong>' . $notificationSummary . '</strong></a></li>';
+							foreach ($unreadNotificationSummaries as $notification) {
+								echo '<li><a href="' . (!empty($notification->rootRelativeURL) ? $notification->rootRelativeURL : '/secure/notifications/') . '"><strong>' . $notification->summary . '</strong></a></li>';
 							}
 						?>
 						<li><a href="/secure/notifications/">ALL NOTIFICATIONS <span class="badge"><?php echo $unreadNotificationCount; ?></span></a></li>
@@ -159,7 +159,7 @@
 							}
 							// ** END NOTIFICATIONS **
 							
-							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {
+							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && clientPartOfGroup('Moderators')) {
 						?>
 						<li role="presentation" class="divider"></li>
 						<li><a href="/secure/mod/">MOD CP</a></li>
@@ -167,7 +167,7 @@
 							}
 						?>
 						<?php
-							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 4) {
+							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && clientPartOfGroup('Administrators')) {
 						?>
 						<li><a href="/secure/admin/">ADMIN CP</a></li>
 						<?php

@@ -17,7 +17,7 @@
 	$tryUserPass = $_POST['pass'];
 	
 	$mysqlConn = connectToDatabase();
-	$matchingUsers = getArrayFromSQLQuery($mysqlConn, 'SELECT userId, password, nick, role FROM users WHERE LOWER(nick) = LOWER(?) LIMIT 1', 's', [$tryUserName]);
+	$matchingUsers = getArrayFromSQLQuery($mysqlConn, 'SELECT userId, password, nick FROM users WHERE LOWER(nick) = LOWER(?) LIMIT 1', 's', [$tryUserName]);
 	
 	printAndExitIfTrue(count($matchingUsers) != 1, 'Invalid username and/or password.'); //Check if there is one user matching attempted username
 	
@@ -30,7 +30,6 @@
 	
 	$_SESSION['user_id'] = $user['userId'];
 	$_SESSION['user_nick'] = $user['nick'];
-	$_SESSION['user_role'] = $user['role'];
 	$_SESSION['user_token'] = $tokenSha1;
 	
 	//Redirect to "my apps" list

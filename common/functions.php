@@ -148,14 +148,26 @@
 	* @return bool Whether the client is logged in
 	*/
 	function clientLoggedIn() {
-		return isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_role'], $_SESSION['user_token']);
+		return isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_groups'], $_SESSION['user_token']);
 	}
 	
 	/**
-	* Exit and print a message if user isn't logged in or has access level lower than required
+	* Get whether the user belongs to a certain group
+	*
+	* @param string $groupName The group name to check against
+	* @return bool Whether the client is logged in and part of the group
 	*/
-	function verifyRole($minimumLevel) {
-		printAndExitIfTrue(!clientLoggedIn() || $_SESSION['user_role'] < $minimumLevel, 'You do not have permission to access this page.');
+	function clientPartOfGroup($groupName) {
+		return clientLoggedIn() && in_array($groupName, $_SESSION['user_groups']);
+	}
+	
+	/**
+	* Exit and print a message if user isn't logged in or doesn't belong to a certain group
+	*
+	* @param string $groupName The group name to check against
+	*/
+	function verifyGroup($groupName) {
+		printAndExitIfTrue(!clientPartOfGroup($groupName), 'You do not have permission to access this page.');
 	}
 	
 	/**

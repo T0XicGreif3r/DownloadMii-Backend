@@ -19,12 +19,18 @@
 	
 	if (isset($_SESSION['user_id'], $_SESSION['user_token'])) {
 		$mysqlConn = connectToDatabase();
-		$matchingUsers = getArrayFromSQLQuery($mysqlConn, 'SELECT nick, role FROM users WHERE userId = ? AND token = ? LIMIT 1', 'ss', [$_SESSION['user_id'], $_SESSION['user_token']]);
+		$matchingUsers = getArrayFromSQLQuery($mysqlConn, 'SELECT nick FROM users WHERE userId = ? AND token = ? LIMIT 1', 'ss', [$_SESSION['user_id'], $_SESSION['user_token']]); //Get user nickname
 		
 		if (count($matchingUsers) === 1) {
 			$_SESSION['user_nick'] = $matchingUsers[0]['nick'];
-			$_SESSION['user_role'] = $matchingUsers[0]['role'];
-	
+			
+			$matchingGroups = getArrayFromSQLQuery($mysqlConn, 'SELECT name FROM groups
+																LEFT JOIN groupconnections groupcon ON groupcon.userId = ?
+																WHERE groupcon.groupName = name', 'i', [$_SESSION['user_id']]); //Get user groups
+			
+			$_SESSION['user_groups'] = call_user_func_array('array_merge', $matchingGroups);
+			
+			//Get information about unread notification
 			$notificationManager = new notification_manager($mysqlConn);
 			$unreadNotificationCount = $notificationManager->getUnreadNotificationCount();
 			$unreadNotificationSummaries = $notificationManager->getUnreadNotificationSummaries(2);

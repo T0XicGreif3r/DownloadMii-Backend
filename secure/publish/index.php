@@ -12,7 +12,7 @@
 	}
 	
 	if (clientLoggedIn()) {
-		printAndExitIfTrue($_SESSION['user_role'] < 1, 'You do not have permission to publish apps.');
+		verifyGroup('Users');
 		
 		$guidId = uniqid(mt_rand(), true);
 		$mysqlConn = connectToDatabase();

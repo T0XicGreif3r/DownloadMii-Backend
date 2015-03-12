@@ -40,7 +40,7 @@
 			<input type="hidden" name="guidid" value="<?php echo $guidId; ?>">
 		</form>
 <?php
-		if ($_SESSION['user_role'] < 2) {
+		if (!clientPartOfGroup('Developers')) {
 			echo '<div class="text-center" style="color: red; font-weight: bold;">WARNING: You\'ll have to republish the app to unhide it.</div>';
 		}
 	}
