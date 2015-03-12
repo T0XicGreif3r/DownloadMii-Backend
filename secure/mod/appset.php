@@ -31,10 +31,10 @@
 		$notificationUserId = $currentApp['publisher'];
 		
 		//Generate notification summary
-		$notificationSummary = 'Your application "' . $currentApp['name'] . '" has been';
+		$notificationSummary = '"' . $currentApp['name'] . '" has been';
 		switch ($appPublishState) {
 			case 1: //Published
-				$notificationSummary .= ' approved and is now published.';
+				$notificationSummary .= ' approved.';
 				break;
 			
 			case 2: //Not approved
@@ -47,8 +47,8 @@
 		}
 		
 		//Generate notification body
-		$notificationBody = $notificationSummary;
-		if ($appPublishState === 1) {
+		$notificationBody = 'Your submitted application ' . $notificationSummary;
+		if ($appPublishState == 1) {
 			$notificationBody .= ' It is now viewable on the website and in the 3DS DownloadMii application.';
 		}
 		else if ($appPublishState > 1 && !empty($appFailPublishMessage)) {
