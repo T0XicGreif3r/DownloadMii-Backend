@@ -6,7 +6,7 @@
 		unset($_SESSION['mod_appview_token']);
 	}
 	
-	verifyRole(3);
+	verifyGroup('Moderators');
 	
 	sendResponseCodeAndExitIfTrue(!(isset($_POST['guid'], $_POST['publishstate'], $_POST['failpublishmessage'], $_POST['token'])), 400);
 	sendResponseCodeAndExitIfTrue(!isset($appsetToken) || md5($appsetToken) !== $_POST['token'] || !is_numeric($_POST['publishstate']) || $_POST['publishstate'] < 0 || $_POST['publishstate'] > 5, 422);

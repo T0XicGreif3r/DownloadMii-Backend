@@ -1,10 +1,25 @@
+CREATE TABLE groups(
+	name VARCHAR(30) NOT NULL PRIMARY KEY,
+	inheritedGroup VARCHAR(30) NULL,
+	
+	FOREIGN KEY (inheritedGroup) REFERENCES groups(name)
+);
+
 CREATE TABLE users(
 	userId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	nick VARCHAR(24) NOT NULL UNIQUE,
 	password VARCHAR(60) NOT NULL,
-	role TINYINT NOT NULL,
 	email VARCHAR(255) NOT NULL UNIQUE,
 	token VARCHAR(40) NULL UNIQUE
+);
+
+CREATE TABLE groupconnections(
+	groupConnectionId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	userId INT NOT NULL,
+	groupName VARCHAR(30) NOT NULL,
+	
+	FOREIGN KEY (userId) REFERENCES users(userId),
+	FOREIGN KEY (groupName) REFERENCES groups(name)
 );
 
 CREATE TABLE categories(
@@ -76,23 +91,16 @@ CREATE TABLE downloads(
 	ipHash CHAR(32) NOT NULL
 );
 
-CREATE TABLE developers(
-	developerId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	appGuid CHAR(36) NOT NULL,
-	userId INT NOT NULL,
-	nick VARCHAR(50) NULL,
-
-	FOREIGN KEY (appGuid) REFERENCES apps(guid),
-	FOREIGN KEY (developerId) REFERENCES users(userId)
-);
-
 CREATE TABLE notifications(
 	notificationId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	userId INT NOT NULL,
+	userId INT NULL,
+	groupName VARCHAR(30) NULL,
 	timeCreated TIMESTAMP NOT NULL,
 	summary TEXT NOT NULL,
 	body TEXT NOT NULL,
+	rootRelativeURL VARCHAR(255) NULL,
 	isRead TINYINT NOT NULL DEFAULT 0,
 
-	FOREIGN KEY (userId) REFERENCES users(userId)
+	FOREIGN KEY (userId) REFERENCES users(userId),
+	FOREIGN KEY (groupName) REFERENCES groups(name)
 );

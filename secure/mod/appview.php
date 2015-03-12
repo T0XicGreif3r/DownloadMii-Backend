@@ -6,7 +6,7 @@
 		unset($_SESSION['mod_apps_token']);
 	}
 	
-	verifyRole(3);
+	verifyGroup('Moderators');
 	
 	$_SESSION['mod_appview_token'] = uniqid(mt_rand(), true); //Generate token for moderator action
 	

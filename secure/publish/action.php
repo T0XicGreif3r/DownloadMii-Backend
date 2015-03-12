@@ -76,7 +76,7 @@
 				$publishToken = $_SESSION['publish_token' . $guid];
 		
 				sendResponseCodeAndExitIfTrue(!clientLoggedIn(), 403);
-				verifyRole(1);
+				verifyGroup('Users');
 				
 				throwExceptionIfTrue(!(isset($_POST['name'], $_POST['version'], $_POST['category'], $_POST['description'], $_FILES['3dsx'], $_FILES['smdh'], $_POST["g-recaptcha-response"], $_POST['publishtoken'])), 'One or more required POST variables have not been set.'); //Check if all expected POST vars are set
 				throwExceptionIfTrue(empty($_POST['name']) || empty($_POST['version']), 'Please fill all required fields.'); //Check if fields aren't empty
@@ -105,7 +105,7 @@
 				$appSmdhPath = $_FILES['smdh']['tmp_name'];
 				$appDataPath = $_FILES['appdata']['tmp_name'];
 				
-				$isDeveloper = $_SESSION['user_role'] > 1;
+				$isDeveloper = clientPartOfGroup('Developers');
 				$updatingApp = isset($_SESSION['user_app_version' . $guid]);
 				
 				$updatingAppData = is_uploaded_file($appDataPath);
@@ -284,6 +284,14 @@
 					echo 'Your application has been published.';
 				}
 				else {
+					//Prepare notification
+					$notificationSummary = '"' . $appName . '" is awaiting approval.';
+					$notificationBody = $notificationSummary;
+					
+					//Create notification
+					$notificationManager = new notification_manager($mysqlConn);
+					$notificationManager->createGroupNotification('Moderators', $notificationSummary, $notificationBody);
+		
 					if (!$updatingApp) {
 						echo 'Your application has been submitted and is now pending approval from our staff.';
 					}
