@@ -16,9 +16,17 @@
 	$appFailPublishMessage = $_POST['publishstate'] == 2 || $_POST['publishstate'] == 5 ? escapeHTMLChars($_POST['failpublishmessage']) : '';
 	
 	$mysqlConn = connectToDatabase();
-	executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET version = (SELECT versionId FROM appversions WHERE appGuid = ? ORDER BY versionId DESC LIMIT 1),
-											publishstate = ?, failpublishmessage = ?
-											WHERE guid = ? LIMIT 1', 'siss', [$appGuid, $appPublishState, $appFailPublishMessage, $appGuid]); //Update publish state in database
+	
+	if ($appPublishState == 1) {
+		executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET version = (SELECT versionId FROM appversions WHERE appGuid = ? ORDER BY versionId DESC LIMIT 1),
+												publishstate = ?, failpublishmessage = ?
+												WHERE guid = ? LIMIT 1', 'siss', [$appGuid, $appPublishState, $appFailPublishMessage, $appGuid]); //Update latest version and publish state in database
+	}
+	else {
+		executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET publishstate = ?, failpublishmessage = ?
+												WHERE guid = ? LIMIT 1', 'iss', [$appPublishState, $appFailPublishMessage, $appGuid]); //Update publish state in database
+	}
+	
 	$mysqlConn->close();
 	
 	echo 'App publish state set.';

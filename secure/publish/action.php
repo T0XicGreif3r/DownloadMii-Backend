@@ -185,10 +185,12 @@
 				}
 				
 				if ($updatingApp) {
-					$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.3dsx, appver.smdh, appver.appdata, appver.largeIcon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM appversions appver
+					$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.3dsx, appver.smdh, appver.appdata, appver.largeIcon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM appversions appver
 																		LEFT JOIN apps app ON appver.versionId = app.version
 																		WHERE app.guid = ? LIMIT 1', 's', [$guid])[0];
-																		
+					
+					$currentVersionId = $currentVersion['versionId'];
+					
 					$currentPublishState = getArrayFromSQLQuery($mysqlConn, 'SELECT publishstate FROM apps WHERE guid = ? LIMIT 1', 's', [$guid])[0]['publishstate'];
 					
 					if (!$updatingSmdh) {
@@ -221,18 +223,37 @@
 				
 				if (!$updatingApp) {
 					//Insert app
+					
+					$publishState = $isDeveloper ? 1 : 0;
+					
 					executePreparedSQLQuery($mysqlConn, 'INSERT INTO apps (guid, name, publisher, version, description, category, subcategory, publishstate)
 															VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-															'ssiisiii', [$guid, $appName, $_SESSION['user_id'], $versionId, $appDescription, $appCategory, $appSubCategory, $isDeveloper ? 1 : 0]);
+															'ssiisiii', [$guid, $appName, $_SESSION['user_id'], $versionId, $appDescription, $appCategory, $appSubCategory, $publishState]);
 				}
-				else if ($updating3dsx || $updatingAppData) {
-					//Update app row, including publish state
-					executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, description = ?, category = ?, subcategory = ?, publishstate = ?
+				else if ($updating3dsx || $updatingSmdh || $updatingAppData) {
+					//Update app row, including version and publish state
+					
+					if ($currentPublishState !== 0) {
+						if ($isDeveloper || $updatingSmdh) {
+							$publishState = 1; //Published
+						}
+						else {
+							$publishState = 4; //Published, new version pending approval
+						}
+					}
+					else {
+						$publishState = 0; //Pending approval
+					}
+					
+					executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, version = ?, description = ?, category = ?, subcategory = ?, publishstate = ?
 															WHERE guid = ?',
-															'ssiiis', [$appName, $appDescription, $appCategory, $appSubCategory, $currentPublishState !== 0 ? ($isDeveloper ? 1 : 4) : 0, $guid]);
+															'sisiiis', [$appName, $publishState === 1 ? $versionId : $currentVersionId, $appDescription, $appCategory, $appSubCategory, $publishState, $guid]);
 				}
 				else {
-					//Update app row, excluding publish state
+					//Update app row, but keep current version and publish state
+					
+					$publishState = $currentPublishState;
+					
 					executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, description = ?, category = ?, subcategory = ?
 															WHERE guid = ?',
 															'ssiis', [$appName, $appDescription, $appCategory, $appSubCategory, $guid]);
