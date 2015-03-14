@@ -90,6 +90,13 @@
 				throwExceptionIfTrue(mb_strlen($_POST['version']) > 12, 'Version is too long.');
 				throwExceptionIfTrue(mb_strlen($_POST['description']) > 300, 'Description is too long.');
 				
+				//Check file upload errors
+				foreach ($_FILES as $file) {
+					throwExceptionIfTrue($file['error'] === 1 || $file['error'] === 2, $file['name'] . ' exceeds the file size limit.');
+					throwExceptionIfTrue($file['error'] === 3, $file['name'] . ' wasn\'t fully uploaded.');
+					throwExceptionIfTrue($file['error'] > 4, $file['name'] . ' encountered an internal error upon upload: ' . $file['error']);
+				}
+				
 				//Check captcha
 				$reCaptcha = new ReCaptcha(getConfigValue('apikey_recaptcha_secret'));
 				$resp = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
