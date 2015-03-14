@@ -234,7 +234,7 @@
 					//Update app row, including version and publish state
 					
 					if ($currentPublishState !== 0) {
-						if ($isDeveloper || $updatingSmdh) {
+						if ($isDeveloper || ($updatingSmdh && !$updating3dsx && !updatingAppData)) {
 							$publishState = 1; //Published
 						}
 						else {
