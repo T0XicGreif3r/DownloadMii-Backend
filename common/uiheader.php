@@ -130,7 +130,7 @@
 								}
 							}
 							else {
-								echo 'USER CP';
+								echo 'ACCOUNT';
 							}
 						?>
 						

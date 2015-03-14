@@ -28,7 +28,7 @@
 																LEFT JOIN groupconnections groupcon ON groupcon.userId = ?
 																WHERE groupcon.groupName = name', 'i', [$_SESSION['user_id']]); //Get user groups
 			
-			$_SESSION['user_groups'] = call_user_func_array('array_merge', $matchingGroups);
+			$_SESSION['user_groups'] = call_user_func_array('array_merge', call_user_func_array('array_merge_recursive', $matchingGroups));
 			
 			//Get information about unread notification
 			$notificationManager = new notification_manager($mysqlConn);
