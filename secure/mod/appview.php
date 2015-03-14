@@ -74,7 +74,7 @@ Set publish state:
 <br />
 <input type="text" name="failpublishmessage" size="50" maxlength="24">
 <br />
-<input type="checkbox" name="sendnotification" value="yes"<?php if ($currentApp['publishstate'] == 0) echo ' checked'; ?>> <b>([1], [2], [3])</b> Send notification?
+<input type="checkbox" name="sendnotification" value="yes"<?php if ($currentApp['publishstate'] == 0 || $currentApp['publishstate'] > 3) echo ' checked'; ?>> <b>([1], [2], [3])</b> Send notification?
 <input type="hidden" name="guid" value="<?php echo $currentApp['guid']; ?>">
 <input type="hidden" name="token" value="<?php echo md5($_SESSION['mod_appview_token']); ?>">
 
