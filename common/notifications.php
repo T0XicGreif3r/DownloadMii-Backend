@@ -6,13 +6,13 @@
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\functions.php');
 	
 	class notification {
+		public $notificationId;
 		public $userId;
-		public $groupName;
+		public $groupId;
 		public $timeCreated;
 		public $summary;
 		public $body;
 		public $rootRelativeURL;
-		public $isRead;
 	}
 	
 	class notification_manager {
@@ -21,16 +21,17 @@
 		
 		public function createNotification($userId, $summary, $body) {
 			//Insert notification entry into database
-			executePreparedSQLQuery($this->mysqlConn, 'INSERT INTO notifications (userId, groupName, summary, body)
-													VALUES (?, NULL, ?, ?)',
-													'iss', [$userId, escapeHTMLChars($summary), escapeHTMLChars($body)]);
+			executePreparedSQLQuery($this->mysqlConn, 'INSERT INTO notifications (userId, summary, body)
+														VALUES (?, ?, ?)',
+														'iss', [$userId, escapeHTMLChars($summary), escapeHTMLChars($body)]);
 		}
 		
 		public function createGroupNotification($groupName, $summary, $body) {
 			//Insert notification entry into database
-			executePreparedSQLQuery($this->mysqlConn, 'INSERT INTO notifications (userId, groupName, summary, body)
-													VALUES (NULL, ?, ?, ?)',
-													'sss', [$groupName, escapeHTMLChars($summary), escapeHTMLChars($body)]);
+			executePreparedSQLQuery($this->mysqlConn, 'INSERT INTO notifications (groupId, summary, body)
+														LEFT JOIN groups ON groups.name = ?
+														VALUES (groups.groupId, ?, ?)',
+														'sss', [$groupName, escapeHTMLChars($summary), escapeHTMLChars($body)]);
 		}
 		
 		public function getNotifications($count) {
@@ -50,18 +51,21 @@
 		}
 		
 		public function getUnreadNotificationCount() {
-			return getArrayFromSQLQuery($this->mysqlConn, 'SELECT COUNT(*) FROM notifications WHERE userId = ? AND isRead = 0', 'i', [$_SESSION['user_id']])[0]['COUNT(*)'];
+			return getArrayFromSQLQuery($this->mysqlConn, 'SELECT COUNT(*) FROM notifications' .
+															$this->getJoinSQL() . $this->getWhereSQL(false))[0]['COUNT(*)'];
 		}
 		
 		public function __construct($mysqlConn = null) {
 			$this->connIsExternal = $mysqlConn !== null;
 			
 			if ($this->connIsExternal) {
-				$this->mysqlConn = $mysqlConn;
+				$this->mysqlConn = $mysqlConn; //Use existing MySQL connection if provided
 			}
 			else {
-				$this->mysqlConn = connectToDatabase();
+				$this->mysqlConn = connectToDatabase(); //Otherwise, create a new one
 			}
+			
+			executePreparedSQLQuery($this->mysqlConn, 'SET @curUserId = ?', 'i', [$_SESSION['user_id']]); 
 		}
 		
 		public function __destruct() {
@@ -72,20 +76,28 @@
 		
 		private function getNotificationObjects($count, $includeRead) {
 			//Get notifications from database
-			$notifications = getArrayFromSQLQuery($this->mysqlConn, 'SELECT userId, groupName, timeCreated, summary, body, rootRelativeURL, isRead FROM notifications WHERE userId = ?' .
-																		(!$includeRead ? ' AND isRead = 0' : '') . ' ORDER BY notificationId DESC LIMIT ?', 'ii', [$_SESSION['user_id'], $count]);
+			$notifications = getArrayFromSQLQuery($this->mysqlConn, 'SELECT notifications.notificationId, notifications.userId, notifications.groupId, timeCreated, summary, body, rootRelativeURL FROM notifications' .
+																		$this->getJoinSQL() . $this->getWhereSQL($includeRead) . '
+																		ORDER BY notifications.notificationId DESC LIMIT ?', 'i', [$count]);
 			
-			//Set "isRead" attribute
-			executePreparedSQLQuery($this->mysqlConn, 'UPDATE notifications SET isRead = 1 WHERE userId = ?' .
-														(!$includeRead ? ' AND isRead = 0' : '') . ' AND isRead = 0 ORDER BY notificationId DESC LIMIT ?', 'ii', [$_SESSION['user_id'], $count]);
+			//Get notification objects
+			$notificationObjects = $this->getObjectsFromNotificationArray($notifications);
 			
-			return $this->getObjectsFromNotificationArray($notifications);
+			//Mark notifications as read
+			foreach ($notificationObjects as $notification) {
+				executePreparedSQLQuery($this->mysqlConn, 'INSERT IGNORE INTO notificationreads (userId, notificationId)
+															VALUES (@curUserId, ?)',
+															'i', [$notification->notificationId]);
+			}
+			
+			return $notificationObjects;
 		}
 		
 		private function getNotificationSummaryStrings($count, $includeRead) {
 			//Get notifications from database
-			$notifications = getArrayFromSQLQuery($this->mysqlConn, 'SELECT summary, rootRelativeURL FROM notifications WHERE userId = ?' .
-																		(!$includeRead ? ' AND isRead = 0' : '') . ' ORDER BY notificationId DESC LIMIT ?', 'ii', [$_SESSION['user_id'], $count]);
+			$notifications = getArrayFromSQLQuery($this->mysqlConn, 'SELECT summary, rootRelativeURL FROM notifications' .
+																		$this->getJoinSQL() . $this->getWhereSQL($includeRead) . '
+																		ORDER BY notifications.notificationId DESC LIMIT ?', 'i', [$count]);
 			
 			return $this->getObjectsFromNotificationArray($notifications);
 		}
@@ -102,6 +114,29 @@
 			}
 			
 			return $notificationObjects;
+		}
+		
+		private function getJoinSQL() {
+			//Get SQL for joining groups into notification queries
+			$sqlParts = array();
+			for ($i = 0; $i < count($_SESSION['user_groups']); $i++) {
+				array_push($sqlParts, 'LEFT JOIN groups group' . $i . ' ON group' . $i . '.name = "' . $_SESSION['user_groups'][$i] . '"');
+			}
+			
+			return ' ' . implode(' ', $sqlParts) . '
+					LEFT JOIN notificationreads ON notificationreads.userId = @curUserId AND notificationreads.notificationId = notifications.notificationId ';
+		}
+		
+		private function getWhereSQL($includeRead) {
+			//Get SQL for selecting notifications from groups into notification queries
+			$sqlParts = array();
+			for ($i = 0; $i < count($_SESSION['user_groups']); $i++) {
+				array_push($sqlParts, 'notifications.groupId = group' . $i . '.groupId');
+			}
+			$whereSql = implode(' OR ', $sqlParts);
+			
+			return ' WHERE (notifications.userId = @curUserId ' . (!empty($whereSql) ? ' OR ' . $whereSql : '') . ') ' . 
+					(!$includeRead ? ' AND notificationreads.readId IS NULL' : '') . ' ';
 		}
 	}
 ?>

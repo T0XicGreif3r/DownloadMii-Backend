@@ -7,6 +7,13 @@
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\functions.php');
 	require_once($_SERVER['DOCUMENT_ROOT'] . '\common\notifications.php');
 	
+	function getFlattenedGroupArray($array) {
+		for ($i = 0; $i < count($array); $i++) {
+			$array[$i] = $array[$i]['name'];
+		}
+		return $array;
+	}
+	
 	session_start();
 	
 	$now = time();
@@ -24,13 +31,31 @@
 		if (count($matchingUsers) === 1) {
 			$_SESSION['user_nick'] = $matchingUsers[0]['nick'];
 			
-			$matchingGroups = getArrayFromSQLQuery($mysqlConn, 'SELECT name FROM groups
+			//Get user groups
+			$matchingGroups = getArrayFromSQLQuery($mysqlConn, 'SELECT groups.groupId, name FROM groups
 																LEFT JOIN groupconnections groupcon ON groupcon.userId = ?
-																WHERE groupcon.groupName = name', 'i', [$_SESSION['user_id']]); //Get user groups
+																WHERE groupcon.groupId = groups.groupId', 'i', [$_SESSION['user_id']]);
 			
-			$_SESSION['user_groups'] = call_user_func_array('array_merge', call_user_func_array('array_merge_recursive', $matchingGroups));
+			if (count($matchingGroups) > 0) {
+				//Get inherited groups for each user group
+				$inheritedGroups = array();
+				foreach ($matchingGroups as $group) {
+					$inheritedGroups = array_merge($inheritedGroups, getArrayFromSQLQuery($mysqlConn, 'SELECT groups.name, @subGroup:=groups.inheritedGroup FROM groups
+																										JOIN (SELECT * FROM groups ORDER BY ISNULL(inheritedGroup), groupId ASC) orderedGroups
+																										JOIN (SELECT @subGroup:=?) topGroup
+																										WHERE groups.groupId=@subGroup', 'i', [$group['groupId']]));
+				}
+				
+				array_shift($matchingGroups);
+				
+				//Combine group arrays
+				$_SESSION['user_groups'] = array_values(array_unique(getFlattenedGroupArray(array_merge($matchingGroups, $inheritedGroups))));
+			}
+			else {
+				$_SESSION['user_groups'] = array();
+			}
 			
-			//Get information about unread notification
+			//Get information about unread notifications
 			$notificationManager = new notification_manager($mysqlConn);
 			$unreadNotificationCount = $notificationManager->getUnreadNotificationCount();
 			$unreadNotificationSummaries = $notificationManager->getUnreadNotificationSummaries(2);

@@ -8,7 +8,8 @@
 	require_once('../../common/ucpheader.php');
 ?>	
 
-	<h1 class="animated bounceInDown text-center">Notifications</h1>
+		<h1 class="animated bounceInDown text-center">Notifications</h1>
+		<br />
 
 <?php	
 	$notificationManager = new notification_manager();
@@ -17,9 +18,9 @@
 	foreach ($notifications as $notification) {
 ?>
 
-	<div class="well">
-		<div class="pull-left">
-			<h4><strong>
+		<div class="well">
+			<div class="pull-left">
+				<h4><strong>
 <?php
 				if (!empty($notification->rootRelativeURL)) {
 					echo '<a href="' . $notification->rootRelativeURL . '">' . $notification->summary . '</a>';
@@ -28,19 +29,19 @@
 					echo $notification->summary;
 				}
 ?>
-			</strong></h4>
-		</div>
-		<div class="pull-right">
+				</strong></h4>
+			</div>
+			<div class="pull-right">
 <?php
 			echo $notification->timeCreated;
 ?>
-		</div>
-		<div class="clear-float">
+			</div>
+			<div class="clear-float">
 <?php
 			echo $notification->body;
 ?>
+			</div>
 		</div>
-	</div>
 
 <?php	
 	}

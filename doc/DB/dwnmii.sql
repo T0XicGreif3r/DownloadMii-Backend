@@ -1,8 +1,9 @@
 CREATE TABLE groups(
-	name VARCHAR(30) NOT NULL PRIMARY KEY,
-	inheritedGroup VARCHAR(30) NULL,
+	groupId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(30) NOT NULL,
+	inheritedGroup INT NULL,
 	
-	FOREIGN KEY (inheritedGroup) REFERENCES groups(name)
+	FOREIGN KEY (inheritedGroup) REFERENCES groups(groupId)
 );
 
 CREATE TABLE users(
@@ -16,10 +17,12 @@ CREATE TABLE users(
 CREATE TABLE groupconnections(
 	groupConnectionId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	userId INT NOT NULL,
-	groupName VARCHAR(30) NOT NULL,
+	groupId INT NOT NULL,
+	
+	UNIQUE KEY uq_user_group(userId, groupId),
 	
 	FOREIGN KEY (userId) REFERENCES users(userId),
-	FOREIGN KEY (groupName) REFERENCES groups(name)
+	FOREIGN KEY (groupId) REFERENCES groups(groupId)
 );
 
 CREATE TABLE categories(
@@ -94,13 +97,23 @@ CREATE TABLE downloads(
 CREATE TABLE notifications(
 	notificationId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	userId INT NULL,
-	groupName VARCHAR(30) NULL,
+	groupId INT NULL,
 	timeCreated TIMESTAMP NOT NULL,
 	summary TEXT NOT NULL,
 	body TEXT NOT NULL,
 	rootRelativeURL VARCHAR(255) NULL,
-	isRead TINYINT NOT NULL DEFAULT 0,
 
 	FOREIGN KEY (userId) REFERENCES users(userId),
-	FOREIGN KEY (groupName) REFERENCES groups(name)
+	FOREIGN KEY (groupId) REFERENCES groups(groupId)
+);
+
+CREATE TABLE notificationreads(
+	readId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	userId INT NOT NULL,
+	notificationId INT NOT NULL,
+	
+	UNIQUE KEY uq_user_notification(userId, notificationId),
+	
+	FOREIGN KEY (userId) REFERENCES users(userId),
+	FOREIGN KEY (notificationId) REFERENCES notifications(notificationId)
 );
