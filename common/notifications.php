@@ -19,7 +19,7 @@
 		private $mysqlConn;
 		private $connIsExternal;
 		
-		public function createNotification($userId, $summary, $body) {
+		public function createUserNotification($userId, $summary, $body) {
 			//Insert notification entry into database
 			executePreparedSQLQuery($this->mysqlConn, 'INSERT INTO notifications (userId, summary, body)
 														VALUES (?, ?, ?)',
@@ -29,8 +29,7 @@
 		public function createGroupNotification($groupName, $summary, $body) {
 			//Insert notification entry into database
 			executePreparedSQLQuery($this->mysqlConn, 'INSERT INTO notifications (groupId, summary, body)
-														LEFT JOIN groups ON groups.name = ?
-														VALUES (groups.groupId, ?, ?)',
+														VALUES ((SELECT groupId FROM groups WHERE name = ?), ?, ?)',
 														'sss', [$groupName, escapeHTMLChars($summary), escapeHTMLChars($body)]);
 		}
 		

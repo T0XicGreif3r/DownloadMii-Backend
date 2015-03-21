@@ -57,7 +57,7 @@
 		
 		//Create notification
 		$notificationManager = new notification_manager($mysqlConn);
-		$notificationManager->createNotification($notificationUserId, $notificationSummary, $notificationBody);
+		$notificationManager->createUserNotification($notificationUserId, $notificationSummary, $notificationBody);
 	}
 	
 	$mysqlConn->close();
