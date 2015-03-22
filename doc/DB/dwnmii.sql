@@ -11,7 +11,9 @@ CREATE TABLE users(
 	nick VARCHAR(24) NOT NULL UNIQUE,
 	password VARCHAR(60) NOT NULL,
 	email VARCHAR(255) NOT NULL UNIQUE,
-	token VARCHAR(40) NULL UNIQUE
+	token VARCHAR(40) NULL UNIQUE,
+
+	UNIQUE KEY uq_nick(nick)
 );
 
 CREATE TABLE groupconnections(
@@ -101,7 +103,7 @@ CREATE TABLE notifications(
 	timeCreated TIMESTAMP NOT NULL,
 	summary TEXT NOT NULL,
 	body TEXT NOT NULL,
-	rootRelativeURL VARCHAR(255) NULL,
+	url VARCHAR(255) NULL,
 
 	FOREIGN KEY (userId) REFERENCES users(userId),
 	FOREIGN KEY (groupId) REFERENCES groups(groupId)

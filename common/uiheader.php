@@ -149,7 +149,7 @@
 						?>
 						<?php
 							foreach ($unreadNotificationSummaries as $notification) {
-								echo '<li><a href="' . (!empty($notification->rootRelativeURL) ? $notification->rootRelativeURL : '/secure/notifications/') . '"><strong>' . $notification->summary . '</strong></a></li>';
+								echo '<li><a href="/secure/notifications/"><strong>' . $notification . '</strong></a></li>';
 							}
 						?>
 						<li><a href="/secure/notifications/">ALL NOTIFICATIONS <span class="badge"><?php echo $unreadNotificationCount; ?></span></a></li>

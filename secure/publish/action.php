@@ -290,7 +290,7 @@
 					
 					//Create notification
 					$notificationManager = new notification_manager($mysqlConn);
-					$notificationManager->createGroupNotification('Moderators', $notificationSummary, $notificationBody);
+					$notificationManager->createGroupNotification('Moderators', $notificationSummary, $notificationBody, '/secure/mod/apps.php');
 		
 					if (!$updatingApp) {
 						echo 'Your application has been submitted and is now pending approval from our staff.';

@@ -91,7 +91,7 @@ Column|Description|
 `timeCreated` | When the notification was sent |
 `summary` | Very short summary of the notification |
 `body` | Full notification text |
-`rootRelativeURL`| Link to relating page, relative from root (for example "secure/myapps/") |
+`url`| URL to relating page |
 
 ##NotificationReads
 Column|Description|

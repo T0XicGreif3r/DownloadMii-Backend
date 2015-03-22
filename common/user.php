@@ -45,7 +45,8 @@
 																										JOIN (SELECT @subGroup:=?) topGroup
 																										WHERE groups.groupId=@subGroup', 'i', [$group['groupId']]));
 				}
-				
+
+				//Remove entry without inherited group
 				array_shift($matchingGroups);
 				
 				//Combine group arrays
