@@ -56,7 +56,7 @@
 ?>
 		<div style="text-align: center;">
 <?php
-	$pageCount = ceil($notificationsPerPage / $totalNotificationCount) + 1;
+	$pageCount = ceil($totalNotificationCount / $notificationsPerPage);
 	for ($i = 1; $i < $pageCount + 1; $i++) {
 		echo $i == $page ? '<button type="button" class="btn btn-primary">' . $i . '</button>' : '<a href="?page=' . $i . '"><button type="button" class="btn">' . $i . '</button></a>';
 	}
