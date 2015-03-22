@@ -22,6 +22,11 @@
 		//API keys
 		'apikey_recaptcha_site' => '',
 		'apikey_recaptcha_secret' => '',
+
+		//Notifications
+		'notifications_per_page' => 10,
+		'notifications_pages_behind' => 2,
+		'notifications_pages_ahead' => 2,
 		
 		//DownloadMii
 		'downloadmii_app_guid' => '',
