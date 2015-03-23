@@ -1,16 +1,18 @@
 <?php
+	$title = 'Mod CP';
+	require_once('../../common/ucpheader.php');
 	require_once('../../common/user.php');
-	
-	if (isset($_SESSION['mod_appview_token'])) {
-		$appsetToken = $_SESSION['mod_appview_token'];
-		unset($_SESSION['mod_appview_token']);
-	}
 	
 	verifyRole(3);
 	
 	sendResponseCodeAndExitIfTrue(!(isset($_POST['guid'], $_POST['publishstate'], $_POST['failpublishmessage'], $_POST['token'])), 400);
-	sendResponseCodeAndExitIfTrue(!isset($appsetToken) || md5($appsetToken) !== $_POST['token'] || !is_numeric($_POST['publishstate']) || $_POST['publishstate'] < 0 || $_POST['publishstate'] > 5, 422);
-	
+
+	if (isset($_SESSION['mod_appview_token' . $_POST['guid']])) {
+		$appViewToken = $_SESSION['mod_appview_token' . $_POST['guid']];
+	}
+
+	sendResponseCodeAndExitIfTrue(!isset($appViewToken) || md5($appViewToken) !== $_POST['token'] || !is_numeric($_POST['publishstate']) || $_POST['publishstate'] < 0 || $_POST['publishstate'] > 5, 422);
+
 	$appGuid = $_POST['guid'];
 	$appPublishState = $_POST['publishstate'];
 	$appFailPublishMessage = $_POST['publishstate'] == 2 || $_POST['publishstate'] == 5 ? escapeHTMLChars($_POST['failpublishmessage']) : '';
@@ -28,6 +30,9 @@
 	}
 	
 	$mysqlConn->close();
-	
+
+	unset($_SESSION['mod_appview_token' . $_POST['guid']]);
 	echo 'App publish state set.';
+
+	require_once('../../common/ucpfooter.php');
 ?>

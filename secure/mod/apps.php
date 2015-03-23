@@ -1,4 +1,6 @@
 <?php
+	$title = 'Mod CP';
+	require_once('../../common/ucpheader.php');
 	require_once('../../common/user.php');
 	
 	verifyRole(3);
@@ -31,3 +33,7 @@ Query app by GUID:
 <input type="hidden" name="token" value="<?php echo $md5Token; ?>">
 <input type="submit" value="Query">
 </form>
+
+<?php
+	require_once('../../common/ucpfooter.php');
+?>

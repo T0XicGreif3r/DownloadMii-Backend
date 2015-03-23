@@ -1,17 +1,18 @@
 <?php
+	$title = 'Mod CP';
+	require_once('../../common/ucpheader.php');
 	require_once('../../common/user.php');
 	
 	if (isset($_SESSION['mod_apps_token'])) {
 		$appsToken = $_SESSION['mod_apps_token'];
-		unset($_SESSION['mod_apps_token']);
 	}
-	
+
 	verifyRole(3);
-	
-	$_SESSION['mod_appview_token'] = uniqid(mt_rand(), true); //Generate token for moderator action
-	
+
 	sendResponseCodeAndExitIfTrue(!(isset($_GET['guid'], $_GET['token'])), 400);
 	sendResponseCodeAndExitIfTrue(!isset($appsToken) || md5($appsToken) !== $_GET['token'], 422);
+	
+	$_SESSION['mod_appview_token' . $_GET['guid']] = uniqid(mt_rand(), true); //Generate token for moderator action
 	
 	$mysqlConn = connectToDatabase();
 	
@@ -57,6 +58,7 @@
 <form action="appset.php" method="post">
 Set publish state:
 <br />
+
 <select name="publishstate" required>
 <option value="">Select...</option>
 <option value="0">[0] Pending approval</option>
@@ -66,12 +68,19 @@ Set publish state:
 <option value="4">[4] Published - newer version pending approval</option>
 <option value="5">[5] Published - newer version not approved</option>
 </select>
+
 <br />
 Message if "not approved" is selected (short, tell submitter why):
 <br />
+
 <input type="text" name="failpublishmessage" size="50" maxlength="24">
 <input type="hidden" name="guid" value="<?php echo $currentApp['guid']; ?>">
-<input type="hidden" name="token" value="<?php echo md5($_SESSION['mod_appview_token']); ?>">
+<input type="hidden" name="token" value="<?php echo md5($_SESSION['mod_appview_token' . $_GET['guid']]); ?>">
 <br />
+
 <input type="submit" value="Set">
 </form>
+
+<?php
+	require_once('../../common/ucpfooter.php');
+?>
