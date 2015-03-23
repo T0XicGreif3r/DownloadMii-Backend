@@ -16,14 +16,14 @@
 		<br />
 
 <?php
-	$currentPage = isset($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1; //Get current page
+	$currentPage = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1; //Get current page
 
 	$notificationsPerPage = getConfigValue('notifications_per_page');
 	$pagesBehind = getConfigValue('notifications_pages_behind');
 	$pagesAhead = getConfigValue('notifications_pages_ahead');
 
 	$notificationManager = new notification_manager();
-	$totalNotificationCount = $notificationManager->getNotificationCount();
+	$notificationCount = $notificationManager->getNotificationCount();
 	$notificationsToDisplay = $notificationManager->getNotifications($notificationsPerPage, $notificationsPerPage * ($currentPage - 1));
 	
 	foreach ($notificationsToDisplay as $notification) {
@@ -34,7 +34,7 @@
 				<h4><strong>
 <?php
 				if (!$notification->isRead) {
-					echo '<span class="badge">!</span> ';
+					echo '<span class="badge">!</span> '; //Display an indicator for unread notifications
 				}
 
 				if (!empty($notification->url)) {
@@ -62,21 +62,11 @@
 ?>
 		<div style="text-align: center;">
 <?php
-	$pageCount = ceil($totalNotificationCount / $notificationsPerPage);
-	$increasedPagesBehind = false;
-	$increasedPagesAhead = false;
+	$pageCount = ceil($notificationCount / $notificationsPerPage);
 
-	if (2 == $currentPage - $pagesBehind) {
-		$pagesBehind += 1;
-		$increasedPagesBehind = true;
-	}
-	if ($pageCount - 1 == $currentPage + $pagesAhead) {
-		$pagesAhead += 1;
-		$increasedPagesAhead = true;
-	}
-
-	if (!$increasedPagesBehind && 2 < $currentPage - getConfigValue('notifications_pages_behind')) {
-		echo getPageButtonHTML(1, $currentPage) . ' ... ';
+	if (1 < $currentPage - getConfigValue('notifications_pages_behind')) {
+		$dots = 2 != $currentPage - $pagesBehind ? ' ... ' : ''; //Show dots if there's no "2" button
+		echo getPageButtonHTML(1, $currentPage) . $dots;
 	}
 
 	for ($i = $currentPage - $pagesBehind; $i < $currentPage + $pagesAhead + 1; $i++) {
@@ -85,8 +75,9 @@
 		}
 	}
 
-	if (!$increasedPagesAhead && $pageCount > $currentPage + getConfigValue('notifications_pages_ahead')) {
-		echo '...' . getPageButtonHTML($pageCount, $currentPage);
+	if ($pageCount > $currentPage + getConfigValue('notifications_pages_ahead')) {
+		$dots = $pageCount - 1 != $currentPage + $pagesAhead ? ' ... ' : ''; //Show dots if there's no "($pageCount - 1)" button
+		echo $dots  . getPageButtonHTML($pageCount, $currentPage);
 	}
 ?>
 		</div>

@@ -32,7 +32,7 @@
 	function generateGUID() {
 		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 	}
-	
+
 	/**
 	* Print a string and exit
 	*
@@ -269,5 +269,55 @@
 		$arr = getArrayFromSQLQuery($conn, $sql, $bindParamTypes, $bindParamVarsArr);
 		$jsonResultObj = (object)array($name => $arr); //Create an enclosing object
 		return json_encode($jsonResultObj); //Return JSON
+	}
+
+	/**
+	 * Get a specific user's groups
+	 *
+	 * @param $conn mysqli The MySQLi connection to use to get the groups
+	 * @param $userId int The user to query
+	 * @param bool $includeInherited Whether to include inherited groups
+	 *
+	 * @return array
+	 */
+	function getGroupsForUser($conn, $userId, $includeInherited = true)
+	{
+		$matchingGroups = getArrayFromSQLQuery($conn, 'SELECT groups.groupId, name FROM groups
+																LEFT JOIN groupconnections groupcon ON groupcon.userId = ?
+																WHERE groupcon.groupId = groups.groupId', 'i', [$userId]);
+
+		if (count($matchingGroups) > 0) {
+			if ($includeInherited) {
+
+				//Get inherited groups for each user group
+				$inheritedGroups = array();
+				foreach ($matchingGroups as $group) {
+					$inheritedGroups = array_merge($inheritedGroups, getArrayFromSQLQuery($conn, 'SELECT groups.name, @subGroup := groups.inheritedGroup FROM groups
+																										JOIN (SELECT * FROM groups ORDER BY ISNULL(inheritedGroup), groupId ASC) orderedGroups
+																										JOIN (SELECT @subGroup := ?) topGroup
+																										WHERE groups.groupId=@subGroup', 'i', [$group['groupId']]));
+				}
+
+				//Remove entry without inherited group
+				array_shift($matchingGroups);
+
+				//Combine group arrays
+				$allGroups = array_merge($matchingGroups, $inheritedGroups);
+			}
+			else {
+				$allGroups = $matchingGroups;
+			}
+
+			//Flatten group array
+			for ($i = 0; $i < count($allGroups); $i++) {
+				$allGroups[$i] = $allGroups[$i]['name'];
+			}
+			$allGroups = array_values(array_unique($allGroups));
+
+			return $allGroups;
+		}
+		else {
+			return array();
+		}
 	}
 ?>
