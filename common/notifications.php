@@ -24,7 +24,7 @@
 		 * Send a notification to a specific user
 		 *
 		 * @param int $userId The ID of the user to send the notification to
-		 * @param string $summary Short notification summary (should be up to 5 words)
+		 * @param string $summary Short notification summary (should be up to 10 words)
 		 * @param string $body Full notification text
 		 * @param string $url URL to related page
 		 */
@@ -39,7 +39,7 @@
 		 * Send a notification to a specific group
 		 *
 		 * @param string $groupName The name of the group to send the notification to
-		 * @param string $summary Short notification summary (should be up to 5 words)
+		 * @param string $summary Short notification summary (should be up to 10 words)
 		 * @param string $body Full notification text
 		 * @param string $url URL to related page
 		 */

@@ -29,7 +29,7 @@
 	foreach ($notificationsToDisplay as $notification) {
 ?>
 
-		<div class="well">
+		<div class="well clearfix">
 			<div class="pull-left">
 				<h4><strong>
 <?php
@@ -46,10 +46,12 @@
 ?>
 				</strong></h4>
 			</div>
-			<div class="pull-right">
+			<div class="app-vertical-center-outer pull-right">
+				<div class="app-vertical-center-inner">
 <?php
 			echo $notification->timeCreated;
 ?>
+				</div>
 			</div>
 			<div class="clear-float">
 <?php
