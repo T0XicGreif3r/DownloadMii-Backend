@@ -2,12 +2,12 @@
 	$title = 'Mod CP';
 	require_once('../../common/ucpheader.php');
 	require_once('../../common/user.php');
-	
+
+	verifyGroup('Moderators');
+
 	if (isset($_SESSION['mod_apps_token'])) {
 		$appsToken = $_SESSION['mod_apps_token'];
 	}
-
-	verifyGroup('Moderators');
 
 	sendResponseCodeAndExitIfTrue(!(isset($_GET['guid'], $_GET['token'])), 400);
 	sendResponseCodeAndExitIfTrue(!isset($appsToken) || md5($appsToken) !== $_GET['token'], 422);

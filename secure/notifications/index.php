@@ -61,6 +61,14 @@
 		</div>
 <?php
 	}
+
+	if ($userApps == null) {
+?>
+	<br />
+	<h4 class="text-center">You have no notifications.</h4>
+	<br />
+<?php
+	}
 ?>
 		<div style="text-align: center;">
 <?php
