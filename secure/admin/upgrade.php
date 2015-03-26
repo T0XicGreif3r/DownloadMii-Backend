@@ -3,10 +3,10 @@
 	
 	verifyRole(4);
 
-	echo 'Connecting to database...';
+	echo 'Connecting to database...<br>';
 	$mysqlConn = connectToDatabase();
 
-	echo 'Creating tables...';
+	echo 'Creating tables...<br>';
 	executePreparedSQLQuery($mysqlConn, '
 	CREATE TABLE groups(
 		groupId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -17,7 +17,9 @@
 
 		FOREIGN KEY (inheritedGroup) REFERENCES groups(groupId)
 	);
+	');
 
+	executePreparedSQLQuery($mysqlConn, '
 	CREATE TABLE groupconnections(
 		groupConnectionId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 		userId INT NOT NULL,
@@ -28,7 +30,9 @@
 		FOREIGN KEY (userId) REFERENCES users(userId),
 		FOREIGN KEY (groupId) REFERENCES groups(groupId)
 	);
+	');
 
+	executePreparedSQLQuery($mysqlConn, '
 	CREATE TABLE notifications(
 		notificationId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 		userId INT NULL,
@@ -41,7 +45,9 @@
 		FOREIGN KEY (userId) REFERENCES users(userId),
 		FOREIGN KEY (groupId) REFERENCES groups(groupId)
 	);
+	');
 
+	executePreparedSQLQuery($mysqlConn, '
 	CREATE TABLE notificationreads(
 		readId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 		userId INT NOT NULL,
@@ -54,24 +60,26 @@
 	);
 	');
 
-	echo 'Creating groups...';
+	echo 'Creating groups...<br>';
 	executePreparedSQLQuery($mysqlConn, '
 	INSERT INTO groups (groupId, name, inheritedGroup)
 	VALUES (1, "Users", NULL), (2, "Developers", 1), (3, "Moderators", 2), (4, "Administrators", 3);
 	');
 
-	echo 'Upgrading roles...';
+	echo 'Upgrading roles...<br>';
 	executePreparedSQLQuery($mysqlConn, '
 	INSERT INTO groupconnections (userId, groupId)
 	SELECT userId, role FROM users;
 	');
 
-	echo 'Removing old columns and tables...';
+	echo 'Removing old columns and tables...<br>';
 	executePreparedSQLQuery($mysqlConn, '
 	ALTER TABLE users
 	DROP COLUMN role,
 	ADD UNIQUE KEY uq_name(name);
+	');
 
+	executePreparedSQLQuery($mysqlConn, '
 	DROP TABLE developers;
 	');
 
