@@ -62,7 +62,7 @@
 <?php
 	}
 
-	if ($userApps == null) {
+	if ($notificationsToDisplay == null) {
 ?>
 	<br />
 	<h4 class="text-center">You have no notifications.</h4>
