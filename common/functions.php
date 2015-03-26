@@ -32,7 +32,7 @@
 	function generateGUID() {
 		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 	}
-	
+
 	/**
 	* Print a string and exit
 	*
@@ -148,14 +148,26 @@
 	* @return bool Whether the client is logged in
 	*/
 	function clientLoggedIn() {
-		return isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_role'], $_SESSION['user_token']);
+		return isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_groups'], $_SESSION['user_token']);
 	}
 	
 	/**
-	* Exit and print a message if user isn't logged in or has access level lower than required
+	* Get whether the user belongs to a certain group
+	*
+	* @param string $groupName The group name to check against
+	* @return bool Whether the client is logged in and part of the group
 	*/
-	function verifyRole($minimumLevel) {
-		printAndExitIfTrue(!clientLoggedIn() || $_SESSION['user_role'] < $minimumLevel, 'You do not have permission to access this page.');
+	function clientPartOfGroup($groupName) {
+		return clientLoggedIn() && in_array($groupName, $_SESSION['user_groups']);
+	}
+	
+	/**
+	* Exit and print a message if user isn't logged in or doesn't belong to a certain group
+	*
+	* @param string $groupName The group name to check against
+	*/
+	function verifyGroup($groupName) {
+		printAndExitIfTrue(!clientPartOfGroup($groupName), 'You do not have permission to access this page.');
 	}
 	
 	/**
@@ -257,5 +269,55 @@
 		$arr = getArrayFromSQLQuery($conn, $sql, $bindParamTypes, $bindParamVarsArr);
 		$jsonResultObj = (object)array($name => $arr); //Create an enclosing object
 		return json_encode($jsonResultObj); //Return JSON
+	}
+
+	/**
+	 * Get a specific user's groups
+	 *
+	 * @param $conn mysqli The MySQLi connection to use to get the groups
+	 * @param $userId int The user to query
+	 * @param bool $includeInherited Whether to include inherited groups
+	 *
+	 * @return array
+	 */
+	function getGroupsForUser($conn, $userId, $includeInherited = true)
+	{
+		$matchingGroups = getArrayFromSQLQuery($conn, 'SELECT groups.groupId, name FROM groups
+																LEFT JOIN groupconnections groupcon ON groupcon.userId = ?
+																WHERE groupcon.groupId = groups.groupId', 'i', [$userId]);
+
+		if (count($matchingGroups) > 0) {
+			if ($includeInherited) {
+
+				//Get inherited groups for each user group
+				$inheritedGroups = array();
+				foreach ($matchingGroups as $group) {
+					$inheritedGroups = array_merge($inheritedGroups, getArrayFromSQLQuery($conn, 'SELECT groups.name, @subGroup := groups.inheritedGroup FROM groups
+																										JOIN (SELECT * FROM groups ORDER BY ISNULL(inheritedGroup), groupId ASC) orderedGroups
+																										JOIN (SELECT @subGroup := ?) topGroup
+																										WHERE groups.groupId=@subGroup', 'i', [$group['groupId']]));
+				}
+
+				//Remove entry without inherited group
+				array_shift($matchingGroups);
+
+				//Combine group arrays
+				$allGroups = array_merge($matchingGroups, $inheritedGroups);
+			}
+			else {
+				$allGroups = $matchingGroups;
+			}
+
+			//Flatten group array
+			for ($i = 0; $i < count($allGroups); $i++) {
+				$allGroups[$i] = $allGroups[$i]['name'];
+			}
+			$allGroups = array_values(array_unique($allGroups));
+
+			return $allGroups;
+		}
+		else {
+			return array();
+		}
 	}
 ?>

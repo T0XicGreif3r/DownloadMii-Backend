@@ -7,7 +7,7 @@
 		$appsToken = $_SESSION['mod_apps_token'];
 	}
 
-	verifyRole(3);
+	verifyGroup('Moderators');
 
 	sendResponseCodeAndExitIfTrue(!(isset($_GET['guid'], $_GET['token'])), 400);
 	sendResponseCodeAndExitIfTrue(!isset($appsToken) || md5($appsToken) !== $_GET['token'], 422);
@@ -55,6 +55,7 @@
 ?>
 <br />
 <br />
+
 <form action="appset.php" method="post">
 Set publish state:
 <br />
@@ -70,10 +71,14 @@ Set publish state:
 </select>
 
 <br />
-Message if "not approved" is selected (short, tell submitter why):
+<br />
+
+<b>([2], [3])</b> Message (keep short, tell submitter reason):
 <br />
 
 <input type="text" name="failpublishmessage" size="50" maxlength="24">
+<br />
+<input type="checkbox" name="sendnotification" value="yes"<?php if ($currentApp['publishstate'] == 0 || $currentApp['publishstate'] > 3) echo ' checked'; ?>> <b>([1], [2], [3])</b> Send notification?
 <input type="hidden" name="guid" value="<?php echo $currentApp['guid']; ?>">
 <input type="hidden" name="token" value="<?php echo md5($_SESSION['mod_appview_token' . $_GET['guid']]); ?>">
 <br />

@@ -1,14 +1,27 @@
 #Download Mii DB Table description
 
+##Groups
+Column|Description|
+---|:---|
+`groupId`| id of the group |
+`name` | group name |
+`inheritedGroup` | optional ID of inherited group |
+
 ##Users
 Column|Description|
 ---|:---|
 `userId`| Unique id for the user |
 `nick` | nickname choosed by the user |
 `password` | bcrypted password for the user |
-`role` | val 0:1[user (can publish apps)]:2[developer (can publish apps without approval)]:3[moderator (can approve apps)]:4[admin] |
 `email` | Email of the user |
 `token` | Token of the user, it will be regenerated every time the user relog into the 3ds app |
+
+##GroupConnections
+Column|Description|
+---|:---|
+`groupConnectionId`| Unique id for the connection |
+`userId`| id of the user |
+`groupId`| id of the group |
 
 ##Categories
 Column|Description|
@@ -62,12 +75,27 @@ Column|Description|
 `userId` | Id of the user who rated the app |
 `rate` | User's rating of the app (values between 1 & 5) |
 
-##Developers
+##Downloads
 Column|Description|
 ---|:---|
-`developerId` | Id of the association |
+`downloadId` | Id of the app/IP download connection (for unique download counting) |
 `appGuid` | Guid of the app |
-`userId` | Id of the user who had worked in the develop of the app(appGuid). If the user isn't registred on the system then this column will be NULL and his nick will be in the next column. |
-`nick` | Nick of a developer if isn't registred on the system |
+`ipHash` | hashed IP address |
 
+##Notifications
+Column|Description|
+---|:---|
+`notificationId` | Id of the notification |
+`userId` | Receiver user |
+`groupId` | Receiver group |
+`timeCreated` | When the notification was sent |
+`summary` | Very short summary of the notification |
+`body` | Full notification text |
+`url`| URL to relating page |
 
+##NotificationReads
+Column|Description|
+---|:---|
+`readId`| Unique id for the user/notification connection |
+`userId`| id of the user who read the notification |
+`notificationId`| id of the notification |

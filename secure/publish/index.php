@@ -12,7 +12,7 @@
 	}
 	
 	if (clientLoggedIn()) {
-		verifyRole(1);
+		verifyGroup('Users');
 		
 		$guidId = uniqid(mt_rand(), true);
 		$mysqlConn = connectToDatabase();

@@ -3,7 +3,7 @@
 	require_once('../../common/ucpheader.php');
 	require_once('../../common/user.php');
 	
-	verifyRole(3);
+	verifyGroup('Moderators');
 	
 	$_SESSION['mod_apps_token'] = uniqid(mt_rand(), true); //Generate token for moderator action
 	

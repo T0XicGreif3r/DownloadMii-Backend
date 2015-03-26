@@ -44,8 +44,14 @@
 	printAndExitIfTrue(count($matchingUsers) != 0, 'User with this name and/or email already exists.');
 	
 	//Insert user into database
-	executePreparedSQLQuery($mysqlConn, 'INSERT INTO users (nick, password, role, email, token)
-											VALUES (?, ?, 1, ?, ?)', 'ssss', [$tryRegisterName, $hashedTryRegisterPass, $tryRegisterEmail, sha1($registerToken)]);
+	$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO users (nick, password, email, token)
+											VALUES (?, ?, ?, ?)', 'ssss', [$tryRegisterName, $hashedTryRegisterPass, $tryRegisterEmail, sha1($registerToken)], true);
+	$userId = $stmt->insert_id;
+	$stmt->close();
+	
+	//Insert user group connection
+	executePreparedSQLQuery($mysqlConn, 'INSERT INTO groupconnections (userId, groupId)
+											VALUES (?, 1)', 'i', [$userId]);
 	
 	$mysqlConn->close();
 	

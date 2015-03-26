@@ -13,7 +13,7 @@
 		<?php
 			require_once($_SERVER['DOCUMENT_ROOT'] . '\common\meta.php');
 		?>
-		<title><?php if (isset($title)) echo $title . ' - '; ?> DownloadMii</title>
+		<title><?php if (isset($title)) echo $title . ' - '; ?>DownloadMii</title>
 		<style>
 			header {
 				margin-bottom: 75px;
@@ -92,6 +92,10 @@
 			.no-top-border-radius {
 				border-top-left-radius: 0; border-top-right-radius: 0;
 			}
+			
+			.dropdown-menu {
+				text-align: right;
+			}
 		</style>
 	</head>
 	<body>
@@ -114,16 +118,52 @@
 					<li><a href="/about">ABOUT</a></li>
 					<li><a data-scroll href="#DOWNLOADwp">DOWNLOAD</a></li>
 					<li><a href="/donate">DONATE</a></li>
-					<li class="dropdown">
-				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <?php if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) { echo strtoupper($_SESSION['user_nick']); } else { echo 'ACCOUNT'; } ?><span class="caret"></span></a>
-				          <ul class="dropdown-menu" role="menu">
+					  <li class="dropdown">
+				        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> 
+						<?php
+							if (clientLoggedIn()) {
+								$displayNotificationInfo = (!isset($printNotificationsInHeader) || $printNotificationsInHeader) && $unreadNotificationCount > 0;
+								
+								echo strtoupper($_SESSION['user_nick']);
+								if ($displayNotificationInfo) {
+									echo ' <span class="badge">!</span>';
+								}
+							}
+							else {
+								echo 'ACCOUNT';
+							}
+						?>
+						
+						<span class="caret"></span></a>
+				        <ul class="dropdown-menu" role="menu">
 						<?php
 							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token'])) {
 						?>
 						<li><a href="/secure/myapps/">MY APPS</a></li>
 						<li><a href="/secure/publish/">SUBMIT APP</a></li>
+						<li role="presentation" class="divider"></li>
+						
 						<?php
-							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 3) {
+							// ** START NOTIFICATIONS **
+							if ($displayNotificationInfo) {
+						?>
+						<?php
+							foreach ($unreadNotificationSummaries as $notification) {
+								echo '<li><a href="/secure/notifications/"><strong>' . $notification . '</strong></a></li>';
+							}
+						?>
+						<li><a href="/secure/notifications/">ALL NOTIFICATIONS <span class="badge"><?php echo $unreadNotificationCount; ?></span></a></li>
+						<?php
+							}
+							else {
+						?>
+						<li><a href="/secure/notifications/">NOTIFICATIONS</a></li>
+						
+						<?php
+							}
+							// ** END NOTIFICATIONS **
+							
+							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && clientPartOfGroup('Moderators')) {
 						?>
 						<li role="presentation" class="divider"></li>
 						<li><a href="/secure/mod/">MOD CP</a></li>
@@ -131,13 +171,13 @@
 							}
 						?>
 						<?php
-							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && $_SESSION['user_role'] >= 4) {
+							if (isset($_SESSION['user_id'], $_SESSION['user_nick'], $_SESSION['user_token']) && clientPartOfGroup('Administrators')) {
 						?>
 						<li><a href="/secure/admin/">ADMIN CP</a></li>
 						<?php
 							}
 						?>
-						<!--li><a href="/secure/usercp/">NOTIFICATIONS <span class="badge">42</span></a></li-->
+						
 						<li role="presentation" class="divider"></li>
 						<li><a href="/secure/signout/">LOGOUT</a></li>
 						<?php
