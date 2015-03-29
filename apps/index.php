@@ -68,7 +68,7 @@
 			</div>
 			<div class="app-vertical-center-outer pull-right btn-toolbar">
 				<div class="app-vertical-center-inner">
-					<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span>3DS</button> <!-- TODO: Fetch the console(s) this app is published on -->
+					<button class="btn btn-default disabled">3DS</button> <!-- TODO: Fetch the console(s) this app is published on -->
 					<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> <?php echo $app['downloads']; ?> unique downloads</button>
 				</div>
 			</div>
