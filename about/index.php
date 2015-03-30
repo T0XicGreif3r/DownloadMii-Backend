@@ -28,6 +28,8 @@
 		<li><a href="http://daneden.github.io/animate.css/">animate.css</a> (CSS Animation Library)</li>
 		<li>Bootstrap (Website Framework)</li>
 		<li>jQuery (JavaScript Library)</li>
+		<li>PicoJson (C++ Json parser)</li>
+		<li><a href="https://github.com/brofield/simpleini">SimpleINI</a></li>
 		<li>#3dsdev</li>
 		<li>All the Contributors that didn't make it to this list! :)</li>
 	<br />
