@@ -63,7 +63,6 @@ catch(e){window.attachEvent("onload", $buo_f)}
 <!-- IE SITE PIN -->
 <meta name="msapplication-starturl" content="https://www.downloadmii.com" />
 <meta name="msapplication-navbutton-color" content="#25A4D6" />
-<meta name="msapplication-window" content="width=1024;height=768" />
 <meta name="msapplication-tooltip" content="Visit DownloadMii" />
 <meta content="name=Home;action-uri=./;icon-uri=./favicon.ico" name="msapplication-task" />
 <meta content="name=User CP;action-uri=./secure/myapps/;icon-uri=./favicon.ico" name="msapplication-task" />
@@ -75,6 +74,7 @@ catch(e){window.attachEvent("onload", $buo_f)}
 <meta name="msapplication-square150x150logo" content="/img/LiveTiles/mediumtile.png" />
 <meta name="msapplication-wide310x150logo" content="/img/LiveTiles/widetile.png" />
 <meta name="msapplication-square310x310logo" content="/img/LiveTiles/largetile.png" />
+<meta name="msapplication-notification" content="frequency=30; polling-uri=/livetiles/1.xml; polling-uri2=/livetiles/2.xml; polling-uri3=/livetiles/3.xml" />
 
 <!-- APPLE -->
 <link rel="apple-touch-icon" href="/img/Apple/touch-icon-iphone.png" /> 
