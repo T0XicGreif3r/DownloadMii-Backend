@@ -35,3 +35,7 @@
     height:175px;
     border-bottom:2px solid #ebebeb;
 }
+.carousel-control.left, .carousel-control.right{ 
+background: none !important; 
+filter: progid:none !important; 
+}
