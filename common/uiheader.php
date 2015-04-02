@@ -40,35 +40,6 @@
 				font-size: 10pt;
 			}
 			
-			.app-screenshot {
-				width: 400px;
-				height: auto;
-				margin-top: 32px;
-				border: 2px solid black;
-				border-radius: 3px;
-			}
-			
-			.app-vertical-center-outer {
-				height: auto;
-				display: table;
-			}
-			
-			.app-vertical-center-inner {
-				height: 48px;
-				display: table-cell;
-				vertical-align: middle;
-			}
-			
-			.app-screenshot-vertical-center {
-				float: none;
-				display: inline-block;
-				vertical-align: middle;
-			}
-			
-			.app-vertical-center-inner {
-				height: 48px;
-			}
-			
 			.clear-float {
 				clear: both;
 			}

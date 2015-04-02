@@ -51,49 +51,90 @@
 	</h3>
 	<br />
 	<div id="appcontainer">
-		<div vocab="http://schema.org/" typeof="SoftwareApplication" class="well clearfix">
-			<div class="app-vertical-center-outer pull-left">
-				<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" /><br/>
-				<div class="pull-right">
-					<h4 class="app-vertical-center-inner">
-<?php
-	echo '<span itemprop="name">' . escapeHTMLChars($app['name']) . '</span> <span itemprop="softwareVersion">' . escapeHTMLChars($app['version']) . '</span> by <span itemprop="publisher" itemscope itemtype="http://schema.org/Organization" style="font-style: italic;">' . $app['publisher'] . '</span>';
-?>
-
-					</h4>
+		<div vocab="http://schema.org/" typeof="SoftwareApplication">
+			<div class="app-header">
+				<div class="app-vertical-center-outer pull-left">
+					<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
+					<div class="pull-right">
+						<h4 class="app-name app-vertical-center-inner">
+							<span itemprop="name">
+								<?php echo escapeHTMLChars($app['name']); ?>
+							</span>
+							<span class="app-version" itemprop="softwareVersion">
+								<?php echo escapeHTMLChars($app['version']); ?>
+							</span>
+							<br/>
+							<span class="app-publisher" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+								<?php echo escapeHTMLChars($app['publisher']); ?>
+							</span>
+						</h4>
+					</div>
+				</div>
+				<div class="app-vertical-center-outer pull-right btn-toolbar">
+					<div class="app-vertical-center-inner">
+						<button class="btn btn-default disabled" style="display: inline-block">3DS</button>
+						<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> <?php echo $app['downloads']; ?> downloads</button>
+					</div>
 				</div>
 			</div>
-			<div class="app-vertical-center-outer pull-right btn-toolbar">
-				<div class="app-vertical-center-inner">
-					<button class="btn btn-default disabled" style="display: inline-block">3DS</button>
-					<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> <?php echo $app['downloads']; ?> unique downloads</button>
+			<?php
+			if ($app['screenshots'] !== null){
+				$screenshots = explode(',', $app['screenshots']);
+			?>
+			<div class="row">
+				<div class="clear-float col-sm-6 col-xs-12">
+					<div id="carousel-appScr" class="carousel slide" data-ride="carousel" style="max-width:400px;">
+						<ol class="carousel-indicators">
+						<?php
+							$temp = 0;
+							foreach ($screenshots as $screenshot) {
+								$temp += 1;
+								if($temp==1)
+								echo '<li class="active" data-target="#carousel-appScr" data-slide-to="'. $temp . '"></li>';
+								else
+								echo '<li data-target="#carousel-appScr" data-slide-to="'. $temp . '"></li>';
+							}
+						?>
+						</ol>
+						<div class="carousel-inner">
+						<?php
+							$temp = 0;
+							foreach ($screenshots as $screenshot) {
+								$temp += 1;
+								if($temp==1){
+									echo '<div class="item active"><img class="app-screenshot" src="' . $screenshot . '" /><div class="carousel-caption"></div></div>';
+								}
+								else
+								echo '<div class="item"><img class="app-screenshot" src="' . $screenshot . '" /><div class="carousel-caption"></div></div>';
+							}
+						?>
+						</div>
+						<a class="left carousel-control" href="#carousel-appScr" role="button" data-slide="prev">
+						<span class="glyphicon glyphicon-chevron-left"></span>
+						</a>
+						<a class="right carousel-control" href="#carousel-appScr" role="button" data-slide="next">
+						<span class="glyphicon glyphicon-chevron-right"></span>
+						</a>
+					</div>
+				</div>
+				<div class="app-desc col-sm-6 col-xs-12" style="max-width:400px;float:left;">
+					<?php
+						echo escapeHTMLChars($app['description']);
+					?>
 				</div>
 			</div>
-			<div class="clear-float" style="padding-top: 8px">
-<?php
-	echo escapeHTMLChars($app['description']);
-?>
-
-			</div>
-			
-<?php
-	if ($app['screenshots'] !== null) {
-		$screenshots = explode(',', $app['screenshots']);
-		$screenshotRows = array_chunk($screenshots, 2);
-		
-		foreach ($screenshotRows as $screenshotRow) {
-			echo '<div class="row">';
-			foreach ($screenshotRow as $screenshot) {
-				echo
-				'<div class="col-md-' . (12 / count($screenshotRow)) . ' app-screenshot-vertical-center" style="text-align: center;">
-					<img class="app-screenshot" src="' . $screenshot . '" />
-				</div>';
+			<?php
 			}
-			echo '</div>';
-		}
-	}
-?>
-
+			else {
+			?>
+				<div class="app-desc clear-float" style="padding-top: 8px">
+					<?php
+						echo escapeHTMLChars($app['description']);
+					?>
+				</div>
+			<?php
+			}
+			?>
 		</div>
 	</div>
 <?php		
