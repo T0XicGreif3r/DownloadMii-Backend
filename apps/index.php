@@ -46,8 +46,8 @@
 		  </span>
 		</div>
 	<br />
-	
 	<div id="appcontainer">
+	<div class="row">
 <?php
 	foreach ($allApps as $app) {
 ?>
@@ -82,7 +82,7 @@
 <?php
 	}
 ?>
-
+	</div>
 	</div>
 	
 	<script type="text/javascript">
