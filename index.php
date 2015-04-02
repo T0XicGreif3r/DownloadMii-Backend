@@ -1,5 +1,5 @@
 <?php
-	$title = 'Home';
+	$title = 'The largest homebrew marketplace';
 	require_once('/common/uiheader.php');
 ?>
 <div class="row">
