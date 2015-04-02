@@ -46,6 +46,9 @@
 			</a>
 		</span>';
 	}
+	
+	$desc = preg_replace("~[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]~","<a href=\"\\0\">\\0</a>",  
+              escapeHTMLChars($app['description']));
 ?>
 
 	</h3>
@@ -119,7 +122,7 @@
 				</div>
 				<div class="app-desc col-sm-6 col-xs-12" style="max-width:400px;float:left;">
 					<?php
-						echo escapeHTMLChars($app['description']);
+						echo $desc;
 					?>
 				</div>
 			</div>
@@ -129,7 +132,7 @@
 			?>
 				<div class="app-desc clear-float" style="padding-top: 8px">
 					<?php
-						echo escapeHTMLChars($app['description']);
+						echo $desc;
 					?>
 				</div>
 			<?php
