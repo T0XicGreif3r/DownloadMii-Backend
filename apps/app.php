@@ -76,7 +76,7 @@
 				<div class="app-vertical-center-outer pull-right btn-toolbar">
 					<div class="app-vertical-center-inner">
 						<button class="btn btn-default disabled" style="display: inline-block">3DS</button>
-						<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> <?php echo $app['downloads']; ?> downloads</button>
+						<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> <?php echo $app['downloads']; ?> downloads </button>
 					</div>
 				</div>
 			</div>
