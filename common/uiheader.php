@@ -40,14 +40,6 @@
 				font-size: 10pt;
 			}
 			
-			.app-icon {
-				width: 48px;
-				height: 48px;
-				margin-right: 12px;
-				border: 2px solid black;
-				border-radius: 3px;
-			}
-			
 			.app-screenshot {
 				width: 400px;
 				height: auto;

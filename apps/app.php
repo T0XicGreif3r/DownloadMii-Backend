@@ -25,6 +25,7 @@
 	$app = $matchingApps[0];
 	
 	$title = $app['name'];
+	$page = 'SingleAppViewPage';
 	require_once('../common/uiheader.php');
 ?>
 
@@ -52,7 +53,7 @@
 	<div id="appcontainer">
 		<div vocab="http://schema.org/" typeof="SoftwareApplication" class="well clearfix">
 			<div class="app-vertical-center-outer pull-left">
-				<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
+				<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" /><br/>
 				<div class="pull-right">
 					<h4 class="app-vertical-center-inner">
 <?php
@@ -64,6 +65,7 @@
 			</div>
 			<div class="app-vertical-center-outer pull-right btn-toolbar">
 				<div class="app-vertical-center-inner">
+					<button class="btn btn-default disabled" style="display: inline-block">3DS</button>
 					<button class="btn btn-default disabled"><span class="glyphicon glyphicon-download"></span> <?php echo $app['downloads']; ?> unique downloads</button>
 				</div>
 			</div>

@@ -41,6 +41,10 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/mainStruct.min.css"/>
 <link rel="stylesheet" href="/css/animate.css">
+<?php if(isset($page))
+	if($page == 'AppView') echo '<link rel="stylesheet" href="/css/appview.css">';
+	else if($page == 'SingleAppViewPage') echo '<link rel="stylesheet" href="/css/singleappviewpage.css">';
+?>
 
 <!-- IN CASE OF OLD WEBBROWSER -->
 <script> 
