@@ -97,7 +97,7 @@
 							$formatted = $n;
 
 						echo $formatted ?> downloads</div>
-						<button class="btn btn-default disabled" style="display: inline-block">3DS</button> <button class="btn btn-default disabled" style="display: inline-block">Wii U</button> <!-- TODO: Fetch the console(s) this app is published on -->
+						<button class="btn btn-default disabled" style="display: inline-block">3DS</button> <!-- TODO: Fetch the console(s) this app is published on -->
 					</div>
 				</div>
 			</div>
