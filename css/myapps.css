@@ -1,0 +1,17 @@
+﻿.app-icon{
+    border:1px solid black;
+    width:96px;
+}
+.app-name{
+    padding-left:15px;
+    font-size:36px;
+}
+.app-version{
+    font-size:28px;
+    font-weight:lighter;
+}
+.app-desc{
+    font-size:20px;
+    font-weight:normal;
+    text-align:left;
+}

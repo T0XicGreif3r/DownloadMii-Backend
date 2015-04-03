@@ -8,15 +8,20 @@
 <div class="text-center">
 	<h1 class="animated bounceInDown">Donate</h1>
 	<br />
+	<div class="animated bounceInLeft text-center">
+		<p class="lead">Keeping the server up costs quite a bit, so does also the time we spend<br />
+	   developing this application. If you like DownloadMii consider donating<br />
+	   to help keep DownloadMii alive! Thanks :)</p>
+	</div>
+	<br/>
 	<div class="animated bounceInRight row text-center">
-	  <div class="row">
-		  <div class="col-sm-5 col-xs-12 well clearfix" style="background: #25A4D6;box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);border:0;">
+	  <div class="row" style="background: #25A4D6;">
+		  <div class="col-sm-6 col-xs-12" style="border:0">
 			<h2 class="font-white">Gratipay</h2>
 			<h4 class="font-white">(recommended)<h4>
 			<script data-gratipay-username="filfat" src="//grtp.co/v1.js"></script>
 		  </div>
-		  <div class="col-sm-2 col-xs-0"></div>
-		  <div class="col-sm-5 col-xs-12 well clearfix" style="background: #25A4D6;box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);border:0;">
+		  <div class="col-sm-6 col-xs-12" style="border:0">
 			<h2 class="font-white">PayPal</h2>
 			<br />
 			<br />
@@ -33,9 +38,6 @@
 		  </div>
 	  </div>
 	</div>
-	<p class="animated fadeIn">Keeping the server up costs quite a bit, so does also the time we spend<br />
-	   developing this application. If you like DownloadMii consider donating<br />
-	   to help keep DownloadMii alive! Thanks :)</p>
 </div>
 <?php
 	require_once('../common/ucpfooter.php');

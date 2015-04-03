@@ -67,9 +67,9 @@
 								<?php echo escapeHTMLChars($app['version']); ?>
 							</span>
 							<br/>
-							<span class="app-publisher" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+							<a href="/user/<?php echo $app['publisher']; ?>" style="color:black"><span class="app-publisher" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
 								<?php echo escapeHTMLChars($app['publisher']); ?>
-							</span>
+							</span></a>
 						</h4>
 					</div>
 				</div>
@@ -130,7 +130,7 @@
 			}
 			else {
 			?>
-				<div class="app-desc clear-float" style="padding-top: 8px">
+				<div class="app-desc clear-float" style="padding-top:8px">
 					<?php
 						echo $desc;
 					?>

@@ -25,21 +25,6 @@
 				max-width: 1060px;
 			}
 			
-			.downloadmii {
-				width: 100%;
-				height: 300px;
-			}
-			
-			.small-width {
-				max-width: 400px;
-				margin-left: auto;
-				margin-right: auto;
-			}
-			
-			.small-text {
-				font-size: 10pt;
-			}
-			
 			.clear-float {
 				clear: both;
 			}
@@ -54,10 +39,6 @@
 			
 			.no-top-border-radius {
 				border-top-left-radius: 0; border-top-right-radius: 0;
-			}
-			
-			.dropdown-menu {
-				text-align: right;
 			}
 		</style>
 	</head>

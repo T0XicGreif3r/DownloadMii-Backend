@@ -102,16 +102,10 @@ p, li{
   width: 15%;
 }
 
-#SHOWCASE {
-  background-color: #25A4D6;
-  color: #ffffff;
-}
-
 /* HEADER */
 .navbar{
 	box-shadow: none !important;
-	border-bottom:0px;
-	/* Remove the lines above to add a border & shadow under the navbar, for a less flat feel */
+	border-bottom:0;
 }
 /* FOOTER */
 footer {
@@ -153,7 +147,7 @@ footer a:hover{
 }
 .SEO{
 	visibility: hidden;
-	font-size: 0px;
+	font-size: 0;
 }
 .Product{
 	max-width: 100%;

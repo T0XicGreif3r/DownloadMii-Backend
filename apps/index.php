@@ -65,7 +65,7 @@
 					<div class="pull-left">
 						<h4 class="app-vertical-center-inner">
 							<span itemprop="name" style="float:left;overflow:hidden"> <div class="app-name"><?php echo escapeHTMLChars($app['name']); ?><div class="dimmer"/></div></span><br/>
-							<span itemprop="publisher" itemscope itemtype="http://schema.org/Organization" style="width:100%;padding:2px;font-size:14px"><?php echo $app['publisher']; ?></span>
+							<a href="/user/<?php echo $app['publisher']; ?>" style="color:black"><span itemprop="publisher" itemscope itemtype="http://schema.org/Organization" style="width:100%;padding:2px;font-size:14px"><?php echo $app['publisher']; ?></span></a>
 						</h4>
 					</div>
 				</div>

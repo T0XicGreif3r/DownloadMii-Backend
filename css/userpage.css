@@ -1,0 +1,48 @@
+﻿.user-avatar{
+    border:1px solid black;
+    width: 148px;
+}
+hr{
+    border:none;
+    border-bottom:2px solid #ebebeb;
+}
+.app-icon {
+	width: 100%;
+	display: table-cell;
+	vertical-align: middle;
+}
+.dimmer {
+    display: block;
+    position: absolute;
+    right: 15px;
+    top: 0;
+    bottom: 0;
+    width: 30px;
+	height:28px;
+	margin-top:146px;
+    background: -moz-linear-gradient(left, rgba(243,243,243,0) 0%, #f3f3f3 60%, #f3f3f3 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(243,243,243,0)), color-stop(60%,#f3f3f3), color-stop(100%,#f3f3f3));
+    background: -webkit-linear-gradient(left, rgba(243,243,243,0) 0%,#f3f3f3 60%,#f3f3f3 100%);
+    background: -o-linear-gradient(left, rgba(243,243,243,0) 0%,#f3f3f3 60%,#f3f3f3 100%);
+    background: -ms-linear-gradient(left, rgba(243,243,243,0) 0%,#f3f3f3 60%,#f3f3f3 100%);
+    background: linear-gradient(left, rgba(243,243,243,0) 0%,#f3f3f3 60%,#f3f3f3 100%);
+    content: "";
+}
+@media (min-width: 700px) and (max-width: 992px) {
+    .app-content {
+        display: none;
+        visibility: hidden;
+    }
+    .app-view{
+        margin-bottom:0!important;
+    }
+}
+@media (max-width: 992px){
+    .app-view{
+        height:auto!important;
+        margin-left:0!important;
+    }
+    .dimmer{
+        display: none;
+    }
+}

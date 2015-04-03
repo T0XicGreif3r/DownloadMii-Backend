@@ -44,6 +44,8 @@
 <?php if(isset($page))
 	if($page == 'AppView') echo '<link rel="stylesheet" href="/css/appview.css">';
 	else if($page == 'SingleAppViewPage') echo '<link rel="stylesheet" href="/css/singleappviewpage.css">';
+	else if($page == 'MyApps') echo '<link rel="stylesheet" href="/css/myapps.css">';
+	else if($page == 'Userpage') echo '<link rel="stylesheet" href="/css/userpage.css">';
 ?>
 
 <!-- PLATFORM SPECIFIC -->

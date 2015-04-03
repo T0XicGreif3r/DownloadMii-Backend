@@ -2,7 +2,7 @@
 	/*
 		DownloadMii App List Page (by current user)
 	*/
-	
+	$page = 'MyApps';
 	$title = 'My Apps';
 	require_once('../../common/ucpheader.php');
 	
@@ -26,11 +26,18 @@
 			<div class="app-vertical-center-outer pull-left">
 				<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
 				<div class="pull-right">
-					<h4 class="app-vertical-center-inner">
-<?php
-			echo escapeHTMLChars($app['name'] . ' ' . $app['version']);
-?>
-
+					<h4 class="app-name app-vertical-center-inner">
+						<span itemprop="name">
+							<?php
+								echo escapeHTMLChars($app['name']);
+							?>
+						</span>
+						<br/>
+						<span class="app-version">
+							<?php
+								echo escapeHTMLChars($app['version']);
+							?>
+						</span>
 					</h4>
 				</div>
 			</div>
@@ -82,11 +89,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="clear-float" style="padding-top: 8px">
-<?php
-			echo escapeHTMLChars($app['description']);
-?>
 			</div>
 		</div>
 <?php
