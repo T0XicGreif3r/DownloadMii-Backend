@@ -181,15 +181,16 @@
 			removeAllOptions(subCategorySelectElement);
 			
 			if (categorySelectElement.value !== '') {
-				var httpRequest = new XMLHttpRequest();
-				httpRequest.onreadystatechange = function() {
-					if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-						var categoriesObject = JSON.parse(httpRequest.responseText);
-						
-						categoriesObject.Subcategories.sort(function(a, b) {
+				addOption(subCategorySelectElement, 'Loading subcategories...', '');
+
+				$.ajax('/newapi/categories/' + categorySelectElement.options[categorySelectElement.selectedIndex].text, {
+					type: "GET",
+					dataType: "json",
+					success: function (categoriesObject) {
+						categoriesObject.Subcategories.sort(function (a, b) {
 							var nameA = a.name.toLowerCase();
 							var nameB = b.name.toLowerCase();
-							
+
 							if (nameA > nameB) {
 								return 1;
 							}
@@ -198,21 +199,20 @@
 							}
 							return 0;
 						});
-						
+
 						removeAllOptions(subCategorySelectElement);
-						
+
 						if (categoriesObject.Subcategories.length > 0) {
 							addOption(subCategorySelectElement, 'Select a category...', '');
 							for (var i = 0; i < categoriesObject.Subcategories.length; i++) {
 								addOption(document.getElementById('subcategory'), categoriesObject.Subcategories[i].name, categoriesObject.Subcategories[i].categoryId);
 							}
 						}
+					},
+					error: function() {
+						subCategorySelectElement.options[0].text = 'Failed to get subcategories.';
 					}
-				}
-				
-				addOption(subCategorySelectElement, 'Loading subcategories...', '');
-				httpRequest.open('GET', '/newapi/categories/' + categorySelectElement.options[categorySelectElement.selectedIndex].text, false);
-				httpRequest.send();
+				});
 			}
 		}
 		
