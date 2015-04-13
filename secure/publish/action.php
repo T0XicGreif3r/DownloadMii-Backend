@@ -88,6 +88,9 @@
 
 		return $retFile; //Return temporary screenshot file handle
 	}
+
+	function deletingFile($fileId) {
+	}
 	
 	if (isset($_POST['guidid'], $_SESSION['publish_app_guid' . $_POST['guidid']])) {
 		$guid = $_SESSION['publish_app_guid' . $_POST['guidid']]; //Get GUID
@@ -137,8 +140,8 @@
 				$isDeveloper = clientPartOfGroup('Developers');
 				$updatingApp = isset($_SESSION['user_app_version' . $guid]);
 				
-				$uploadingAppData = is_uploaded_file($appDataPath);
-				$uploadingWebIcon = is_uploaded_file($webIconPath);
+				$uploadingAppData = !deletingFile('appdata') && is_uploaded_file($appDataPath);
+				$uploadingWebIcon = !deletingFile('webicon') && is_uploaded_file($webIconPath);
 
 				if (!$updatingApp) {
 					throwExceptionIfTrue(!is_uploaded_file($app3dsxPath) || !is_uploaded_file($appSmdhPath), 'Please upload the required files.');
@@ -160,7 +163,7 @@
 				//Check which screenshots were uploaded
 				$screenshotsUploaded = array();
 				for ($i = 1; $i <= getConfigValue('downloadmii_max_screenshots'); $i++) {
-					array_push($screenshotsUploaded, isset($_FILES['scr' . $i]) && is_uploaded_file($_FILES['scr' . $i]['tmp_name']));
+					array_push($screenshotsUploaded, isset($_FILES['scr' . $i]) && !deletingFile('scr' . $i) && is_uploaded_file($_FILES['scr' . $i]['tmp_name']));
 					
 					if ($screenshotsUploaded[$i - 1]) {
 						//Verify that image is JPEG/PNG
@@ -230,13 +233,13 @@
 				else if (!$updatingApp) {
 					$webIconBlob->url = null;
 				}
-				
+
 				if ($updatingApp) {
 					$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.3dsx, appver.smdh, appver.appdata, appver.largeIcon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5, app.webicon FROM appversions appver
 																		LEFT JOIN apps app ON appver.versionId = app.version
 																		WHERE app.guid = ? LIMIT 1', 's', [$guid])[0];
 					$currentVersionId = $currentVersion['versionId'];
-					
+
 					$currentApp = getArrayFromSQLQuery($mysqlConn, 'SELECT webicon, publishstate FROM apps WHERE guid = ? LIMIT 1', 's', [$guid])[0];
 					$currentPublishState = $currentApp['publishstate'];
 					
@@ -254,14 +257,25 @@
 					}
 
 					if (!$uploadingAppData) {
-						//Get current appdata URL and MD5
-						$appDataBlob->url = $currentVersion['appdata'];
-						$appDataBlob->md5 = $currentVersion['appdata_md5'];
+						if (!deletingFile('webicon')) {
+							//Get current appdata URL and MD5
+							$appDataBlob->url = $currentVersion['appdata'];
+							$appDataBlob->md5 = $currentVersion['appdata_md5'];
+						}
+						else {
+							$appDataBlob->url = null;
+							$appDataBlob->md5 = null;
+						}
 					}
 
 					if (!$uploadingWebIcon) {
-						//Get current appdata URL and MD5
-						$webIconBlob->url = $currentApp['webicon'];
+						if (!deletingFile('webicon')) {
+							//Get current appdata URL and MD5
+							$webIconBlob->url = $currentApp['webicon'];
+						}
+						else {
+							$webIconBlob->url = null;
+						}
 					}
 				}
 				
@@ -326,6 +340,25 @@
 																VALUES (?, ?, ?)
 																ON DUPLICATE KEY UPDATE url = ?',
 																'siss', [$guid, $i, $appScreenshotBlob->url, $appScreenshotBlob->url]);
+					}
+
+					//Delete screenshot if desired
+						$matchingScreenshotsToDelete = getArrayFromSQLQuery($mysqlConn, 'SELECT url FROM screenshots
+																			WHERE appGuid = ? AND imageIndex = ?',
+																			'si', [$guid, $i]);
+
+						if (count($matchingScreenshotsToDelete) === 1) {
+							//Delete screenshot from database
+							executePreparedSQLQuery($mysqlConn, 'DELETE FROM screenshots
+																	WHERE appGuid = ? AND imageIndex = ?',
+																	'si', [$guid, $i]);
+
+							//Get screenshot blob name from URL
+							$screenshotToDeleteBlobName = substr($matchingScreenshotsToDelete[0]['url'], strrpos($matchingScreenshotsToDelete[0]['url'], '/') + 1);
+
+							//Delete screenshot from Azure storage
+							$blobRestProxy->deleteBlob(getConfigValue('azure_container_screenshots'), $screenshotToDeleteBlobName);
+						}
 					}
 				}
 				

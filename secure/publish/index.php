@@ -8,7 +8,7 @@
 	require_once('action.php');
 
 	function generateDeleteButtonHTML($fileId) {
-		echo '<input type="checkbox" id="del_' . $fileId . '" name="del_' . $fileId . '" onclick="updateFileButton(\'' . $fileId . '\')">
+		echo '<input type="checkbox" id="del_' . $fileId . '" name="del_' . $fileId . '" value="yes" onclick="updateFileButton(\'' . $fileId . '\')">
 				<label for="del_' . $fileId . '">Delete</label>';
 	}
 	
