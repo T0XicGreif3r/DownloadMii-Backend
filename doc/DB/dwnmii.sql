@@ -58,6 +58,7 @@ CREATE TABLE apps(
 	subcategory INT NULL,
 	rating TINYINT NOT NULL DEFAULT 0,
 	downloads INT NOT NULL DEFAULT 0,
+	webicon VARCHAR(255) NULL,
 	publishstate TINYINT NOT NULL DEFAULT 0,				-- Use bitwise operations in the future?
 	failpublishmessage VARCHAR(24) NULL,
 	

@@ -11,7 +11,7 @@
 	$appGuid = rtrim(substr($requestUri, strlen('/apps/view/')), '/');
 	
 	$mysqlConn = connectToDatabase();
-	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.name, app.description, app.downloads, app.publishstate, app.failpublishmessage,
+	$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.name, app.description, app.downloads, app.webicon, app.publishstate, app.failpublishmessage,
 														user.nick AS publisher, appver.number AS version, appver.largeIcon, maincat.name AS category, subcat.name AS subcategory, group_concat(scr.url) AS screenshots FROM apps app
 														LEFT JOIN users user ON user.userId = app.publisher
 														LEFT JOIN appversions appver ON appver.versionId = app.version
@@ -57,7 +57,7 @@
 		<div vocab="http://schema.org/" typeof="SoftwareApplication">
 			<div class="app-header">
 				<div class="app-vertical-center-outer pull-left">
-					<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
+					<img class="app-icon" src="<?php if (!empty($app['webicon'])) echo $app['webicon']; else if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
 					<div class="pull-right">
 						<h4 class="app-name app-vertical-center-inner">
 							<span itemprop="name">
@@ -85,7 +85,7 @@
 				$screenshots = explode(',', $app['screenshots']);
 			?>
 			<div class="row">
-				<div class="clear-float col-sm-6 col-xs-12">
+				<div class="clearfix col-sm-6 col-xs-12">
 					<div id="carousel-appScr" class="carousel slide" data-ride="carousel" style="max-width:400px;">
 						<ol class="carousel-indicators">
 						<?php
@@ -130,7 +130,7 @@
 			}
 			else {
 			?>
-				<div class="app-desc clear-float" style="padding-top:8px">
+				<div class="app-desc clearfix" style="padding-top:8px">
 					<?php
 						echo $desc;
 					?>

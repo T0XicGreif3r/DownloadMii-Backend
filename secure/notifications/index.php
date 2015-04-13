@@ -30,34 +30,34 @@
 ?>
 
 		<div class="well clearfix">
-			<div class="pull-left">
-				<h4><strong>
-<?php
-				if (!$notification->isRead) {
-					echo '<span class="badge">!</span> '; //Display an indicator for unread notifications
-				}
+			<div class="clearfix">
+				<div class="pull-left">
+					<h4><strong>
+	<?php
+					if (!$notification->isRead) {
+						echo '<span class="badge">!</span> '; //Display an indicator for unread notifications
+					}
 
-				if (!empty($notification->url)) {
-					echo '<a href="' . $notification->url . '">' . $notification->summary . '</a>';
-				}
-				else {
-					echo $notification->summary;
-				}
-?>
-				</strong></h4>
-			</div>
-			<div class="app-vertical-center-outer pull-right">
-				<div class="app-vertical-center-inner">
-<?php
-			echo $notification->timeCreated;
-?>
+					if (!empty($notification->url)) {
+						echo '<a href="' . $notification->url . '">' . $notification->summary . '</a>';
+					}
+					else {
+						echo $notification->summary;
+					}
+	?>
+					</strong></h4>
+				</div>
+				<div class="app-vertical-center-outer pull-right">
+					<div class="app-vertical-center-inner">
+	<?php
+				echo $notification->timeCreated;
+	?>
+					</div>
 				</div>
 			</div>
-			<div class="clear-float">
 <?php
 			echo $notification->body;
 ?>
-			</div>
 		</div>
 <?php
 	}

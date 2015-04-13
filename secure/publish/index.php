@@ -6,6 +6,11 @@
 	$title = 'Publish App';
 	require_once('../../common/ucpheader.php');
 	require_once('action.php');
+
+	function generateDeleteButtonHTML($fileId) {
+		echo '<input type="checkbox" id="del_' . $fileId . '" name="del_' . $fileId . '" onclick="updateFileButton(\'' . $fileId . '\')">
+				<label for="del_' . $fileId . '">Delete</label>';
+	}
 	
 	if (isset($_GET['guid']) && isset($_SESSION['myapps_token' . $_GET['guid']])) {
 		$myappsToken = $_SESSION['myapps_token' . $_GET['guid']];
@@ -51,6 +56,21 @@
 			<strong>Error!</strong> <?php echo $errorMessage; ?>
 		</div>
 		
+		<?php
+		}
+
+		if ($editing) {
+?>
+
+		<div id="edittip" class="well clearfix" style="background: rgba(146, 205, 146, 0.6);">
+			<div class="pull-left">
+				<h4>When editing an app, keep in mind that uploading an existing file will replace the current one.</h4>
+			</div>
+			<div class="pull-right">
+				<button role="button" class="btn btn-primary" onclick="$('#edittip').remove();">Ok, got it!</button>
+			</div>
+		</div>
+
 		<?php
 		}
 ?>
@@ -105,20 +125,37 @@
 					<label for="description">Description (300 character limit):</label>
 					<textarea class="form-control" id="description" name="description" rows="6" maxlength="300"><?php printAttributeValueFromChoices(@$_POST['description'], $appToEdit['description'], false); ?></textarea>
 				</div>
-				<div class="row" style="margin-bottom: 48px;">
-					<div class="col-md-4 form-group">
-						<label for="3dsx">3dsx file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
+
+				<div class="row" style="margin-top: 48px;">
+					<div class="col-md-6 form-group">
+						<label for="3dsx">3dsx file:</label>
 						<input type="file" class="filestyle" id="3dsx" name="3dsx" accept=".3dsx"<?php if (!$editing) echo ' required'; ?>>
 					</div>
-					<div class="col-md-4 form-group">
-						<label for="smdh">smdh/icon file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
+					<div class="col-md-6 form-group">
+						<label for="smdh">smdh/icon file:</label>
 						<input type="file" class="filestyle" id="smdh" name="smdh" accept=".smdh,.bin,.icn"<?php if (!$editing) echo ' required'; ?>>
 					</div>
-					<div class="col-md-4 form-group">
-						<label for="appdata">Additional data ZIP file (optional<?php if ($editing) echo ', only upload if you want to update'; ?>):</label>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6 form-group">
+						<label for="appdata">Additional files ZIP archive (optional):</label>
 						<input type="file" class="filestyle" id="appdata" name="appdata" accept=".zip">
+
+						<?php if ($editing) generateDeleteButtonHTML('appdata'); ?>
+					</div>
+					<div class="col-md-6 form-group">
+						<label for="webicon">Hi-res app icon (optional):</label>
+						<input type="file" class="filestyle" id="webicon" name="webicon" accept=".jpg,.jpeg,.png">
+
+						<?php if ($editing) generateDeleteButtonHTML('webicon'); ?>
 					</div>
 				</div>
+
+				<div class="form-group" style="margin-bottom: 48px;">
+					Additional files will be unpacked in the same directory as the 3dsx will be placed. The hi-res icon will automatically be resized to 400x400.
+				</div>
+
 				<?php
 					for ($i = 0; $i < ceil(getConfigValue('downloadmii_max_screenshots') / 2); $i++) {
 						echo '<div class="row">';
@@ -126,16 +163,13 @@
 							$imageIndex = $i * 2 + $j;
 							
 							if ($imageIndex < getConfigValue('downloadmii_max_screenshots') + 1) {
-								echo
-								'<div class="col-md-6 form-group">
-									<label for="scr' . $imageIndex . '">Screenshot ' . $imageIndex . ' (optional';
-								
-								if ($editing) echo ', only upload if you want to update';
-								
-								echo
-									'):</label>
-									<input type="file" class="filestyle" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '" accept=".jpg,.jpeg,.png">
-								</div>';
+								echo '<div class="col-md-6 form-group">
+										<label for="scr' . $imageIndex . '">Screenshot ' . $imageIndex . ' (optional):</label>
+										<input type="file" class="filestyle" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '" accept=".jpg,.jpeg,.png">';
+
+								generateDeleteButtonHTML('scr' . $imageIndex);
+
+								echo '</div>';
 							}
 						}
 						echo '</div>';
@@ -145,6 +179,7 @@
 				<div class="form-group">
 					Please include either only the top screen or both screens in each screenshot. They should also be 1:1 to the 3DS screen resolution(s); 400x240 or 400x480.
 				</div>
+
 				<div class="form-group" style="margin-top: 48px;">
 					<div class="g-recaptcha" data-sitekey="<?php echo getConfigValue('apikey_recaptcha_site'); ?>"></div>
 				</div>
@@ -213,6 +248,20 @@
 						subCategorySelectElement.options[0].text = 'Failed to get subcategories.';
 					}
 				});
+			}
+		}
+
+		var updateFileButton = function(fileId) {
+			var disable = $('#del_' + fileId).prop('checked');
+			$('#' + fileId).prop('disabled', disable);
+
+			//Enable/disable upload button
+			var fileButton = $('#' + fileId).nextUntil('label').find('label');
+			if (disable) {
+				fileButton.addClass('disabled');
+			}
+			else {
+				fileButton.removeClass('disabled');
 			}
 		}
 		
