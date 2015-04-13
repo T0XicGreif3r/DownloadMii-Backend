@@ -90,6 +90,7 @@
 	}
 
 	function deletingFile($fileId) {
+		return $updatingApp && isset($_POST['del_' . $fileId]) && $_POST['del_' . $fileId] === 'yes';
 	}
 	
 	if (isset($_POST['guidid'], $_SESSION['publish_app_guid' . $_POST['guidid']])) {
@@ -239,10 +240,10 @@
 																		LEFT JOIN apps app ON appver.versionId = app.version
 																		WHERE app.guid = ? LIMIT 1', 's', [$guid])[0];
 					$currentVersionId = $currentVersion['versionId'];
-
+					
 					$currentApp = getArrayFromSQLQuery($mysqlConn, 'SELECT webicon, publishstate FROM apps WHERE guid = ? LIMIT 1', 's', [$guid])[0];
 					$currentPublishState = $currentApp['publishstate'];
-					
+
 					if (!$updatingSmdh) {
 						//Get current smdh URL and MD5, plus icon URL
 						$appSmdhBlob->url = $currentVersion['smdh'];
@@ -343,6 +344,7 @@
 					}
 
 					//Delete screenshot if desired
+					if (deletingFile('scr' . $i)) {
 						$matchingScreenshotsToDelete = getArrayFromSQLQuery($mysqlConn, 'SELECT url FROM screenshots
 																			WHERE appGuid = ? AND imageIndex = ?',
 																			'si', [$guid, $i]);
