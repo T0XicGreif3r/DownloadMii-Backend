@@ -11,9 +11,9 @@
 	use WindowsAzure\Common\ServicesBuilder;
 	
 	class blob {
-		public $md5;
 		public $name;
-		public $url;
+		public $url = null;
+		public $md5 = null;
 		public $fileHandle;
 		
 		public function upload($blobRestProxy, $container, $filePath) {
@@ -86,13 +86,14 @@
 			imagepng($originalImage, stream_get_meta_data($retFile)['uri']); //Save original screenshot
 		}
 
-		return $retFile; //Return temporary screenshot file handle
+		return $retFile; //Return temporary image file handle
 	}
 
 	function deletingFile($fileId) {
+		global $updatingApp;
 		return $updatingApp && isset($_POST['del_' . $fileId]) && $_POST['del_' . $fileId] === 'yes';
 	}
-	
+
 	if (isset($_POST['guidid'], $_SESSION['publish_app_guid' . $_POST['guidid']])) {
 		$guid = $_SESSION['publish_app_guid' . $_POST['guidid']]; //Get GUID
 		
@@ -135,33 +136,25 @@
 				
 				$app3dsxPath = $_FILES['3dsx']['tmp_name'];
 				$appSmdhPath = $_FILES['smdh']['tmp_name'];
-				$appDataPath = $_FILES['appdata']['tmp_name'];
-				$webIconPath = $_FILES['webicon']['tmp_name'];
 				
 				$isDeveloper = clientPartOfGroup('Developers');
 				$updatingApp = isset($_SESSION['user_app_version' . $guid]);
-				
-				$uploadingAppData = !deletingFile('appdata') && is_uploaded_file($appDataPath);
-				$uploadingWebIcon = !deletingFile('webicon') && is_uploaded_file($webIconPath);
 
-				if (!$updatingApp) {
-					throwExceptionIfTrue(!is_uploaded_file($app3dsxPath) || !is_uploaded_file($appSmdhPath), 'Please upload the required files.');
-				}
-				else {
-					$updating3dsx = is_uploaded_file($app3dsxPath);
-					$updatingSmdh = is_uploaded_file($appSmdhPath);
-					
-					//Check that if 3dsx/appdata is changed, the version also is
-					throwExceptionIfTrue($_SESSION['user_app_version' . $guid] === $_POST['version'] && ($updating3dsx || $uploadingAppData), 'Please also update the version number when uploading a new 3dsx/appdata file.');
+				//Check which optional files were uploaded
+				$uploadingAppData = isset($_FILES['appdata']) && !deletingFile('appdata') && is_uploaded_file($_FILES['appdata']['tmp_name']);
+				if ($uploadingAppData) {
+					$appDataPath = $_FILES['appdata']['tmp_name'];
 				}
 
-				//Verify web icon file type
+				$uploadingWebIcon = isset($_FILES['webicon']) && !deletingFile('webicon') && is_uploaded_file($_FILES['webicon']['tmp_name']);
 				if ($uploadingWebIcon) {
-					$imageMIME = getimagesize($_FILES['webicon'])['mime'];
+					$webIconPath = $_FILES['webicon']['tmp_name'];
+
+					//Verify that image is JPEG/PNG
+					$imageMIME = getimagesize($webIconPath)['mime'];
 					throwExceptionIfTrue(!($imageMIME && ($imageMIME === 'image/jpeg' || $imageMIME === 'image/png')), 'Invalid hi-res icon file type. It must be in JPEG or PNG format.');
 				}
 
-				//Check which screenshots were uploaded
 				$screenshotsUploaded = array();
 				for ($i = 1; $i <= getConfigValue('downloadmii_max_screenshots'); $i++) {
 					array_push($screenshotsUploaded, isset($_FILES['scr' . $i]) && !deletingFile('scr' . $i) && is_uploaded_file($_FILES['scr' . $i]['tmp_name']));
@@ -172,7 +165,19 @@
 						throwExceptionIfTrue(!($imageMIME && ($imageMIME === 'image/jpeg' || $imageMIME === 'image/png')), 'Invalid screenshot file type. Screenshots must be in JPEG or PNG format.');
 					}
 				}
-				
+
+				//Check if all required files were uploaded
+				if (!$updatingApp) {
+					throwExceptionIfTrue(!is_uploaded_file($app3dsxPath) || !is_uploaded_file($appSmdhPath), 'Please upload the required files.');
+				}
+				else {
+					$updating3dsx = is_uploaded_file($app3dsxPath);
+					$updatingSmdh = is_uploaded_file($appSmdhPath);
+
+					//Check that if 3dsx/appdata is changed, the version also is
+					throwExceptionIfTrue($_SESSION['user_app_version' . $guid] === $_POST['version'] && ($updating3dsx || $uploadingAppData), 'Please also update the version number when uploading a new 3dsx/appdata file.');
+				}
+
 				$mysqlConn = connectToDatabase();
 				
 				//Check if categories exist and are valid
@@ -220,19 +225,12 @@
 					$appDataBlob->upload($blobRestProxy, getConfigValue('azure_container_appdata'), $appDataPath);
 					$appDataBlob->closeFileHandle();
 				}
-				else if (!$updatingApp) {
-					$appDataBlob->url = null;
-					$appDataBlob->md5 = null;
-				}
 
 				$webIconBlob = new blob();
 				if ($uploadingWebIcon) {
 					$processedWebIconHandle = processImage($_FILES['webicon']['tmp_name'], 'webicon');
-					$webIconBlob->upload($blobRestProxy, getConfigValue('azure_container_webicon'), $processedWebIconHandle);
+					$webIconBlob->upload($blobRestProxy, getConfigValue('azure_container_webicon'), stream_get_meta_data($processedWebIconHandle)['uri']);
 					$webIconBlob->closeFileHandle();
-				}
-				else if (!$updatingApp) {
-					$webIconBlob->url = null;
 				}
 
 				if ($updatingApp) {
@@ -258,25 +256,20 @@
 					}
 
 					if (!$uploadingAppData) {
-						if (!deletingFile('webicon')) {
-							//Get current appdata URL and MD5
-							$appDataBlob->url = $currentVersion['appdata'];
-							$appDataBlob->md5 = $currentVersion['appdata_md5'];
-						}
-						else {
-							$appDataBlob->url = null;
-							$appDataBlob->md5 = null;
-						}
+						//Get current appdata URL and MD5
+						$appDataBlob->url = $currentVersion['appdata'];
+						$appDataBlob->md5 = $currentVersion['appdata_md5'];
+					}
+					else if (deletingFile('appdata') && !empty($currentVersion['appdata'])) {
+						$blobRestProxy->deleteBlob(getConfigValue('azure_container_appdata'), $currentVersion['appdata']);
 					}
 
 					if (!$uploadingWebIcon) {
-						if (!deletingFile('webicon')) {
-							//Get current appdata URL and MD5
-							$webIconBlob->url = $currentApp['webicon'];
-						}
-						else {
-							$webIconBlob->url = null;
-						}
+						//Get current webicon URL and MD5
+						$webIconBlob->url = $currentApp['webicon'];
+					}
+					else if (deletingFile('webicon') && !empty($currentVersion['webicon'])) {
+						$blobRestProxy->deleteBlob(getConfigValue('azure_container_webicon'), $currentVersion['webicon']);
 					}
 				}
 				
@@ -343,7 +336,7 @@
 																'siss', [$guid, $i, $appScreenshotBlob->url, $appScreenshotBlob->url]);
 					}
 
-					//Delete screenshot if desired
+					//Delete screenshots if desired
 					if (deletingFile('scr' . $i)) {
 						$matchingScreenshotsToDelete = getArrayFromSQLQuery($mysqlConn, 'SELECT url FROM screenshots
 																			WHERE appGuid = ? AND imageIndex = ?',

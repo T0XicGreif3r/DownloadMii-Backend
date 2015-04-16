@@ -24,13 +24,15 @@
 		
 		$appToEdit = null;
 		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && md5($myappsToken) === $_GET['token']) {
-			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.category, app.subcategory, app.rating, app.downloads, app.publishstate,
-																appver.number AS version FROM apps app
-																LEFT JOIN appversions appver ON appver.versionId = (SELECT versionId FROM appversions WHERE appGuid = ? ORDER BY versionId DESC LIMIT 1)
-																WHERE app.guid = ? AND app.publisher = ? LIMIT 1', 'sss', [$_GET['guid'], $_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
+			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT guid, name, description, category, subcategory, rating, downloads, webicon, publishstate,
+																appversions.number AS version, appversions.appdata, group_concat(screenshots.imageIndex) AS screenshots FROM apps
+																LEFT JOIN appversions ON appversions.versionId = (SELECT versionId FROM appversions appver WHERE appver.appGuid = ? ORDER BY appver.versionId DESC LIMIT 1)
+																LEFT JOIN screenshots ON screenshots.appGuid = ?
+																WHERE guid = ? AND publisher = ?
+																GROUP BY guid LIMIT 1', 'ssss', [$_GET['guid'], $_GET['guid'], $_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
 			
 			printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
-			
+
 			$appToEdit = $matchingApps[0];
 			 
 			$_SESSION['publish_app_guid' . $guidId] = $appToEdit['guid'];
@@ -55,21 +57,6 @@
 			<a class="close" href="#" data-dismiss="alert">&times;</a>
 			<strong>Error!</strong> <?php echo $errorMessage; ?>
 		</div>
-		
-		<?php
-		}
-
-		if ($editing) {
-?>
-
-		<div id="edittip" class="well clearfix" style="background: rgba(146, 205, 146, 0.6);">
-			<div class="pull-left">
-				<h4>When editing an app, keep in mind that uploading an existing file will replace the current one.</h4>
-			</div>
-			<div class="pull-right">
-				<button role="button" class="btn btn-primary" onclick="$('#edittip').remove();">Ok, got it!</button>
-			</div>
-		</div>
 
 		<?php
 		}
@@ -90,7 +77,7 @@
 				<div class="row">
 					<div class="col-md-6 form-group">
 						<label for="category">Category:</label>
-						<select class="form-control" id="category" name="category" required>
+						<select class="form-control" id="category" name="category" onchange="updateSubCategories()" required>
 							<option value="">Select a category...</option>
 							<?php
 								$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories WHERE parent IS NULL ORDER BY name ASC');
@@ -129,24 +116,24 @@
 				<div class="row" style="margin-top: 48px;">
 					<div class="col-md-6 form-group">
 						<label for="3dsx">3dsx file:</label>
-						<input type="file" class="filestyle" id="3dsx" name="3dsx" accept=".3dsx"<?php if (!$editing) echo ' required'; ?>>
+						<input type="file" class="filestyle <?php if ($editing) echo 'alreadyuploaded'; ?> " id="3dsx" name="3dsx" accept=".3dsx" <?php if (!$editing) echo 'required'; ?> >
 					</div>
 					<div class="col-md-6 form-group">
 						<label for="smdh">smdh/icon file:</label>
-						<input type="file" class="filestyle" id="smdh" name="smdh" accept=".smdh,.bin,.icn"<?php if (!$editing) echo ' required'; ?>>
+						<input type="file" class="filestyle <?php if ($editing) echo 'alreadyuploaded'; ?> " id="smdh" name="smdh" accept=".smdh,.bin,.icn" <?php if (!$editing) echo 'required'; ?> >
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="col-md-6 form-group">
 						<label for="appdata">Additional files ZIP archive (optional):</label>
-						<input type="file" class="filestyle" id="appdata" name="appdata" accept=".zip">
+						<input type="file" class="filestyle <?php if ($editing && $appToEdit['appdata'] !== null) echo 'alreadyuploaded'; ?> " id="appdata" name="appdata" accept=".zip">
 
 						<?php if ($editing) generateDeleteButtonHTML('appdata'); ?>
 					</div>
 					<div class="col-md-6 form-group">
 						<label for="webicon">Hi-res app icon (optional):</label>
-						<input type="file" class="filestyle" id="webicon" name="webicon" accept=".jpg,.jpeg,.png">
+						<input type="file" class="filestyle <?php if ($editing && $appToEdit['webicon'] !== null) echo 'alreadyuploaded'; ?> " id="webicon" name="webicon" accept=".jpg,.jpeg,.png">
 
 						<?php if ($editing) generateDeleteButtonHTML('webicon'); ?>
 					</div>
@@ -157,6 +144,8 @@
 				</div>
 
 				<?php
+					$uploadedScreenshots = explode(',', $appToEdit['screenshots']);
+
 					for ($i = 0; $i < ceil(getConfigValue('downloadmii_max_screenshots') / 2); $i++) {
 						echo '<div class="row">';
 						for ($j = 1; $j <= 2; $j++) {
@@ -165,7 +154,7 @@
 							if ($imageIndex < getConfigValue('downloadmii_max_screenshots') + 1) {
 								echo '<div class="col-md-6 form-group">
 										<label for="scr' . $imageIndex . '">Screenshot ' . $imageIndex . ' (optional):</label>
-										<input type="file" class="filestyle" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '" accept=".jpg,.jpeg,.png">';
+										<input type="file" class="filestyle ' . ($editing && in_array($imageIndex, $uploadedScreenshots) ? 'alreadyuploaded' : '') . '" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '" accept=".jpg,.jpeg,.png">';
 
 								generateDeleteButtonHTML('scr' . $imageIndex);
 
@@ -264,19 +253,25 @@
 				fileButton.removeClass('disabled');
 			}
 		}
-		
-		document.getElementById('category').onchange = updateSubCategories;
+
+		document.addEventListener("DOMContentLoaded", function(event) {
+			$('.alreadyuploaded').nextUntil('bootstrap-filestyle').find('label').each(function(index) {
+				$(this).contents().last().replaceWith(' Choose replacement');
+			});
+
 		<?php
 			$categoryValue = getValueFromChoices(@$_POST['category'], $appToEdit['category']);
 			if ($categoryValue) {
-				echo "document.getElementById('category').value = " . $categoryValue . ";";
+				echo "$('#category').val(" . $categoryValue . ");";
 				
 				$subCategoryValue = getValueFromChoices(@$_POST['subcategory'], $appToEdit['subcategory']);
 				if ($subCategoryValue) {
-					echo "document.getElementById('subcategory').value = " . $subCategoryValue . ";";
+					echo "$('#subcategory').val(" . $subCategoryValue . ");";
 				}
 			}
 ?>
+
+		});
 		</script>
 		
 	<?php

@@ -19,7 +19,7 @@
 														LEFT JOIN categories subcat ON subcat.categoryId = app.subcategory
 														LEFT JOIN screenshots scr ON scr.appGuid = app.guid
 														WHERE (app.publishstate = 1 OR app.publishstate = 4 OR app.publishstate = 5) AND app.guid = ?
-														GROUP BY app.guid', 's', [$appGuid]);
+														GROUP BY app.guid LIMIT 1', 's', [$appGuid]);
 	
 	printAndExitIfTrue(count($matchingApps) !== 1, 'Invalid app GUID.');
 	$app = $matchingApps[0];
