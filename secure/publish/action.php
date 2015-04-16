@@ -11,9 +11,9 @@
 	use WindowsAzure\Common\ServicesBuilder;
 	
 	class blob {
-		public $md5;
 		public $name;
-		public $url;
+		public $url = null;
+		public $md5 = null;
 		public $fileHandle;
 		
 		public function upload($blobRestProxy, $container, $filePath) {
@@ -29,45 +29,71 @@
 			fclose($this->fileHandle);
 		}
 	}
-	
-	function processScreenshot($filename) {
-		$originalSizeInfo = getimagesize($filename); //Get input image size and MIME information
+
+	function processImage($path, $type)
+	{
+		//Get input image size and MIME information
+		$originalSizeInfo = getimagesize($path);
 		$originalWidth = $originalSizeInfo[0];
 		$originalHeight = $originalSizeInfo[1];
 		$originalMIME = $originalSizeInfo['mime'];
-		
-		if ($originalWidth !== 400 || ($originalHeight !== 240 && $originalHeight !== 480)) { //If width isn't 400, and height isn't 240 or 480...
+
+		//Get image data
+		$originalImage = null;
+		switch ($originalMIME) {
+			case 'image/jpeg':
+				$originalImage = imagecreatefromjpeg($path);
+				break;
+
+			case 'image/png':
+				$originalImage = imagecreatefrompng($path);
+				break;
+
+			default:
+				throw new Exception('Invalid image file type.');
+				break;
+		}
+
+		//Set desired resolution according to type
+		switch ($type) {
+			case 'webicon':
+				$newWidth = 400;
+				$newHeight = 400;
+				break;
+
+			case 'screenshot':
+				$scale = 400 / $originalWidth; //Calculate horizontal scaling
+				$newWidth = 400;
+				$newHeight = $originalHeight * $scale / 480 >= 0.75 ? 480 : 240; //Estimate if the image is of the top screen only or both screens, and adjust the height for that
+				break;
+
+			default:
+				throw new Exception('Invalid image processing type.');
+				break;
+		}
+
+		$retFile = tmpfile(); //Create temporary file to save PNG
+
+		if ($originalWidth !== 400 || ($originalHeight !== 240 && $originalHeight !== 480)) { //If width and height doesn't match desired values...
 			//...do some resizing
-			
-			$image = null;
-			switch ($originalMIME) {
-				case 'image/jpeg':
-					$image = imagecreatefromjpeg($filename);
-					break;
-				
-				case 'image/png':
-					$image = imagecreatefrompng($filename);
-					break;
-			}
-			
-			$scale = 400 / $originalWidth; //Calculate horizontal scaling
-			$newWidth = 400;
-			$newHeight = $originalHeight * $scale / 480 >= 0.75 ? 480 : 240; //Estimate if the image is of the top screen only or both screens, and adjust the height for that
-			
 			$resizedImage = imagecreatetruecolor($newWidth, $newHeight);
-			imagecopyresampled($resizedImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight); //Resize the image
-			
-			$screenshot = tmpfile(); //Create temporary file to save PNG
-			imagepng($resizedImage, stream_get_meta_data($screenshot)['uri']); //Save processed screenshot
+			imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight); //Resize the image
+
+			imagepng($resizedImage, stream_get_meta_data($retFile)['uri']); //Save processed screenshot
 			imagedestroy($resizedImage);
-			
-			return $screenshot; //Return temporary screenshot file handle
 		}
 		else {
-			return fopen($filename, 'r'); //We didn't do anything, return the file handle of the original screenshot
+			imagepng($originalImage, stream_get_meta_data($retFile)['uri']); //Save original screenshot
 		}
+
+		return $retFile; //Return temporary image file handle
 	}
-	
+
+	function deletingFile($fileId) {
+		global $updatingApp;
+		return $updatingApp && isset($_POST['del_' . $fileId]) && $_POST['del_' . $fileId] === 'yes';
+	}
+
 	if (isset($_POST['guidid'], $_SESSION['publish_app_guid' . $_POST['guidid']])) {
 		$guid = $_SESSION['publish_app_guid' . $_POST['guidid']]; //Get GUID
 		
@@ -110,27 +136,28 @@
 				
 				$app3dsxPath = $_FILES['3dsx']['tmp_name'];
 				$appSmdhPath = $_FILES['smdh']['tmp_name'];
-				$appDataPath = $_FILES['appdata']['tmp_name'];
 				
 				$isDeveloper = clientPartOfGroup('Developers');
 				$updatingApp = isset($_SESSION['user_app_version' . $guid]);
-				
-				$updatingAppData = is_uploaded_file($appDataPath);
-				if (!$updatingApp) {
-					throwExceptionIfTrue(!is_uploaded_file($app3dsxPath) || !is_uploaded_file($appSmdhPath), 'Please upload the required files.');
+
+				//Check which optional files were uploaded
+				$uploadingAppData = isset($_FILES['appdata']) && !deletingFile('appdata') && is_uploaded_file($_FILES['appdata']['tmp_name']);
+				if ($uploadingAppData) {
+					$appDataPath = $_FILES['appdata']['tmp_name'];
 				}
-				else {
-					$updating3dsx = is_uploaded_file($app3dsxPath);
-					$updatingSmdh = is_uploaded_file($appSmdhPath);
-					
-					//Check that if 3dsx/appdata is changed, the version also is
-					throwExceptionIfTrue($_SESSION['user_app_version' . $guid] === $_POST['version'] && ($updating3dsx || $updatingAppData), 'Please also update the version number when uploading a new 3dsx/appdata file.');
+
+				$uploadingWebIcon = isset($_FILES['webicon']) && !deletingFile('webicon') && is_uploaded_file($_FILES['webicon']['tmp_name']);
+				if ($uploadingWebIcon) {
+					$webIconPath = $_FILES['webicon']['tmp_name'];
+
+					//Verify that image is JPEG/PNG
+					$imageMIME = getimagesize($webIconPath)['mime'];
+					throwExceptionIfTrue(!($imageMIME && ($imageMIME === 'image/jpeg' || $imageMIME === 'image/png')), 'Invalid hi-res icon file type. It must be in JPEG or PNG format.');
 				}
-				
-				//Check which screenshots were uploaded
+
 				$screenshotsUploaded = array();
 				for ($i = 1; $i <= getConfigValue('downloadmii_max_screenshots'); $i++) {
-					array_push($screenshotsUploaded, isset($_FILES['scr' . $i]) && is_uploaded_file($_FILES['scr' . $i]['tmp_name']));
+					array_push($screenshotsUploaded, isset($_FILES['scr' . $i]) && !deletingFile('scr' . $i) && is_uploaded_file($_FILES['scr' . $i]['tmp_name']));
 					
 					if ($screenshotsUploaded[$i - 1]) {
 						//Verify that image is JPEG/PNG
@@ -138,7 +165,19 @@
 						throwExceptionIfTrue(!($imageMIME && ($imageMIME === 'image/jpeg' || $imageMIME === 'image/png')), 'Invalid screenshot file type. Screenshots must be in JPEG or PNG format.');
 					}
 				}
-				
+
+				//Check if all required files were uploaded
+				if (!$updatingApp) {
+					throwExceptionIfTrue(!is_uploaded_file($app3dsxPath) || !is_uploaded_file($appSmdhPath), 'Please upload the required files.');
+				}
+				else {
+					$updating3dsx = is_uploaded_file($app3dsxPath);
+					$updatingSmdh = is_uploaded_file($appSmdhPath);
+
+					//Check that if 3dsx/appdata is changed, the version also is
+					throwExceptionIfTrue($_SESSION['user_app_version' . $guid] === $_POST['version'] && ($updating3dsx || $uploadingAppData), 'Please also update the version number when uploading a new 3dsx/appdata file.');
+				}
+
 				$mysqlConn = connectToDatabase();
 				
 				//Check if categories exist and are valid
@@ -153,7 +192,7 @@
 				}
 				
 				//Initialize Azure Blob Service if files will be uploaded
-				if (!$updatingApp || $updating3dsx || $updatingSmdh || $updatingAppData || count($screenshotsUploaded) > 0) {
+				if (!$updatingApp || $updating3dsx || $updatingSmdh || $uploadingAppData || count($screenshotsUploaded) > 0) {
 					$blobRestProxy = ServicesBuilder::getInstance()->createBlobService(getConfigValue('azure_connection_string'));
 				}
 				
@@ -182,24 +221,27 @@
 				}
 				
 				$appDataBlob = new blob();
-				if ($updatingAppData) {
+				if ($uploadingAppData) {
 					$appDataBlob->upload($blobRestProxy, getConfigValue('azure_container_appdata'), $appDataPath);
 					$appDataBlob->closeFileHandle();
 				}
-				else if (!$updatingApp) {
-					$appDataBlob->url = null;
-					$appDataBlob->md5 = null;
+
+				$webIconBlob = new blob();
+				if ($uploadingWebIcon) {
+					$processedWebIconHandle = processImage($_FILES['webicon']['tmp_name'], 'webicon');
+					$webIconBlob->upload($blobRestProxy, getConfigValue('azure_container_webicon'), stream_get_meta_data($processedWebIconHandle)['uri']);
+					$webIconBlob->closeFileHandle();
 				}
-				
+
 				if ($updatingApp) {
-					$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.3dsx, appver.smdh, appver.appdata, appver.largeIcon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5 FROM appversions appver
+					$currentVersion = getArrayFromSQLQuery($mysqlConn, 'SELECT appver.versionId, appver.3dsx, appver.smdh, appver.appdata, appver.largeIcon, appver.3dsx_md5, appver.smdh_md5, appver.appdata_md5, app.webicon FROM appversions appver
 																		LEFT JOIN apps app ON appver.versionId = app.version
 																		WHERE app.guid = ? LIMIT 1', 's', [$guid])[0];
-					
 					$currentVersionId = $currentVersion['versionId'];
 					
-					$currentPublishState = getArrayFromSQLQuery($mysqlConn, 'SELECT publishstate FROM apps WHERE guid = ? LIMIT 1', 's', [$guid])[0]['publishstate'];
-					
+					$currentApp = getArrayFromSQLQuery($mysqlConn, 'SELECT webicon, publishstate FROM apps WHERE guid = ? LIMIT 1', 's', [$guid])[0];
+					$currentPublishState = $currentApp['publishstate'];
+
 					if (!$updatingSmdh) {
 						//Get current smdh URL and MD5, plus icon URL
 						$appSmdhBlob->url = $currentVersion['smdh'];
@@ -212,15 +254,23 @@
 						$app3dsxBlob->url = $currentVersion['3dsx'];
 						$app3dsxBlob->md5 = $currentVersion['3dsx_md5'];
 					}
-					
-					if (!$updatingAppData) {
+
+					if (!$uploadingAppData) {
 						//Get current appdata URL and MD5
 						$appDataBlob->url = $currentVersion['appdata'];
 						$appDataBlob->md5 = $currentVersion['appdata_md5'];
 					}
+
+					if (!$uploadingWebIcon) {
+						//Get current webicon URL and MD5
+						$webIconBlob->url = $currentApp['webicon'];
+					}
+					else if (deletingFile('webicon') && !empty($currentVersion['webicon'])) {
+						$blobRestProxy->deleteBlob(getConfigValue('azure_container_webicon'), $currentVersion['webicon']);
+					}
 				}
 				
-				if (!$updatingApp || $updating3dsx || $updatingSmdh || $updatingAppData) {
+				if (!$updatingApp || $updating3dsx || $updatingSmdh || $uploadingAppData) {
 					//Insert app version
 					$stmt = executePreparedSQLQuery($mysqlConn, 'INSERT INTO appversions (appGuid, number, 3dsx, smdh, appdata, largeIcon, 3dsx_md5, smdh_md5, appdata_md5)
 																	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 'sssssssss', [$guid, $appVersion, $app3dsxBlob->url, $appSmdhBlob->url, $appDataBlob->url, $appIconBlob->url, $app3dsxBlob->md5, $appSmdhBlob->md5, $appDataBlob->md5], true);
@@ -233,11 +283,11 @@
 					
 					$publishState = $isDeveloper ? 1 : 0;
 					
-					executePreparedSQLQuery($mysqlConn, 'INSERT INTO apps (guid, name, publisher, version, description, category, subcategory, publishstate)
-															VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-															'ssiisiii', [$guid, $appName, $_SESSION['user_id'], $versionId, $appDescription, $appCategory, $appSubCategory, $publishState]);
+					executePreparedSQLQuery($mysqlConn, 'INSERT INTO apps (guid, name, publisher, version, description, category, subcategory, webicon, publishstate)
+															VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+															'ssiisiisi', [$guid, $appName, $_SESSION['user_id'], $versionId, $appDescription, $appCategory, $appSubCategory, $webIconBlob->url, $publishState]);
 				}
-				else if ($updating3dsx || $updatingSmdh || $updatingAppData) {
+				else if ($updating3dsx || $updatingSmdh || $uploadingAppData) {
 					//Update app row, including version and publish state
 					
 					if ($currentPublishState !== 0) {
@@ -252,18 +302,18 @@
 						$publishState = 0; //Pending approval
 					}
 					
-					executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, version = ?, description = ?, category = ?, subcategory = ?, publishstate = ?
+					executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, version = ?, description = ?, category = ?, subcategory = ?, webicon = ?, publishstate = ?
 															WHERE guid = ?',
-															'sisiiis', [$appName, $publishState === 1 ? $versionId : $currentVersionId, $appDescription, $appCategory, $appSubCategory, $publishState, $guid]);
+															'sisiisis', [$appName, $publishState === 1 ? $versionId : $currentVersionId, $appDescription, $appCategory, $appSubCategory, $webIconBlob->url, $publishState, $guid]);
 				}
 				else {
 					//Update app row, but keep current version and publish state
 					
 					$publishState = $currentPublishState;
 					
-					executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, description = ?, category = ?, subcategory = ?
+					executePreparedSQLQuery($mysqlConn, 'UPDATE apps SET name = ?, description = ?, category = ?, subcategory = ?, webicon = ?
 															WHERE guid = ?',
-															'ssiis', [$appName, $appDescription, $appCategory, $appSubCategory, $guid]);
+															'ssiiss', [$appName, $appDescription, $appCategory, $appSubCategory, $webIconBlob->url, $guid]);
 				}
 				
 				unset($_SESSION['publish_app_guid' . $_POST['guidid']]);
@@ -273,7 +323,7 @@
 					if ($screenshotsUploaded[$i - 1]) {
 						//...push it to storage and insert/update a database row for it
 						$appScreenshotBlob = new blob();
-						$processedScreenshotHandle = processScreenshot($_FILES['scr' . $i]['tmp_name']);
+						$processedScreenshotHandle = processImage($_FILES['scr' . $i]['tmp_name'], 'screenshot');
 						$appScreenshotBlob->upload($blobRestProxy, getConfigValue('azure_container_screenshots'), stream_get_meta_data($processedScreenshotHandle)['uri']);
 						$appScreenshotBlob->closeFileHandle();
 						
@@ -282,12 +332,32 @@
 																ON DUPLICATE KEY UPDATE url = ?',
 																'siss', [$guid, $i, $appScreenshotBlob->url, $appScreenshotBlob->url]);
 					}
+
+					//Delete screenshots if desired
+					if (deletingFile('scr' . $i)) {
+						$matchingScreenshotsToDelete = getArrayFromSQLQuery($mysqlConn, 'SELECT url FROM screenshots
+																			WHERE appGuid = ? AND imageIndex = ?',
+																			'si', [$guid, $i]);
+
+						if (count($matchingScreenshotsToDelete) === 1) {
+							//Delete screenshot from database
+							executePreparedSQLQuery($mysqlConn, 'DELETE FROM screenshots
+																	WHERE appGuid = ? AND imageIndex = ?',
+																	'si', [$guid, $i]);
+
+							//Get screenshot blob name from URL
+							$screenshotToDeleteBlobName = substr($matchingScreenshotsToDelete[0]['url'], strrpos($matchingScreenshotsToDelete[0]['url'], '/') + 1);
+
+							//Delete screenshot from Azure storage
+							$blobRestProxy->deleteBlob(getConfigValue('azure_container_screenshots'), $screenshotToDeleteBlobName);
+						}
+					}
 				}
 				
 				unset($_SESSION['myapps_token' . $guid]);
 				unset($_SESSION['publish_token' . $guid]);
 				
-				if ($isDeveloper || ($updatingApp && $currentPublishState === 1 && !$updating3dsx && !$updatingAppData)) {
+				if ($isDeveloper || ($updatingApp && $currentPublishState === 1 && !$updating3dsx && !$uploadingAppData)) {
 					echo 'Your application has been published.';
 				}
 				else {

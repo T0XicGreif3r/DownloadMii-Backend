@@ -25,10 +25,6 @@
 				max-width: 1060px;
 			}
 			
-			.clear-float {
-				clear: both;
-			}
-			
 			.no-border-radius {
 				border-radius: 0;
 			}

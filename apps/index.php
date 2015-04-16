@@ -9,7 +9,7 @@
 	$page = 'AppView';
 	require_once('../common/uiheader.php');
 	
-	$mysqlQuery = 'SELECT app.guid, app.name, app.description, app.downloads, app.publishstate, user.nick AS publisher, appver.number AS version, appver.largeIcon FROM apps app
+	$mysqlQuery = 'SELECT app.guid, app.name, app.description, app.downloads, app.webicon, app.publishstate, user.nick AS publisher, appver.number AS version, appver.largeIcon FROM apps app
 					LEFT JOIN users user ON user.userId = app.publisher
 					LEFT JOIN appversions appver ON appver.versionId = app.version
 					LEFT JOIN categories maincat ON maincat.categoryId = app.category
@@ -60,7 +60,7 @@
 	<a href="/apps/view/<?php echo $app['guid'] ?>" style="color: black;max-width:100%">
 		<div itemscope itemtype="http://schema.org/SoftwareApplication" class="col-sm-2 col-xs-6 app-view" style="height:280px;margin-bottom:30px">
 			<div style="max-width:100%;overflow:hidden;white-space:nowrap;">
-				<img class="app-icon" alt="App logo" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>"/>
+				<img class="app-icon" alt="App logo" src="<?php if (!empty($app['webicon'])) echo $app['webicon']; else if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>"/>
 				<div class="app-content app-vertical-center-outer pull-left" style="padding:0 10px;background:#f3f3f3;width:100%;">
 					<div class="pull-left">
 						<h4 class="app-vertical-center-inner">

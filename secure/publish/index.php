@@ -6,6 +6,11 @@
 	$title = 'Publish App';
 	require_once('../../common/ucpheader.php');
 	require_once('action.php');
+
+	function generateDeleteButtonHTML($fileId) {
+		echo '<input type="checkbox" id="del_' . $fileId . '" name="del_' . $fileId . '" value="yes" onclick="updateFileButton(\'' . $fileId . '\')">
+				<label for="del_' . $fileId . '">Delete</label>';
+	}
 	
 	if (isset($_GET['guid']) && isset($_SESSION['myapps_token' . $_GET['guid']])) {
 		$myappsToken = $_SESSION['myapps_token' . $_GET['guid']];
@@ -19,13 +24,15 @@
 		
 		$appToEdit = null;
 		if (isset($_GET['guid'], $_GET['token'], $myappsToken) && md5($myappsToken) === $_GET['token']) {
-			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.category, app.subcategory, app.rating, app.downloads, app.publishstate,
-																appver.number AS version FROM apps app
-																LEFT JOIN appversions appver ON appver.versionId = (SELECT versionId FROM appversions WHERE appGuid = ? ORDER BY versionId DESC LIMIT 1)
-																WHERE app.guid = ? AND app.publisher = ? LIMIT 1', 'sss', [$_GET['guid'], $_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
+			$matchingApps = getArrayFromSQLQuery($mysqlConn, 'SELECT guid, name, description, category, subcategory, rating, downloads, webicon, publishstate,
+																appversions.number AS version, appversions.appdata, group_concat(screenshots.imageIndex) AS screenshots FROM apps
+																LEFT JOIN appversions ON appversions.versionId = (SELECT versionId FROM appversions appver WHERE appver.appGuid = ? ORDER BY appver.versionId DESC LIMIT 1)
+																LEFT JOIN screenshots ON screenshots.appGuid = ?
+																WHERE guid = ? AND publisher = ?
+																GROUP BY guid LIMIT 1', 'ssss', [$_GET['guid'], $_GET['guid'], $_GET['guid'], $_SESSION['user_id']]); //Get app with user/GUID combination
 			
 			printAndExitIfTrue(count($matchingApps) != 1, 'Invalid app GUID.'); //Check if there is one app matching attempted GUID/user combination
-			
+
 			$appToEdit = $matchingApps[0];
 			 
 			$_SESSION['publish_app_guid' . $guidId] = $appToEdit['guid'];
@@ -50,7 +57,7 @@
 			<a class="close" href="#" data-dismiss="alert">&times;</a>
 			<strong>Error!</strong> <?php echo $errorMessage; ?>
 		</div>
-		
+
 		<?php
 		}
 ?>
@@ -70,7 +77,7 @@
 				<div class="row">
 					<div class="col-md-6 form-group">
 						<label for="category">Category:</label>
-						<select class="form-control" id="category" name="category" required>
+						<select class="form-control" id="category" name="category" onchange="updateSubCategories()" required>
 							<option value="">Select a category...</option>
 							<?php
 								$categories = getArrayFromSQLQuery($mysqlConn, 'SELECT categoryId, name FROM categories WHERE parent IS NULL ORDER BY name ASC');
@@ -105,37 +112,53 @@
 					<label for="description">Description (300 character limit):</label>
 					<textarea class="form-control" id="description" name="description" rows="6" maxlength="300"><?php printAttributeValueFromChoices(@$_POST['description'], $appToEdit['description'], false); ?></textarea>
 				</div>
-				<div class="row" style="margin-bottom: 48px;">
-					<div class="col-md-4 form-group">
-						<label for="3dsx">3dsx file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
-						<input type="file" class="filestyle" id="3dsx" name="3dsx" accept=".3dsx"<?php if (!$editing) echo ' required'; ?>>
+
+				<div class="row" style="margin-top: 48px;">
+					<div class="col-md-6 form-group">
+						<label for="3dsx">3dsx file:</label>
+						<input type="file" class="filestyle <?php if ($editing) echo 'alreadyuploaded'; ?> " id="3dsx" name="3dsx" accept=".3dsx" <?php if (!$editing) echo 'required'; ?> >
 					</div>
-					<div class="col-md-4 form-group">
-						<label for="smdh">smdh/icon file<?php if ($editing) echo ' (only upload if you want to update)'; ?>:</label>
-						<input type="file" class="filestyle" id="smdh" name="smdh" accept=".smdh,.bin,.icn"<?php if (!$editing) echo ' required'; ?>>
-					</div>
-					<div class="col-md-4 form-group">
-						<label for="appdata">Additional data ZIP file (optional<?php if ($editing) echo ', only upload if you want to update'; ?>):</label>
-						<input type="file" class="filestyle" id="appdata" name="appdata" accept=".zip">
+					<div class="col-md-6 form-group">
+						<label for="smdh">smdh/icon file:</label>
+						<input type="file" class="filestyle <?php if ($editing) echo 'alreadyuploaded'; ?> " id="smdh" name="smdh" accept=".smdh,.bin,.icn" <?php if (!$editing) echo 'required'; ?> >
 					</div>
 				</div>
+
+				<div class="row">
+					<div class="col-md-6 form-group">
+						<label for="appdata">Additional files ZIP archive (optional):</label>
+						<input type="file" class="filestyle <?php if ($editing && $appToEdit['appdata'] !== null) echo 'alreadyuploaded'; ?> " id="appdata" name="appdata" accept=".zip">
+
+						<?php if ($editing) generateDeleteButtonHTML('appdata'); ?>
+					</div>
+					<div class="col-md-6 form-group">
+						<label for="webicon">Hi-res app icon (optional):</label>
+						<input type="file" class="filestyle <?php if ($editing && $appToEdit['webicon'] !== null) echo 'alreadyuploaded'; ?> " id="webicon" name="webicon" accept=".jpg,.jpeg,.png">
+
+						<?php if ($editing) generateDeleteButtonHTML('webicon'); ?>
+					</div>
+				</div>
+
+				<div class="form-group" style="margin-bottom: 48px;">
+					Additional files will be unpacked in the same directory as the 3dsx will be placed. The hi-res icon will automatically be resized to 400x400.
+				</div>
+
 				<?php
+					$uploadedScreenshots = explode(',', $appToEdit['screenshots']);
+
 					for ($i = 0; $i < ceil(getConfigValue('downloadmii_max_screenshots') / 2); $i++) {
 						echo '<div class="row">';
 						for ($j = 1; $j <= 2; $j++) {
 							$imageIndex = $i * 2 + $j;
 							
 							if ($imageIndex < getConfigValue('downloadmii_max_screenshots') + 1) {
-								echo
-								'<div class="col-md-6 form-group">
-									<label for="scr' . $imageIndex . '">Screenshot ' . $imageIndex . ' (optional';
-								
-								if ($editing) echo ', only upload if you want to update';
-								
-								echo
-									'):</label>
-									<input type="file" class="filestyle" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '" accept=".jpg,.jpeg,.png">
-								</div>';
+								echo '<div class="col-md-6 form-group">
+										<label for="scr' . $imageIndex . '">Screenshot ' . $imageIndex . ' (optional):</label>
+										<input type="file" class="filestyle ' . ($editing && in_array($imageIndex, $uploadedScreenshots) ? 'alreadyuploaded' : '') . '" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '" accept=".jpg,.jpeg,.png">';
+
+								generateDeleteButtonHTML('scr' . $imageIndex);
+
+								echo '</div>';
 							}
 						}
 						echo '</div>';
@@ -145,6 +168,7 @@
 				<div class="form-group">
 					Please include either only the top screen or both screens in each screenshot. They should also be 1:1 to the 3DS screen resolution(s); 400x240 or 400x480.
 				</div>
+
 				<div class="form-group" style="margin-top: 48px;">
 					<div class="g-recaptcha" data-sitekey="<?php echo getConfigValue('apikey_recaptcha_site'); ?>"></div>
 				</div>
@@ -215,19 +239,39 @@
 				});
 			}
 		}
-		
-		document.getElementById('category').onchange = updateSubCategories;
+
+		var updateFileButton = function(fileId) {
+			var disable = $('#del_' + fileId).prop('checked');
+			$('#' + fileId).prop('disabled', disable);
+
+			//Enable/disable upload button
+			var fileButton = $('#' + fileId).nextUntil('label').find('label');
+			if (disable) {
+				fileButton.addClass('disabled');
+			}
+			else {
+				fileButton.removeClass('disabled');
+			}
+		}
+
+		document.addEventListener("DOMContentLoaded", function(event) {
+			$('.alreadyuploaded').nextUntil('bootstrap-filestyle').find('label').each(function(index) {
+				$(this).contents().last().replaceWith(' Choose replacement');
+			});
+
 		<?php
 			$categoryValue = getValueFromChoices(@$_POST['category'], $appToEdit['category']);
 			if ($categoryValue) {
-				echo "document.getElementById('category').value = " . $categoryValue . ";";
+				echo "$('#category').val(" . $categoryValue . ");";
 				
 				$subCategoryValue = getValueFromChoices(@$_POST['subcategory'], $appToEdit['subcategory']);
 				if ($subCategoryValue) {
-					echo "document.getElementById('subcategory').value = " . $subCategoryValue . ";";
+					echo "$('#subcategory').val(" . $subCategoryValue . ");";
 				}
 			}
 ?>
+
+		});
 		</script>
 		
 	<?php

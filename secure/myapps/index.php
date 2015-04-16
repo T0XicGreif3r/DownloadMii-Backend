@@ -8,7 +8,7 @@
 	
 	if (clientLoggedIn()) {
 		$mysqlConn = connectToDatabase();
-		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.downloads, app.publishstate, app.failpublishmessage, appver.number AS version, appver.largeIcon, appver_new.number AS version_new FROM apps app
+		$userApps = getArrayFromSQLQuery($mysqlConn, 'SELECT app.guid, app.name, app.description, app.downloads, app.webicon, app.publishstate, app.failpublishmessage, appver.number AS version, appver.largeIcon, appver_new.number AS version_new FROM apps app
 														LEFT JOIN appversions appver ON appver.versionId = app.version
 														LEFT JOIN appversions appver_new ON appver_new.versionId = (SELECT versionId FROM appversions WHERE appGuid = app.guid ORDER BY versionId DESC LIMIT 1)
 														WHERE app.publisher = ? ORDER BY appver.versionId DESC', 'i', [$_SESSION['user_id']]);
@@ -24,7 +24,7 @@
 ?>
 		<div class="well clearfix">
 			<div class="app-vertical-center-outer pull-left">
-				<img class="app-icon" src="<?php if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
+				<img class="app-icon" src="<?php if (!empty($app['webicon'])) echo $app['webicon']; else if (!empty($app['largeIcon'])) echo $app['largeIcon']; else echo '/img/no_icon.png'; ?>" />
 				<div class="pull-right">
 					<h4 class="app-name app-vertical-center-inner">
 						<span itemprop="name">
