@@ -260,9 +260,6 @@
 						$appDataBlob->url = $currentVersion['appdata'];
 						$appDataBlob->md5 = $currentVersion['appdata_md5'];
 					}
-					else if (deletingFile('appdata') && !empty($currentVersion['appdata'])) {
-						$blobRestProxy->deleteBlob(getConfigValue('azure_container_appdata'), $currentVersion['appdata']);
-					}
 
 					if (!$uploadingWebIcon) {
 						//Get current webicon URL and MD5
