@@ -156,7 +156,9 @@
 										<label for="scr' . $imageIndex . '">Screenshot ' . $imageIndex . ' (optional):</label>
 										<input type="file" class="filestyle ' . ($editing && in_array($imageIndex, $uploadedScreenshots) ? 'alreadyuploaded' : '') . '" id="scr' . $imageIndex . '" name="scr' . $imageIndex . '" accept=".jpg,.jpeg,.png">';
 
-								generateDeleteButtonHTML('scr' . $imageIndex);
+								if ($editing) {
+									generateDeleteButtonHTML('scr' . $imageIndex);
+								}
 
 								echo '</div>';
 							}
